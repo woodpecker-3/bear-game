@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="60" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
+ </tileset>
+ <layer name="ele" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt0jEKwDAMQ1HNPUSGLN1y/+OFQodiQsiSBqz/QJMXC1sCAKlMZvVNJkXjzjUks9h11vf+ZaO9nG67W4Z/wJrrk4fT7WN3J87d3bTTCwAAAAAAjul6WgNW
+  </data>
+ </layer>
+ <layer name="template" width="60" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6BHsX9KY9w5SEAC8N+0AwAAAAAAcMQCAs0AIQ==
+  </data>
+ </layer>
+ <objectgroup name="box2d" width="60" height="30">
+  <object name="platform" x="0" y="1">
+   <polyline points="0,0 102,69 250,79 373,131 497,180 594,194 849,322 1066,319 1235,339 1425,380 1822,472 1916,478"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="start" width="60" height="30">
+  <object name="startpos" x="72" y="22" width="23" height="12">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="box2d2" width="60" height="30">
+  <object name="stone" x="484" y="172">
+   <properties>
+    <property name="canDestroy" value="True"/>
+   </properties>
+   <polyline points="0,0 9,-13 26,-4 18,9 0,1"/>
+  </object>
+ </objectgroup>
+</map>
