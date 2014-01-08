@@ -6,6 +6,10 @@ USING_NS_CC;
 PanelLayer::PanelLayer()
 {
 	_parent = NULL;
+	_scoreLabel = NULL;
+	_score = 0;
+	_goldLabel = NULL;
+	_gold = 0;
 }
 
 PanelLayer::~PanelLayer()
@@ -41,11 +45,25 @@ bool PanelLayer::init(GameplayView* view)
 		menu->setPosition(winSize.width - menuSize.width,winSize.height - menuSize.height);
 		addChild(menu);
 
+		//计分板
+		 _scoreLabel = CCLabelTTF::create("score: 0", "American Typewriter", 16);
+		 addChild(_scoreLabel);
+		 _scoreLabel->setColor(ccc3(126, 126, 126));
+		 _scoreLabel->setPosition(ccp(winSize.width - menuSize.width - 64,winSize.height - menuSize.height));
+		 setScoreNumber(0);
+
+		 //金币
+		 _goldLabel = CCLabelTTF::create("gold: 0", "American Typewriter", 16);
+		 addChild(_goldLabel);
+		 _goldLabel->setColor(ccc3(126, 126, 126));
+		 _goldLabel->setPosition(ccp(winSize.width - menuSize.width - 164,winSize.height - menuSize.height));
+		 setScoreNumber(0);
+
 		//跳跃按钮
-		pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::jump));
-		menu = CCMenu::create(pause, NULL);
-		menu->setPosition(winSize.width - menuSize.width,/*winSize.height -*/ menuSize.height);
-		addChild(menu);
+// 		pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::jump));
+// 		menu = CCMenu::create(pause, NULL);
+// 		menu->setPosition(winSize.width - menuSize.width,/*winSize.height -*/ menuSize.height);
+// 		addChild(menu);
 
 		bRet = true;
 	} while (0);
@@ -58,10 +76,41 @@ void PanelLayer::pauseOrResume( cocos2d::CCObject* pSender )
 	_parent->pauseOrResume();
 }
 
-void PanelLayer::jump( cocos2d::CCObject* pSender )
+void PanelLayer::setScoreNumber( int number )
 {
-	_parent->jump();
+	if (number != _score)
+	{
+		_score = number;
+		_scoreLabel->setString(CCString::createWithFormat("score: %d",number)->getCString());
+	}
 }
+
+void PanelLayer::setGoldNumber( int number )
+{
+	if (number != _gold)
+	{
+		_gold = number;
+		CCParticleFlower* particle = /*CCParticleFire*/CCParticleFlower::createWithTotalParticles(50);//
+		particle->retain();
+		particle->setTexture( CCTextureCache::sharedTextureCache()->addImage("stars.png") );//.pvr");
+		particle->setAutoRemoveOnFinish(true);
+		particle->setStartSizeVar(10.0f);
+		particle->setSpeed(70.0f);
+		particle->setAnchorPoint(ccp(0.5f,0.5f));
+		particle->setPosition(getContentSize().width,getContentSize().height/2);
+		particle->setDuration(1.0f);
+
+		_goldLabel->setString(CCString::createWithFormat("gold: %d",number)->getCString());
+		_goldLabel->addChild(particle, 10);
+		particle->release();
+	}
+	
+}
+
+// void PanelLayer::jump( cocos2d::CCObject* pSender )
+// {
+// 	_parent->jump();
+// }
 
 
 

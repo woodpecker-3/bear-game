@@ -1,13 +1,34 @@
 #include "MyContactListener.h"
+#include "Defined.h"
 
 void MyContactListener::BeginContact( b2Contact* contact )
 {
-
+// 	int fixtureTypeA = (int)(contact->GetFixtureA()->GetUserData());
+// 	int fixtureTypeB = (int)(contact->GetFixtureB()->GetUserData());
+// 
+// 	if (fixtureTypeA == kFixtrue_Hero)
+// 	{
+// 		_heroContacts.insert(contact->GetFixtureB());
+// 	}
+// 	if (fixtureTypeB == kFixtrue_Hero)
+// 	{
+// 		_heroContacts.insert(contact->GetFixtureA());
+// 	}
 }
 
 void MyContactListener::EndContact( b2Contact* contact )
 {
-
+// 	int fixtureTypeA = (int)(contact->GetFixtureA()->GetUserData());
+// 	int fixtureTypeB = (int)(contact->GetFixtureB()->GetUserData());
+// 
+// 	if (fixtureTypeA == kFixtrue_Hero)
+// 	{
+// 		_heroContacts.erase(contact->GetFixtureB());
+// 	}
+// 	if (fixtureTypeB == kFixtrue_Hero)
+// 	{
+// 		_heroContacts.erase(contact->GetFixtureA());
+// 	}
 }
 
 void MyContactListener::PreSolve( b2Contact* contact, const b2Manifold* oldManifold )
@@ -17,9 +38,10 @@ void MyContactListener::PreSolve( b2Contact* contact, const b2Manifold* oldManif
 
 void MyContactListener::PostSolve( b2Contact* contact, const b2ContactImpulse* impulse )
 {
-	bool isAStone = (contact->GetFixtureA()->GetUserData() != NULL);
-	bool isBStone = (contact->GetFixtureB()->GetUserData() != NULL);
-	if (isAStone || isBStone)
+	int fixtureTypeA = (int)(contact->GetFixtureA()->GetUserData());
+	int fixtureTypeB = (int)(contact->GetFixtureB()->GetUserData());
+	if ((fixtureTypeA == kFixtrue_Stone) || 
+		(fixtureTypeB == kFixtrue_Stone) )
 	{
 		// Should the body break?
 		int32 count = contact->GetManifold()->pointCount;
@@ -33,9 +55,9 @@ void MyContactListener::PostSolve( b2Contact* contact, const b2ContactImpulse* i
 		if (maxImpulse > 1.0f)
 		{
 			// Flag the enemy(ies) for breaking.
-			if (isAStone)
+			if (fixtureTypeA == kFixtrue_Stone)
 				_contacts.insert(contact->GetFixtureA()->GetBody());
-			if (isBStone)
+			if (fixtureTypeB == kFixtrue_Stone)
 				_contacts.insert(contact->GetFixtureB()->GetBody());
 		}
 	}

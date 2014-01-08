@@ -1,5 +1,7 @@
 #include "Hero.h"
 #include "Defined.h"
+#include "MyContactListener.h"
+#include "GameplayModel.h"
 
 USING_NS_CC;
 Hero::Hero()
@@ -8,6 +10,11 @@ Hero::Hero()
 	_body = NULL;
 	_nextVel = 0;
 	_awake = false;
+	_state = kHeroState_invalid;
+	_normalAnim = NULL;
+	_normalAnimate = NULL;
+	_bellyAnim = NULL;
+	_bellyAnimate = NULL;
 }
 
 Hero::~Hero()
@@ -35,6 +42,21 @@ bool Hero::init(b2World* world)
 
 		_world = world;
 
+		//创建动画
+		_normalAnim = CCAnimation::create();
+		_normalAnim->retain();
+		_normalAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_stand1.png"));
+		_normalAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_stand2.png"));
+		//_normalAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_stand3.png"));
+		_normalAnim->setDelayPerUnit(0.1f);
+
+		_bellyAnim = CCAnimation::create();
+		_bellyAnim->retain();
+		_bellyAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_duck1.png"));
+		_bellyAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_duck2.png"));
+		_bellyAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_duck3.png"));
+		_bellyAnim->setDelayPerUnit(0.1f);
+
 		bRet = true;
 	} while (0);
 	return bRet;
@@ -58,9 +80,11 @@ void Hero::update( float dt )
 		_nextVel = 0;
 	}
 
-	float angle = ccpToAngle(ccp(weightedVel.x, weightedVel.y));
-	if (_awake)
+	//旋转
+	
+	if (GameplayModel::sharedModel()->isHeroOnTheGround())
 	{
+		float angle = ccpToAngle(ccp(weightedVel.x, weightedVel.y));
 		setRotation(-1 * CC_RADIANS_TO_DEGREES(angle));
 	}
 }
@@ -90,6 +114,7 @@ void Hero::createBox2dBody()
 	fd.density = 1.0f / CC_CONTENT_SCALE_FACTOR();
 	fd.restitution = 0.0f;
 	fd.friction = 0.2f;
+	fd.userData = (void*)kFixtrue_Hero;
 
 	_body->CreateFixture(&fd);
 }
@@ -117,7 +142,8 @@ void Hero::limitVelocity()
 
 void Hero::wake()
 {
-	_awake = true;
+	//_awake = true;
+	setAwake(true);
 	_body->SetActive(true);
 	_body->ApplyLinearImpulse(b2Vec2(1, -2), _body->GetPosition());
 }
@@ -127,7 +153,92 @@ void Hero::jump()
 	if (_awake)
 	{
 		b2Vec2 vel = _body->GetLinearVelocity();
-		vel.y = 2;
+		vel.x = 1;
+		vel.y = 5;
 		_body->ApplyLinearImpulse(vel, _body->GetPosition());
+	}
+}
+
+void Hero::rotation(float angle)
+{
+	setRotation(-1 * CC_RADIANS_TO_DEGREES(angle));
+}
+
+// bool Hero::isOnTheGround()
+// {
+// 	MyContactListener* listener = GameplayModel::sharedModel()->getContactListener();
+// 	for(set<b2Fixture*>::iterator it = listener->_heroContacts.begin();
+// 		it != listener->_heroContacts.end();
+// 		++it)
+// 	{
+// 		if ((int)((*it)->GetUserData()) == kFixtrue_Ground)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
+
+void Hero::setState( int state )
+{
+	if (_state != state)
+	{
+		_state = state;
+		switch (_state)
+		{
+		case kHeroState_normal:
+			{
+				if (_bellyAnimate)
+				{
+					stopAction(_bellyAnimate);
+					_bellyAnimate = NULL;
+				}
+				if(!_normalAnimate)
+				{
+					_normalAnimate = CCRepeatForever::create(CCAnimate::create(_normalAnim));
+					runAction(_normalAnimate);
+				}
+			}
+			break;
+		case kHeroState_belly:
+			{
+				if (_normalAnimate)
+				{
+					stopAction(_normalAnimate);
+				}
+				_normalAnimate = NULL;
+
+				_bellyAnimate = CCRepeatForever::create(CCAnimate::create(_bellyAnim));
+				runAction(_bellyAnimate);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void Hero::setAwake( bool awake )
+{
+	_awake = awake;
+	setState(kHeroState_normal);
+}
+
+void Hero::damage()
+{
+	switch (_state)
+	{
+	case kHeroState_normal:
+		{
+			setState(Hero::kHeroState_belly);
+		}
+		break;
+	case kHeroState_belly:
+		{
+			setState(Hero::kHeroState_dead);
+		}
+		break;
+	default:
+		break;
 	}
 }

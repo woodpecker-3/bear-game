@@ -28,8 +28,11 @@ public:
 	//来自GameplayControllerDelegate的接口
 public:
 	virtual void didPauseOrResume();
-	virtual void didJump();
+	virtual void didTouchBegan();
+	virtual void didTouchEnded();
+	virtual void didTouchCancelled();
 
+	virtual void didReset();
 protected:
 	void pause();
 	void resume();

@@ -40,18 +40,18 @@ bool TouchLayer::init(GameplayView* view)
 
 bool TouchLayer::ccTouchBegan( CCTouch* touch, CCEvent* event )
 {
-	//getGameScene()->dive();
+	_parent->touchBegan();
 	return true;
 }
 
 void TouchLayer::ccTouchEnded( CCTouch* touch, CCEvent* event )
 {
-	//getGameScene()->skiing();
+	_parent->touchEnded();
 }
 
 void TouchLayer::ccTouchCancelled( CCTouch* touch, CCEvent* event )
 {
-	//getGameScene()->skiing();
+	_parent->touchCancelled();
 }
 
 void TouchLayer::setTouchEnabled( bool flag )

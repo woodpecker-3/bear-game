@@ -7,78 +7,78 @@
             <key>bear_duck1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,30},{60,28}}</string>
+                <string>{{1,1},{64,64}}</string>
                 <key>offset</key>
-                <string>{0,-7}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,25},{60,28}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
             <key>bear_duck2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,1},{60,28}}</string>
+                <string>{{66,1},{64,64}}</string>
                 <key>offset</key>
-                <string>{-1,-7}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,25},{60,28}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
             <key>bear_duck3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,59},{58,34}}</string>
+                <string>{{131,1},{64,64}}</string>
                 <key>offset</key>
-                <string>{0,-4}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,19},{58,34}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
             <key>bear_stand1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,200},{52,50}}</string>
+                <string>{{1,66},{64,64}}</string>
                 <key>offset</key>
-                <string>{0,4}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{6,3},{52,50}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
             <key>bear_stand2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,147},{56,52}}</string>
+                <string>{{66,66},{64,64}}</string>
                 <key>offset</key>
-                <string>{-1,2}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,4},{56,52}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
             <key>bear_stand3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,94},{56,52}}</string>
+                <string>{{131,66},{64,64}}</string>
                 <key>offset</key>
-                <string>{0,2}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,4},{56,52}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>sourceSize</key>
                 <string>{64,64}</string>
             </dict>
@@ -90,9 +90,9 @@
             <key>realTextureFileName</key>
             <string>bear.png</string>
             <key>size</key>
-            <string>{64,256}</string>
+            <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cb1ab11ed86fa5f442be6e86979e51f4:d3bfe44708b39db08d5aaad7c4a2da36:2904f34ed51771f70a05a1fbadbb6a19$</string>
+            <string>$TexturePacker:SmartUpdate:bd471ef05609d65c84ac6a07dc0caf33:c12bc16d5c31fa6a29496df378d3fbce:2904f34ed51771f70a05a1fbadbb6a19$</string>
             <key>textureFileName</key>
             <string>bear.png</string>
         </dict>

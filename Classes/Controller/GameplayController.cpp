@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "GameplayModel.h"
 #include "Hero.h"
+#include "Defined.h"
 
 USING_NS_CC;
 GameplayController::GameplayController(void)
@@ -38,7 +39,17 @@ bool GameplayController::init()
 void GameplayController::update( float dt )
 {
 	if(_pauseFlag) return;
-	GameplayModel::sharedModel()->update(dt);
+	if (GameplayModel::sharedModel()->isGameOver())
+	{
+		_view->showResult();
+		didPauseOrResume();
+	}
+	else
+	{
+		GameplayModel::sharedModel()->update(dt);
+
+		_view->update(dt);
+	}
 }
 
 void GameplayController::didPauseOrResume()
@@ -106,7 +117,44 @@ void GameplayController::operateAllSchedulerAndActions( cocos2d::CCNode* node, O
 	}
 }
 
-void GameplayController::didJump()
+// void GameplayController::didJump()
+// {
+// 	Hero* hero = GameplayModel::sharedModel()->getHero();
+// 	if (hero->isHeroOnTheGround())
+// 	{
+// 		hero->jump();
+// 	}
+// 	else
+// 	{
+// 		hero->rotation();
+// 	}
+// }
+
+void GameplayController::didTouchBegan()
 {
-	GameplayModel::sharedModel()->getHero()->jump();
+	Hero* hero = GameplayModel::sharedModel()->getHero();
+	if (GameplayModel::sharedModel()->isHeroOnTheGround())
+	{
+		hero->jump();
+	}
+	else
+	{
+		GameplayModel::sharedModel()->setTapDown(true);
+	}
+}
+
+void GameplayController::didTouchEnded()
+{
+	GameplayModel::sharedModel()->setTapDown(false);
+}
+
+void GameplayController::didTouchCancelled()
+{
+	GameplayModel::sharedModel()->setTapDown(false);
+}
+
+void GameplayController::didReset()
+{
+	GameplayModel::sharedModel()->getHero()->setState(Hero::kHeroState_normal);
+	didPauseOrResume();
 }

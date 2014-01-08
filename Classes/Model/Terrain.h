@@ -14,7 +14,8 @@ class Terrain :
 	public cocos2d::CCNode
 {
 public:
-	//friend class MyPlatform;
+	friend class MyPlatform;
+	friend class GameplayModel;
 	typedef struct  
 	{
 		cocos2d::CCTMXTiledMap* _map;

@@ -9,6 +9,13 @@ class Hero :
 	public cocos2d::CCSprite
 {
 public:
+	enum
+	{
+		kHeroState_invalid = -1,
+		kHeroState_normal = 0,
+		kHeroState_belly,
+		kHeroState_dead
+	};
 	Hero();
 	~Hero();
 
@@ -19,15 +26,30 @@ public:
 
 	void createBox2dBody();
 
+	void limitVelocity();
 	void wake();
 	void jump();
-	void limitVelocity();
+	void rotation(float angle);
+	//bool isOnTheGround();
 
-	CC_SYNTHESIZE_READONLY(bool, _awake, Awake);
+	void damage();
+public:
+	int getState(){return _state;}
+	void setState(int state);
+
+	bool getAwake(){return _awake;}
+	void setAwake(bool awake);
 protected:
 	b2World* _world;
 	b2Body* _body;
 	b2Vec2 _prevVels[NUM_PREV_VELS];
 	int _nextVel;
+
+	bool _awake;
+	int _state;
+	cocos2d::CCAnimation *_normalAnim;
+	cocos2d::CCAction *_normalAnimate;
+	cocos2d::CCAnimation *_bellyAnim;
+	cocos2d::CCAction *_bellyAnimate;
 };
 #endif// _HERO_H_

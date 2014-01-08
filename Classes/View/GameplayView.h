@@ -14,18 +14,27 @@ class GameplayView :
 {
 public:
 	friend class PanelLayer;
+	friend class TouchLayer;
+	friend class MenuLayer;
 	GameplayView(void);
 	~GameplayView(void);
 
 	static GameplayView* create(GameplayControllerDelegate* theDelegate);
 	bool init(GameplayControllerDelegate* theDelegate);
 
+	void update(float delta);
+
 	void setTouchEnabled(bool flag);
 
+	void showResult();
 protected:
 	void pauseOrResume();
-	void jump();
+	void touchBegan();
+	void touchEnded();
+	void touchCancelled();
 
+
+	void resume();
 private:
 	BackgroundLayer* _background;
 	PlayerLayer* _playerLayer;

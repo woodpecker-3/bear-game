@@ -2,6 +2,8 @@
 #include "Hero.h"
 #include "MyUtil.h"
 #include "Defined.h"
+#include "GameObject.h"
+#include "GameplayModel.h"
 
 USING_NS_CC;
 static const char* s_MapArr[]={"down.tmx","down.tmx"};
@@ -65,7 +67,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_rightMap->clear();
 		
 		//初始化位置
-		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*3/4);
+		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*0.5);
 		createMap();
 		resetHillVertices();
 
@@ -255,8 +257,9 @@ void Terrain::resetHillVertices()
 	static int prevToKeyPointI = -1;
 
 	CCPoint tmp = getPosition();
+	float scale = getScale();
 	// key points interval for drawing
-	while (_hillKeyPoints[_fromKeyPointIndex + 1].x < (-getPosition().x - _sceenSize.width / 8 / getScale()))
+	while (_hillKeyPoints[_fromKeyPointIndex + 1].x < (-tmp.x - _sceenSize.width / 8 / getScale()))
 	{
 		_fromKeyPointIndex++;
 		if (_fromKeyPointIndex >= kMaxPlatformKeyPoints)
@@ -264,7 +267,7 @@ void Terrain::resetHillVertices()
 			_fromKeyPointIndex=0;
 		}
 	}
-	while (_hillKeyPoints[_toKeyPointIndex].x < ( -getPosition().x + _sceenSize.width * 9 / 8 / getScale()) )
+	while (_hillKeyPoints[_toKeyPointIndex].x < ( -tmp.x + _sceenSize.width * 9 / 8 / getScale()) )
 	{
 		_toKeyPointIndex++;
 		if (_toKeyPointIndex >= kMaxPlatformKeyPoints)
@@ -276,6 +279,7 @@ void Terrain::resetHillVertices()
 			break;
 		}
 	}
+
 
 	if (prevFromKeyPointI != _fromKeyPointIndex || prevToKeyPointI != _toKeyPointIndex)
 	{
@@ -290,6 +294,22 @@ void Terrain::resetHillVertices()
 		{
 			nextKeyPointIndex = 0;
 		}
+		//最小的y值
+		float minY = p0.y;
+		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
+		{
+			if (_hillKeyPoints[i].y < minY)
+			{
+				minY = _hillKeyPoints[i].y;
+			}
+			++i;
+			if (i >= kMaxPlatformKeyPoints)
+			{
+				i=0;
+			}
+		}
+		minY -= 320;
+
 		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
 		{
 			
@@ -309,15 +329,15 @@ void Terrain::resetHillVertices()
 				pt1.y = ymid + ampl * cosf(da * j);
 				_borderVertices[_borderVerticesCount++] = pt1;
 
-				_hillVertices[_hillVerticesCount] = ccp(pt0.x, 0);
-				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
-				_hillVertices[_hillVerticesCount] = ccp(pt1.x, 0);
-				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
-
-				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
-				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 0);
-				_hillVertices[_hillVerticesCount] = ccp(pt1.x, pt1.y);
-				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 0);
+ 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/minY);
+ 				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
+ 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/minY);
+ 				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
+ 
+ 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
+ 				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 0);
+ 				_hillVertices[_hillVerticesCount] = ccp(pt1.x, pt1.y);
+ 				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 0);
 
 				pt0 = pt1;
 			}
@@ -329,7 +349,7 @@ void Terrain::resetHillVertices()
 			{
 				i=0;
 			}
-			CCLog("_fromKeyPointIndex_i(%d)",i);
+			//CCLog("_fromKeyPointIndex_i(%d)",i);
 
 		}
 
@@ -351,15 +371,37 @@ void Terrain::resetTerrainBox2DBody()
 	bd.userData = this;
 	_body = _world->CreateBody(&bd);
 
-	b2EdgeShape shape;
-	b2Vec2 p1, p2;
-	for (int i = 0; i < _borderVerticesCount - 1; ++i)
+// 	b2EdgeShape shape;
+// 	b2Vec2 p1, p2;
+// 	for (int i = 0; i < _borderVerticesCount - 1; ++i)
+// 	{
+// 		p1 = b2Vec2( (_borderVertices[i].x) / PTM_RATIO, (_borderVertices[i].y ) / PTM_RATIO);
+// 		p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
+// 		shape.Set(p1, p2);
+// 		//_body->CreateFixture(&shape, 0);
+// 		b2FixtureDef fd;
+// 		fd.shape = &shape;
+// 		fd.userData = (void*)kFixtrue_Ground;
+// 		_body->CreateFixture(&fd);
+// 	}
+	b2ChainShape shape;
+	b2Vec2 p1;//, p2;
+	b2Vec2 pointes[kMaxBorderVertices];
+	int i = 0;
+	for (; i < _borderVerticesCount /*- 1*/; ++i)
 	{
 		p1 = b2Vec2( (_borderVertices[i].x) / PTM_RATIO, (_borderVertices[i].y ) / PTM_RATIO);
-		p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
-		shape.Set(p1, p2);
-		_body->CreateFixture(&shape, 0);
+		//p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
+		
+		pointes[i] = p1;
+		//_body->CreateFixture(&shape, 0);
+		
 	}
+	shape.CreateChain(pointes,i);
+	b2FixtureDef fd;
+	fd.shape = &shape;
+	fd.userData = (void*)kFixtrue_Ground;
+	_body->CreateFixture(&fd);
 }
 
 void Terrain::createElementBox2DBody()
@@ -381,15 +423,17 @@ void Terrain::createElementBox2DBody()
 		int x = ((CCString*)dict->objectForKey("x"))->intValue();
 		int y = ((CCString*)dict->objectForKey("y"))->intValue();
 		//创建精灵
-		CCSprite* sprite = NULL;
-		if (strcmp(dict->valueForKey("name")->getCString(),"stone") == 0)
+		GameObject* obj = NULL;
+// 		if (strcmp(dict->valueForKey("name")->getCString(),"stone") == 0 ||
+// 			strcmp(dict->valueForKey("name")->getCString(),"gold"))
 		{
 			string str = dict->valueForKey("canDestroy")->getCString();
+			int objType = dict->valueForKey("objType")->intValue();
 
-			sprite = CCSprite::create("stone.png");
+			obj = GameObject::create(objType);
 			//sprite->setTag(kTagStone);
-			addChild(sprite);
-			sprite->setPosition(CCPointMake(offsetPosition.x + x,offsetPosition.y + y));
+			addChild(obj);
+			obj->setPosition(CCPointMake(offsetPosition.x + x,offsetPosition.y + y));
 		}
 
 		//创建刚体
@@ -401,7 +445,7 @@ void Terrain::createElementBox2DBody()
 
 		b2BodyDef bd;
 		bd.position.Set(0, 0);
-		bd.userData = sprite;
+		bd.userData = obj;
 		b2Body* body = _world->CreateBody(&bd);
 
 		b2EdgeShape shape;
@@ -435,12 +479,9 @@ void Terrain::createElementBox2DBody()
 				fd.density = 1.0f ;
 				fd.restitution = 0.0f;
 				fd.friction = 0.2f;
-				fd.userData = (void*)1;
-				//fd.isSensor = true;
-				//body->CreateFixture(&shape, 0);
+				fd.userData = (void*)kFixtrue_Stone;
 				body->CreateFixture(&fd);
-				//fd.isSensor = false;
-				//body->CreateFixture(&fd);
+
 				p1 = p2;
 			}	
 		}
@@ -457,6 +498,10 @@ void Terrain::update( float dt )
 	resetMap();
 
 	resetHillVertices();
+
+	//缩放
+	float scale = abs((_sceenSize.height*0.5)/(getPositionY() + _hero->getPositionY()));
+	GameplayModel::sharedModel()->setTerrainScale(scale);
 }
 
 void Terrain::draw()
@@ -471,13 +516,13 @@ void Terrain::draw()
 	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, _hillVertices);
 	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, _hillTexCoords);
 
-	glDrawArrays(/*GL_TRIANGLE_STRIP*/GL_LINES, 0, (GLsizei)_hillVerticesCount);
+	glDrawArrays(GL_TRIANGLE_STRIP/*GL_LINES*/, 0, (GLsizei)_hillVerticesCount);
 }
 
 void Terrain::fellow()
 {
 	float offsetX = _sceenSize.width/4 - _hero->getPosition().x * getScale();
-	float offsetY = (_sceenSize.height*3/4 - (_hero->getPosition().y + getPosition().y));
+	float offsetY = (_sceenSize.height*0.5 - (_hero->getPosition().y + getPosition().y));
 	if (offsetY < 0)
 	{
 		offsetY = 0;

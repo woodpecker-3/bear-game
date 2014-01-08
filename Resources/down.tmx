@@ -15,7 +15,7 @@
  </layer>
  <objectgroup name="box2d" width="60" height="30">
   <object name="platform" x="0" y="1">
-   <polyline points="0,0 102,69 250,79 373,131 497,180 594,194 849,322 1066,319 1235,339 1425,380 1822,472 1916,478"/>
+   <polyline points="0,0 213,116 516,188 849,322 1144,326 1503,459 1920,478"/>
   </object>
  </objectgroup>
  <objectgroup name="start" width="60" height="30">
@@ -27,8 +27,30 @@
   <object name="stone" x="484" y="172">
    <properties>
     <property name="canDestroy" value="True"/>
+    <property name="objType" value="2"/>
    </properties>
    <polyline points="0,0 9,-13 26,-4 18,9 0,1"/>
+  </object>
+  <object name="gold" x="893" y="316">
+   <properties>
+    <property name="canDestroy" value="True"/>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 0,-27 37,-30 34,1 1,1"/>
+  </object>
+  <object name="gold" x="972" y="314">
+   <properties>
+    <property name="canDestroy" value="True"/>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 1,-27 44,-28 41,-2 2,2"/>
+  </object>
+  <object name="gold" x="1043" y="312">
+   <properties>
+    <property name="canDestroy" value="True"/>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 -3,-27 47,-28 40,8 2,2"/>
   </object>
  </objectgroup>
 </map>
