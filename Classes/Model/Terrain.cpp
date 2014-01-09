@@ -1,4 +1,4 @@
-#include "Terrain.h"
+ï»¿#include "Terrain.h"
 #include "Hero.h"
 #include "MyUtil.h"
 #include "Defined.h"
@@ -66,7 +66,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_rightMap = new MyMap;
 		_rightMap->clear();
 		
-		//³õÊ¼»¯Î»ÖÃ
+		//åˆå§‹ç‚¹
 		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*0.5);
 		createMap();
 		resetHillVertices();
@@ -76,7 +76,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_stripes->getTexture()->setTexParameters(&tp2);
 		_stripes->retain();
 
-		//heroÔÚ×î¶¥²ã
+		//hero
 		_hero = hero;
 		addChild(_hero,11);
  		_hero->setPosition(CCPointMake(_leftMap->_map->getPosition().x + _prepareFirstHillKeyPoint.x,
@@ -98,9 +98,9 @@ void Terrain::createMap()
 	_rightMap->_map = CCTMXTiledMap::create(nextMapRes());
 	addChild(_rightMap->_map,-1);
 	_rightMap->_offsetXWhenCreated = getPosition().x;
-	//Ìá³öµØ±íµÚÒ»¸ö¹Ø¼üµã
+	//æå–ç¬¬ä¸€ä¸ªç‚¹
 	prepareFirstHillKeyPoint();
-	//ÐÞÕýÎ»ÖÃ(leftmap.x + lastpoint.x,(leftmap.y - (fistpint.y - lastpoint.y)))
+	//ä¸‹ä¸€å¼ åœ°å›¾ç¬¬ä¸€ä¸ªç‚¹å’Œä¸Šä¸€å¼ åœ°å›¾æœ€åŽä¸€ä¸ªç‚¹é‡åˆ
 	CCPoint leftPoint;
 	float leftMapWidth = 0;
 	if (_leftMap->isValid())
@@ -109,7 +109,7 @@ void Terrain::createMap()
 		leftPoint = _leftMap->_map->getPosition();
 	}
 	else
-	{//Ê×ÕÅµØÍ¼
+	{//ç¬¬ä¸€ä¸ªç‚¹ä¼šå·¦ç§»ï¼Œè¡¥ä¸Šä¸€ä¸ªç‚¹
 		_hillKeyPoints[_hillKeyPointIndex++] = CCPointMake(-_sceenSize.width/4,_sceenSize.height*3/4);
 		leftPoint = CCPointZero;
 	}
@@ -117,10 +117,10 @@ void Terrain::createMap()
  	_rightMap->_map->setPosition(CCPointMake(leftPoint.x + leftMapWidth - _prepareFirstHillKeyPoint.x,
  		leftPoint.y + _lastHillKeyPoint.y - _prepareFirstHillKeyPoint.y ));
 
-	//ÌáÈ¡µØ±í¹Ø¼üµã
+	//æå–åœ°é¢å…³é”®ç‚¹
 	prepareHillKeyPoint();
 
-	//´´½¨¸ÕÌå
+	//åˆ›å»ºéšœç¢ç‰©åˆšä½“
 	createElementBox2DBody();
 
 	//
@@ -143,20 +143,19 @@ void Terrain::removeMap( MyMap* myMap )
 
 void Terrain::resetMap()
 {
-	//´´½¨tiledµØÍ¼
 	int posX = getPosition().x;
 	if (_leftMap->isValid())
 	{
 		if (_leftMap->_offsetXWhenCreated == 0 )
 		{
 			if(( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width/8))
-			{//ÓÒ±ßÒÑ¾­Àë¿ªÆÁÄ»×ó²à
+			{//å·¦è¾¹åœ°å›¾å³åŠæ»‘å‡ºå±å¹•8åˆ†ä¹‹åŒºåŸŸ
 				swap(_leftMap,_rightMap);
 				_rightMap->_map->setVisible(false);
 				removeMap(_rightMap);
 			}
 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)- _sceenSize.width*9/8))
-			{//ÓÒ±ß½«Òª½øÈëÆÁÄ»ÓÒ²à
+			{//å·¦è¾¹åœ°å›¾å·¦åŠè¿›å…¥å±å¹•8åˆ†ä¹‹åŒºåŸŸ
 				if (!_rightMap->isValid())
 				{
 					createMap();
@@ -166,13 +165,13 @@ void Terrain::resetMap()
 		else
 		{
 			if(( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width*10/8))
-			{//ÓÒ±ßÒÑ¾­Àë¿ªÆÁÄ»×ó²à
+			{//å·¦è¾¹åœ°å›¾å³åŠæ»‘å‡ºå±å¹•8åˆ†ä¹‹åŒºåŸŸ
 				swap(_leftMap,_rightMap);
 				_rightMap->_map->setVisible(false);
 				removeMap(_rightMap);
 			}
 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)/*- _sceenSize.width*9/8*/))
-			{//ÓÒ±ß½«Òª½øÈëÆÁÄ»ÓÒ²à
+			{//å·¦è¾¹åœ°å›¾å·¦åŠè¿›å…¥å±å¹•8åˆ†ä¹‹åŒºåŸŸ
 				if (!_rightMap->isValid())
 				{
 					createMap();
@@ -186,11 +185,10 @@ void Terrain::prepareFirstHillKeyPoint()
 {
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d");
 	CCDictionary* dict = objGroup->objectNamed("platform");
-	//±£´æÖµµÄÊ±ºòÐèÒªÍ¬Ê±±£´æX Y ºÍpolyline µÄ points    XYÎªËù»­¶à±ßÐÎµÄÆðÊ¼µã
-	//²éÕÒX Y Öµ 
+	//å¯¹è±¡çš„ä½ç½®
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
-	// Èç¹ûÃû×ÖÎª ¡°polyline¡± ¶ÁÈ¡²¢±£´æpointsÖµ
+	//åˆšä½“å…³é”®ç‚¹
 	CCString* pointStr = (CCString*)dict->objectForKey("polyline");
 	const char* beginPos;
 	const char* endPos;
@@ -218,11 +216,10 @@ void Terrain::prepareHillKeyPoint()
 
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d");
 	CCDictionary* dict = objGroup->objectNamed("platform");
-	//±£´æÖµµÄÊ±ºòÐèÒªÍ¬Ê±±£´æX Y ºÍpolyline µÄ points    XYÎªËù»­¶à±ßÐÎµÄÆðÊ¼µã
-	//²éÕÒX Y Öµ 
+	//å¯¹è±¡ä½ç½®
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
-	// Èç¹ûÃû×ÖÎª ¡°polyline¡± ¶ÁÈ¡²¢±£´æpointsÖµ
+	//åˆšä½“å…³é”®ç‚¹
 	CCString* pointStr = (CCString*)dict->objectForKey("polyline");
 	const char* beginPos;
 	const char* endPos;
@@ -294,7 +291,7 @@ void Terrain::resetHillVertices()
 		{
 			nextKeyPointIndex = 0;
 		}
-		//×îÐ¡µÄyÖµ
+		//Ã—Ã®ÃÂ¡ÂµÃ„yÃ–Âµ
 		float minY = p0.y;
 		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
 		{
@@ -407,7 +404,7 @@ void Terrain::resetTerrainBox2DBody()
 void Terrain::createElementBox2DBody()
 {
 	CCPoint offsetPosition = _rightMap->_map->getPosition();
-	//ÆäËû¸ÕÌå
+	//éšœç¢ç‰©layer
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d2");
 	CCArray* objArr = objGroup->getObjects();
 	CCObject* obj=NULL;
@@ -418,11 +415,10 @@ void Terrain::createElementBox2DBody()
 	{
 		obj = objArr->objectAtIndex(i);
 		dict = (CCDictionary*)obj;
-		//±£´æÖµµÄÊ±ºòÐèÒªÍ¬Ê±±£´æX Y ºÍpolyline µÄ points    XYÎªËù»­¶à±ßÐÎµÄÆðÊ¼µã
-		//²éÕÒX Y Öµ 
+		//å¯¹è±¡ä½ç½®
 		int x = ((CCString*)dict->objectForKey("x"))->intValue();
 		int y = ((CCString*)dict->objectForKey("y"))->intValue();
-		//´´½¨¾«Áé
+		//Â´Â´Â½Â¨Â¾Â«ÃÃ©
 		GameObject* obj = NULL;
 // 		if (strcmp(dict->valueForKey("name")->getCString(),"stone") == 0 ||
 // 			strcmp(dict->valueForKey("name")->getCString(),"gold"))
@@ -436,8 +432,7 @@ void Terrain::createElementBox2DBody()
 			obj->setPosition(CCPointMake(offsetPosition.x + x,offsetPosition.y + y));
 		}
 
-		//´´½¨¸ÕÌå
-		// Èç¹ûÃû×ÖÎª ¡°polyline¡± ¶ÁÈ¡²¢±£´æpointsÖµ
+		//åˆšä½“å…³é”®å…³é”®ç‚¹
 		CCString* pointStr = (CCString*)dict->objectForKey("polyline");
 		const char* beginPos;
 		const char* endPos;
@@ -499,7 +494,7 @@ void Terrain::update( float dt )
 
 	resetHillVertices();
 
-	//Ëõ·Å
+	//scale
 	float scale = abs((_sceenSize.height*0.5)/(getPositionY() + _hero->getPositionY()));
 	GameplayModel::sharedModel()->setTerrainScale(scale);
 }

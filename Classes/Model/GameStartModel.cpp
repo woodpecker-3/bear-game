@@ -50,7 +50,6 @@ void GameStartModel::gameInitialization()
 
 void GameStartModel::loadingCallback(cocos2d::CCObject* obj)
 {
-	//设置精度条等
 	loadingFinish();
 }
 

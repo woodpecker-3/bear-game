@@ -1,4 +1,4 @@
-#include "MyContactListener.h"
+﻿#include "MyContactListener.h"
 #include "Defined.h"
 
 void MyContactListener::BeginContact( b2Contact* contact )

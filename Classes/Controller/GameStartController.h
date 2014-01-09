@@ -1,4 +1,4 @@
-#ifndef _GAMESTARTCONTROLLER_H_
+ï»¿#ifndef _GAMESTARTCONTROLLER_H_
 #define _GAMESTARTCONTROLLER_H_
 
 #include "cocos2d.h"
@@ -17,12 +17,9 @@ public:
 	CREATE_FUNC(GameStartController);
 	bool init();
 
-	//À´×ÔGameStartControllerDelegateµÄ½Ó¿Ú
 public:
-	//model×´Ì¬ÊÂ¼ş
+	//æ¥è‡ªGameStartControllerDelegate
 	virtual void didGameInitializationCompleted();
-
-	//ÓÃ»§ÊäÈëÊÂ¼ş
 	virtual void didGameStart();
 
 protected:

@@ -1,4 +1,4 @@
-#ifndef _GAMESTARTCONTROLLERDELEGATE_H_
+ï»¿#ifndef _GAMESTARTCONTROLLERDELEGATE_H_
 #define _GAMESTARTCONTROLLERDELEGATE_H_
 
 
@@ -8,10 +8,8 @@ public:
 	GameStartControllerDelegate(void);
 	virtual ~GameStartControllerDelegate(void);
 
-	//model×´Ì¬ÊÂ¼þ
 	virtual void didGameInitializationCompleted()=0;
 
-	//ÓÃ»§ÊäÈëÊÂ¼þ
 	virtual void didGameStart()=0;
 };
 #endif// _GAMESTARTCONTROLLERDELEGATE_H_

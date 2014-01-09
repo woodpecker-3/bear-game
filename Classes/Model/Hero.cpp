@@ -1,4 +1,4 @@
-#include "Hero.h"
+ï»¿#include "Hero.h"
 #include "Defined.h"
 #include "MyContactListener.h"
 #include "GameplayModel.h"
@@ -42,7 +42,7 @@ bool Hero::init(b2World* world)
 
 		_world = world;
 
-		//´´½¨¶¯»­
+		//Â´Â´Â½Â¨Â¶Â¯Â»Â­
 		_normalAnim = CCAnimation::create();
 		_normalAnim->retain();
 		_normalAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_stand1.png"));
@@ -80,7 +80,7 @@ void Hero::update( float dt )
 		_nextVel = 0;
 	}
 
-	//Ðý×ª
+	//ÃÃ½Ã—Âª
 	
 	if (GameplayModel::sharedModel()->isHeroOnTheGround())
 	{
@@ -163,21 +163,6 @@ void Hero::rotation(float angle)
 {
 	setRotation(-1 * CC_RADIANS_TO_DEGREES(angle));
 }
-
-// bool Hero::isOnTheGround()
-// {
-// 	MyContactListener* listener = GameplayModel::sharedModel()->getContactListener();
-// 	for(set<b2Fixture*>::iterator it = listener->_heroContacts.begin();
-// 		it != listener->_heroContacts.end();
-// 		++it)
-// 	{
-// 		if ((int)((*it)->GetUserData()) == kFixtrue_Ground)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
 
 void Hero::setState( int state )
 {

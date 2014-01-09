@@ -1,4 +1,4 @@
-#ifndef _GAMEPLAYCONTROLLER_H_
+ï»¿#ifndef _GAMEPLAYCONTROLLER_H_
 #define _GAMEPLAYCONTROLLER_H_
 
 #include "cocos2d.h"
@@ -25,7 +25,7 @@ public:
 	bool init();
 	void update(float dt);
 
-	//À´×ÔGameplayControllerDelegateµÄ½Ó¿Ú
+	//delegate interface
 public:
 	virtual void didPauseOrResume();
 	virtual void didTouchBegan();

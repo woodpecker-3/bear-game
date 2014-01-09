@@ -42,10 +42,6 @@ public:
 
 	void draw();
 
-	//hero»¬ĞĞÖĞ£¬ÎªÁËËø¶¨ÊÓ½Ç
-	//TerrainÏòÏà·´µÄx/y·½ÏòÒÆ¶¯ÏàÍ¬¾àÀë
-	
-
 	void removeBody(b2Body* body);
 protected:
 	void createMap();
@@ -65,34 +61,34 @@ protected:
 	Hero* _hero;
 
 	b2World *_world;
-	b2Body *_body;//µØ±í
-	vector<b2Body*> _bodyArr;//¿ÉÅö×²Îï¼ş
+	b2Body *_body;//åœ°è¡¨
+	vector<b2Body*> _bodyArr;//å¯ç¢°æ’ç‰©ä»¶
 
 
 	//cocos2d::CCTMXTiledMap* _leftMap;
 	//cocos2d::CCTMXTiledMap* _rightMap;
 	MyMap* _leftMap;
 	MyMap* _rightMap;
-	//µØÍ¼1µÄ¿í¶È
+	//åœ°å›¾1çš„å®½åº¦
 	int _LeftMapWidth;
 	int _RightMapWidth;
-	//µ±Ç°µØÍ¼µÄ×îºóÒ»¸ö¹Ø¼üµã£¬ÊÇÏÂÒ»¸öµØÍ¼µÄÆğÊ¼µã
+	//å½“å‰åœ°å›¾çš„æœ€åä¸€ä¸ªå…³é”®ç‚¹ï¼Œæ˜¯ä¸‹ä¸€ä¸ªåœ°å›¾çš„èµ·å§‹ç‚¹
 	cocos2d::CCPoint _lastHillKeyPoint;
 	//cocos2d::CCPoint _prepareLastHillKeyPoint;
 	cocos2d::CCPoint _prepareFirstHillKeyPoint;
 
 	
-	//µØÃæ¹Ø¼üµã
+	//åœ°é¢å…³é”®ç‚¹
 	cocos2d::CCPoint _hillKeyPoints[kMaxPlatformKeyPoints];
-	int _hillKeyPointIndex;//µ±Ç°²åÈëÎ»ÖÃ
-	//µ±Ç°»æÖÆÇøÓò
+	int _hillKeyPointIndex;//å½“å‰æ’å…¥ä½ç½®
+	//å½“å‰ç»˜åˆ¶åŒºåŸŸ
 	int _fromKeyPointIndex;
 	int _toKeyPointIndex;
-	//Éú³ÉµÄcosÇúÏß¶¥µã
+	//ç”Ÿæˆçš„cosæ›²çº¿é¡¶ç‚¹
 	cocos2d::CCPoint _hillVertices[kMaxPlatformVertices];
 	cocos2d::CCPoint _hillTexCoords[kMaxPlatformVertices];
 	int _hillVerticesCount;
-	//µØÃæbox2dÏß¶Î
+	//åœ°é¢box2dçº¿æ®µ
 	cocos2d::CCPoint _borderVertices[kMaxBorderVertices];
 	int _borderVerticesCount;
 

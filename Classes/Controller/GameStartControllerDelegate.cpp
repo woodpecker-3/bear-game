@@ -1,4 +1,4 @@
-#include "GameStartControllerDelegate.h"
+﻿#include "GameStartControllerDelegate.h"
 
 
 GameStartControllerDelegate::GameStartControllerDelegate(void)

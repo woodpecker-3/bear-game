@@ -1,4 +1,4 @@
-#include "GameStartController.h"
+ï»¿#include "GameStartController.h"
 #include "GameStartView.h"
 #include "GameStartModel.h"
 #include "GameplayController.h"
@@ -36,7 +36,6 @@ bool GameStartController::init()
 		_model = model;
 		_model->retain();
 
-		//³õÊ¼»¯Âß¼­
 		_model->gameInitialization();
 
 		bRet = true;

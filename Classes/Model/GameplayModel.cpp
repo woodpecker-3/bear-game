@@ -110,10 +110,10 @@ void GameplayModel::update( float dt )
 	_terrain->update(dt);
 
 	//_platform->update(dt);
-	//Åö×²
+	//contact
 	processContact();
 
-	//»ý·Ö
+	//score
 	float score = GameplayModel::sharedModel()->getHero()->getPositionX();
 	score /= PTM_RATIO;
 	BearData::sharedData()->setScore((int)score);

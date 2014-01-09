@@ -1,4 +1,4 @@
-#ifndef _GAMESTARTMODEL_H_
+ï»¿#ifndef _GAMESTARTMODEL_H_
 #define _GAMESTARTMODEL_H_
 
 #include "cocos2d.h"
@@ -16,17 +16,14 @@ public:
 
 	void gameInitialization();
 protected:
-	//Òì²½¼ÓÔØ×ÊÔ´Íê³É»Øµ÷
+	//sync load
 	void loadingCallback(cocos2d::CCObject* obj);
-	//¼ÓÔØ×ÊÔ´Íê³É
 	void loadingFinish();
 
-	//¾«Áé²ÄÖÊ¡¢¾«Áé±íµÈ»º´æ
+	//cache sprite sheet
 	void cacheInit();
-	//ÒôÀÖÒôĞ§ÒıÇæºÍÍæ¼ÒÊı¾İ³õÊ¼»¯
 	void audioAndUserDataInit();
 
-	//ËùÓĞÔ¤±¸¹¤×÷Íê³É
 	void gameInitializationCompleted();
 protected:
 	GameStartControllerDelegate* _delegate;

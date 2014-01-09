@@ -30,7 +30,6 @@ public:
 	void wake();
 	void jump();
 	void rotation(float angle);
-	//bool isOnTheGround();
 
 	void damage();
 public:

@@ -1,4 +1,4 @@
-#ifndef _BEAR_DATA_H_
+ï»¿#ifndef _BEAR_DATA_H_
 #define _BEAR_DATA_H_
 
 #include "cocos2d.h"
@@ -18,23 +18,22 @@ public:
     CC_SYNTHESIZE(float, _musicVolume, MusicVolume);
     
     /**
-     *	@brief	 ÄÚ´æ²»×ãÊ±µ÷ÓÃ
+     *	@brief	 release memory
      */
     void purge();
     
     /**
-     *	@brief	 ½«Êı¾İ´ÓÄÚ´æ±£´æµ½Íâ²¿ÎÄ¼şÖĞ
+     *	@brief	 save data
      */
     void flush();
     
     /**
-     *	@brief	 ¶ÔGoldµÄ²Ù×÷
-     *
-     *	@param 	delta 	Õı¸ºÖµ¾ù¿É
+     *	@brief	 alter gold
+	 *
      */
     void alterGold(int delta);
     /**
-     *	@brief	 ÖØÖÃÓÎÏ·Êı¾İÎªÄ¬ÈÏÊıÖµ
+     *	@brief	 reset date
      */
     void reset();
 };

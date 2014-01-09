@@ -1,4 +1,4 @@
-#ifndef _GAMEPLAYCONTROLLERDELEGATE_H_
+ï»¿#ifndef _GAMEPLAYCONTROLLERDELEGATE_H_
 #define _GAMEPLAYCONTROLLERDELEGATE_H_
 
 class GameplayControllerDelegate
@@ -7,13 +7,15 @@ public:
 	GameplayControllerDelegate();
 	virtual ~GameplayControllerDelegate();
 
-	//À´Ö®panellayeµÄÊÂ¼þ
+	//panel layer
 	virtual void didPauseOrResume()=0;
+
+	//touch layer
 	virtual void didTouchBegan()=0;
 	virtual void didTouchEnded()=0;
 	virtual void didTouchCancelled()=0;
 
-	//À´×ÔmenulayerµÄÊÂ¼þ
+	//menu ayer
 	virtual void didReset()=0;
 };
 #endif// _GAMEPLAYCONTROLLERDELEGATE_H_

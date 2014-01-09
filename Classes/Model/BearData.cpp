@@ -1,4 +1,4 @@
-#include "BearData.h"
+﻿#include "BearData.h"
 //#include "StaticData.h"
 USING_NS_CC;
 

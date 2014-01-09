@@ -1,4 +1,4 @@
-#ifndef _MYCONTACTLISTENER_H_
+﻿#ifndef _MYCONTACTLISTENER_H_
 #define _MYCONTACTLISTENER_H_
 #include "Box2D/Box2D.h"
 #include "cocos2d.h"
