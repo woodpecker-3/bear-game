@@ -57,10 +57,10 @@ bool BackgroundLayer::init()
 void BackgroundLayer::setOffsetX( float offsetX )
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	//Ò»Ö±Íù×óÒÆ
+	//ä¸€ç›´å¾€å·¦ç§»
 	_backgroundSprite->setPositionX(_backgroundSprite->getPosition().x - (offsetX - _offsetX) * 0.25f);
 	float diffx;
-	//ÒÆÍêÒ»¸ö¿í¶ÈÊ±£¬ÖØÐÂ°ÑÎ»ÖÃÉèÖÃÎª½Ó½ü0µÄÎ»ÖÃ
+	//ç§»å®Œä¸€ä¸ªå®½åº¦æ—¶ï¼Œé‡æ–°æŠŠä½ç½®è®¾ç½®ä¸ºæŽ¥è¿‘0çš„ä½ç½®
 	if (_backgroundSprite->getPositionX() < -(_backgroundSprite->getContentSize().width - size.width)) {
 		//diffx = fabs(_backgroundSprite->getPositionX()) - _backgroundSprite->getContentSize().width;
 		_backgroundSprite->setPositionX(0);

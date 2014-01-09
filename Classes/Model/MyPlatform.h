@@ -27,10 +27,10 @@
  private:
  	Terrain* _terrain;
  
- 	//µØÃæ¹Ø¼üµã
+ 	//åœ°é¢å…³é”®ç‚¹
  	cocos2d::CCPoint _hillKeyPoints[kMaxPlatformKeyPoints];
- 	int _hillKeyPointCount;//µ±Ç°²åÈëÎ»ÖÃ
- 	//Éú³ÉµÄcosÇúÏß¶¥µã
+ 	int _hillKeyPointCount;//å½“å‰æ’å…¥ä½ç½®
+ 	//ç”Ÿæˆçš„cosæ›²çº¿é¡¶ç‚¹
  	cocos2d::CCPoint _hillVertices[kMaxPlatformVertices];
  	cocos2d::CCPoint _hillTexCoords[kMaxPlatformVertices];
  	int _hillVerticesCount;

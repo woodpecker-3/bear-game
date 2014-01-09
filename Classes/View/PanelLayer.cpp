@@ -35,7 +35,7 @@ bool PanelLayer::init(GameplayView* view)
 	{
 		_parent = view;
 
-		//��ͣ��ť
+		//ÔÝÍŁ°´ĹĽ
 		CCMenuItemSprite* pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::pauseOrResume));
 		CCMenu* menu = CCMenu::create(pause, NULL);
 
@@ -45,21 +45,21 @@ bool PanelLayer::init(GameplayView* view)
 		menu->setPosition(winSize.width - menuSize.width,winSize.height - menuSize.height);
 		addChild(menu);
 
-		//�Ʒְ�
+		//źĆˇÖ°ĺ
 		 _scoreLabel = CCLabelTTF::create("score: 0", "American Typewriter", 16);
 		 addChild(_scoreLabel);
 		 _scoreLabel->setColor(ccc3(126, 126, 126));
 		 _scoreLabel->setPosition(ccp(winSize.width - menuSize.width - 64,winSize.height - menuSize.height));
 		 setScoreNumber(0);
 
-		 //���
+		 //˝đąŇ
 		 _goldLabel = CCLabelTTF::create("gold: 0", "American Typewriter", 16);
 		 addChild(_goldLabel);
 		 _goldLabel->setColor(ccc3(126, 126, 126));
 		 _goldLabel->setPosition(ccp(winSize.width - menuSize.width - 164,winSize.height - menuSize.height));
 		 setScoreNumber(0);
 
-		//��Ծ��ť
+		//ĚřÔž°´ĹĽ
 // 		pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::jump));
 // 		menu = CCMenu::create(pause, NULL);
 // 		menu->setPosition(winSize.width - menuSize.width,/*winSize.height -*/ menuSize.height);

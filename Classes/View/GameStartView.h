@@ -14,10 +14,10 @@ public:
 	static GameStartView* create(GameStartControllerDelegate* theDelegate);
 	bool init(GameStartControllerDelegate* theDelegate);
 
-	//°´Å¥µã»÷ÊÂ¼ş
+	//æŒ‰é’®ç‚¹å‡»äº‹ä»¶
 	void menuStartCallback(cocos2d::CCObject* obj);
 public:
-	//ÓÎÏ·³õÊ¼»¯Íê³É
+	//æ¸¸æˆåˆå§‹åŒ–å®Œæˆ
 	void showGameStart();
 protected:
 	GameStartControllerDelegate* _delegate;
