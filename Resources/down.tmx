@@ -29,28 +29,28 @@
     <property name="canDestroy" value="True"/>
     <property name="objType" value="2"/>
    </properties>
-   <polyline points="0,0 9,-13 26,-4 18,9 0,1"/>
+   <polyline points="-2,7 9,-27 32,-18 18,9 -4,5"/>
   </object>
-  <object name="gold" x="893" y="316">
+  <object name="gold" x="893" y="320">
    <properties>
     <property name="canDestroy" value="True"/>
     <property name="objType" value="3"/>
    </properties>
    <polyline points="0,0 0,-27 37,-30 34,1 1,1"/>
   </object>
-  <object name="gold" x="972" y="314">
+  <object name="gold" x="985" y="321">
    <properties>
     <property name="canDestroy" value="True"/>
     <property name="objType" value="3"/>
    </properties>
-   <polyline points="0,0 1,-27 44,-28 41,-2 2,2"/>
+   <polyline points="0,0 20,-23 44,-28 43,4 2,2"/>
   </object>
-  <object name="gold" x="1043" y="312">
+  <object name="gold" x="1073" y="314">
    <properties>
     <property name="canDestroy" value="True"/>
     <property name="objType" value="3"/>
    </properties>
-   <polyline points="0,0 -3,-27 47,-28 40,8 2,2"/>
+   <polyline points="4,10 -14,-21 43,-21 40,8 5,10"/>
   </object>
  </objectgroup>
 </map>

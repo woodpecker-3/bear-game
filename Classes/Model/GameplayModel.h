@@ -3,10 +3,10 @@
 
 #include "Box2D/Box2D.h"
 #include "cocos2d.h"
+#include "MyContactListener.h"
 
 class Hero;
 class Terrain;
-class MyContactListener;
 //class MyPlatform;
 class GameplayModel
 {
@@ -31,6 +31,9 @@ public:
 protected:
 	void setupWorld();
 	void processContact();
+	void processContact_Ground(const MyContact& myContact);
+	void processContact_Stone(const MyContact& myContact);
+	void processContact_Gold(const MyContact& myContact);
 private:
 	b2World* _world;
 	MyContactListener* _contactListener;

@@ -14,10 +14,8 @@ public:
 	static GameStartView* create(GameStartControllerDelegate* theDelegate);
 	bool init(GameStartControllerDelegate* theDelegate);
 
-	//按钮点击事件
 	void menuStartCallback(cocos2d::CCObject* obj);
 public:
-	//游戏初始化完成
 	void showGameStart();
 protected:
 	GameStartControllerDelegate* _delegate;

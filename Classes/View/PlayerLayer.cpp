@@ -1,7 +1,7 @@
  #include "PlayerLayer.h"
  #include "GameplayModel.h"
  #include "Terrain.h"
- #include "MyPlatform.h"
+//#include "MyPlatform.h"
  
  USING_NS_CC;
  PlayerLayer::PlayerLayer()

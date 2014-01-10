@@ -1,8 +1,6 @@
 #include "GameplayModel.h"
 #include "Terrain.h"
 #include "Hero.h"
-#include "MyContactListener.h"
-#include "MyPlatform.h"
 #include "Defined.h"
 #include "BearData.h"
 #include "GameObject.h"
@@ -94,7 +92,8 @@ void GameplayModel::update( float dt )
 		_world->Step(UPDATE_INTERVAL, velocityIterations, positionIterations);
 		_world->ClearForces();
 	}
-
+	
+	
 	_hero->update(dt);
 	if (_tapDown && !isHeroOnTheGround())
 	{
@@ -131,38 +130,30 @@ void GameplayModel::update( float dt )
 
 void GameplayModel::processContact()
 {
-	for(std::set<b2Body*>::iterator pos=_contactListener->_contacts.begin();pos!=_contactListener->_contacts.end();pos++)
+	for(std::set<MyContact>::iterator pos=_contactListener->_contacts.begin();pos!=_contactListener->_contacts.end();pos++)
 	{
 		//toDestroy.insert(*it);
-		b2Body* body = *pos;
-		GameObject* obj = (GameObject*)body->GetUserData();
-		int objType = obj->getObjType();
-		if (obj)
+		const MyContact& myContact = (*pos);
+		int fixtureType = (int)(myContact._fixture->GetUserData());
+		switch (fixtureType)
 		{
-			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
-			explosion->retain();
-			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
-			//explosion->initWithTotalParticles(200);
-			explosion->setAutoRemoveOnFinish(true);
-			explosion->setStartSizeVar(10.0f);
-			explosion->setSpeed(70.0f);
-			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
-			explosion->setPosition(obj->getPosition());
-			explosion->setDuration(1.0f);
-
-
-			_terrain->addChild(explosion, 11);
-			explosion->release();
-			_terrain->removeChild(obj);
-			_terrain->removeBody(body);
-		}
-		if (objType == kFixtrue_Stone)
-		{
-			_hero->damage();
-		}
-		else if (objType == kFixtrue_Gold)
-		{
-			BearData::sharedData()->alterGold(10);
+		case kFixtrue_Ground:
+			{
+				processContact_Ground(myContact);
+			}
+			break;
+		case kFixtrue_Stone:
+			{
+				processContact_Stone(myContact);
+			}
+			break;
+		case kFixtrue_Gold:
+			{
+				processContact_Gold(myContact);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 	_contactListener->_contacts.clear();
@@ -190,4 +181,106 @@ bool GameplayModel::isHeroOnTheGround()
 		return true;
 	}
 	return false;
+}
+
+void GameplayModel::processContact_Ground(const MyContact& myContact )
+{
+	/*速度为0**/
+	if(!myContact._linearVelocity.IsValid())
+	{
+		_hero->damage();
+	}
+}
+
+void GameplayModel::processContact_Stone(const MyContact& myContact )
+{
+	b2Body* body = myContact._fixture->GetBody();
+	GameObject* obj = (GameObject*)body->GetUserData();
+	if (obj)
+	{
+		/*速度为0,石头碎、hero受到伤害**/
+		if ( !myContact._linearVelocity.IsValid() )
+		{
+			b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
+			CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+
+			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
+			explosion->retain();
+			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
+			//explosion->initWithTotalParticles(200);
+			explosion->setAutoRemoveOnFinish(true);
+			explosion->setStartSizeVar(10.0f);
+			explosion->setSpeed(70.0f);
+			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
+			explosion->setPosition(obj->getPosition());
+			explosion->setDuration(1.0f);
+
+
+			_terrain->addChild(explosion, 11);
+			explosion->release();
+			_terrain->removeChild(obj);
+			_terrain->removeBody(body);
+
+			_hero->damage();
+		}
+		/*冲力大于7，石头碎、hero不受伤害**/
+		else if (myContact._impulse > 7.0f)
+		{
+			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
+			explosion->retain();
+			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
+			//explosion->initWithTotalParticles(200);
+			explosion->setAutoRemoveOnFinish(true);
+			explosion->setStartSizeVar(10.0f);
+			explosion->setSpeed(70.0f);
+			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
+			explosion->setPosition(obj->getPosition());
+			explosion->setDuration(1.0f);
+
+
+			_terrain->addChild(explosion, 11);
+			explosion->release();
+			_terrain->removeChild(obj);
+			_terrain->removeBody(body);
+		}
+		/*hero滑行而过**/
+		else
+		{
+
+		}
+
+		//
+		
+	}
+}
+
+void GameplayModel::processContact_Gold(const MyContact& myContact )
+{
+	b2Body* body = myContact._fixture->GetBody();
+	GameObject* obj = (GameObject*)body->GetUserData();
+	if (obj)
+	{
+		//
+		b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
+		CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+
+		CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
+		explosion->retain();
+		explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
+		//explosion->initWithTotalParticles(200);
+		explosion->setAutoRemoveOnFinish(true);
+		explosion->setStartSizeVar(10.0f);
+		explosion->setSpeed(70.0f);
+		explosion->setAnchorPoint(ccp(0.5f, 0.5f));
+		explosion->setPosition(obj->getPosition());
+		explosion->setDuration(1.0f);
+
+
+		_terrain->addChild(explosion, 11);
+		explosion->release();
+		_terrain->removeChild(obj);
+		_terrain->removeBody(body);
+
+		BearData::sharedData()->alterGold(10);
+	}
 }

@@ -263,7 +263,7 @@ void Terrain::resetHillVertices()
 
 	if (prevFromKeyPointI != _fromKeyPointIndex || prevToKeyPointI != _toKeyPointIndex)
 	{
-		CCLog("_fromKeyPointIndex(%d,%d)",_fromKeyPointIndex,_toKeyPointIndex);
+		//CCLog("_fromKeyPointIndex(%d,%d)",_fromKeyPointIndex,_toKeyPointIndex);
 		// vertices for visible area
 		_hillVerticesCount = 0;
 		_borderVerticesCount = 0;
@@ -451,7 +451,7 @@ void Terrain::createElementBox2DBody()
 				fd.density = 1.0f ;
 				fd.restitution = 0.0f;
 				fd.friction = 0.2f;
-				fd.userData = (void*)kFixtrue_Stone;
+				fd.userData = (void*)obj->getObjType();
 				body->CreateFixture(&fd);
 
 				p1 = p2;

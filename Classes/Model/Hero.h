@@ -38,6 +38,8 @@ public:
 
 	bool getAwake(){return _awake;}
 	void setAwake(bool awake);
+
+	b2Body* getBody(){return _body;}
 protected:
 	b2World* _world;
 	b2Body* _body;

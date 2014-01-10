@@ -152,7 +152,7 @@ void Hero::jump()
 {
 	if (_awake)
 	{
-		b2Vec2 vel = _body->GetLinearVelocity();
+		b2Vec2 vel;// = _body->GetLinearVelocity();
 		vel.x = 1;
 		vel.y = 5;
 		_body->ApplyLinearImpulse(vel, _body->GetPosition());

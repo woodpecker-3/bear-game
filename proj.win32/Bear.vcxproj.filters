@@ -78,11 +78,17 @@
     <ClCompile Include="..\Classes\View\PlayerLayer.cpp">
       <Filter>Classes\View\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Model\MyPlatform.cpp">
-      <Filter>Classes\Model\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Controller\MyContactListener.cpp">
       <Filter>Classes\Controller\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Model\BearData.cpp">
+      <Filter>Classes\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\View\MenuLayer.cpp">
+      <Filter>Classes\View\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Model\GameObject.cpp">
+      <Filter>Classes\Model\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,11 +146,17 @@
     <ClInclude Include="..\Classes\View\PlayerLayer.h">
       <Filter>Classes\View\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Model\MyPlatform.h">
-      <Filter>Classes\Model\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Controller\MyContactListener.h">
       <Filter>Classes\Controller\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Model\BearData.h">
+      <Filter>Classes\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\View\MenuLayer.h">
+      <Filter>Classes\View\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Model\GameObject.h">
+      <Filter>Classes\Model\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

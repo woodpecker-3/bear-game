@@ -4,6 +4,20 @@
 #include "cocos2d.h"
 #include <set>
 
+typedef struct _MyContact
+{
+	typedef struct _MyContact self;
+
+	b2Fixture* _fixture;
+	float32 _impulse;/*夹具受到的冲量**/
+	b2Vec2 _linearVelocity;/*碰撞瞬间hero的线性速度**/
+
+	bool operator < (const self& r) const
+	{
+		return (_fixture < r._fixture);
+	}
+}MyContact;
+
 class MyContactListener:public b2ContactListener
 {
 public:
@@ -18,9 +32,7 @@ public:
 
 	void process();
 private:
-	std::set<b2Body*> _contacts;
-
-	std::set<b2Fixture*> _heroContacts;
+	std::set<MyContact> _contacts;
 };
 
 #endif// _MYCONTACTLISTENER_H_
