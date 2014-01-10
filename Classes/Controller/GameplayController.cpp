@@ -136,6 +136,7 @@ void GameplayController::didTouchBegan()
 	if (GameplayModel::sharedModel()->isHeroOnTheGround())
 	{
 		hero->jump();
+		GameplayModel::sharedModel()->setTapDown(true);
 	}
 	else
 	{

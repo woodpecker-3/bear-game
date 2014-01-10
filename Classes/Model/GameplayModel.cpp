@@ -98,8 +98,18 @@ void GameplayModel::update( float dt )
 	_hero->update(dt);
 	if (_tapDown && !isHeroOnTheGround())
 	{
-		_rotationAngle += 1;
-		_hero->rotation(_rotationAngle);
+		//_rotationAngle += 1;
+		//_hero->rotation(_rotationAngle);
+        float currAngleDegree = _hero->getRotation();
+        while (currAngleDegree > 360) {
+            currAngleDegree -= 360;
+        }
+        while (currAngleDegree < -360) {
+            currAngleDegree += 360;
+        }
+        // 12 * 0.5 * 60 = 360
+        // 12 degree per frame, 0.5 sec to turn a loop, negative means ccw
+        _hero->setRotation(currAngleDegree + (-12));
 	}
 	else
 	{

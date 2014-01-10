@@ -189,25 +189,14 @@ void Terrain::prepareFirstHillKeyPoint()
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
 	//刚体关键点
-	CCString* pointStr = (CCString*)dict->objectForKey("polyline");
-	const char* beginPos;
-	const char* endPos;
-	const_string_parser lineParser(pointStr->getCString(),' ');
-	if (beginPos=lineParser.parse(&endPos))
-	{
-		const char* ppbegin;
-		const char* ppend;
-		const_string_parser pointParser(beginPos,',');
-		ppbegin = pointParser.parse(&ppend);
-
-		CCString* xString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-		ppbegin = pointParser.parse(&ppend);
-		CCString* yString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-
-		//CCLog("X=%d,Y=%d",xString->intValue(),yString->intValue());
-
-		_prepareFirstHillKeyPoint = CCPointMake(x + xString->intValue(),y -yString->intValue());
-	}
+    CCArray* points = (CCArray*)dict->objectForKey("points");
+    if (points && points->count() > 0) {
+        CCDictionary* point = (CCDictionary*)(points->objectAtIndex(0));
+        _prepareFirstHillKeyPoint = CCPointMake(
+            x + ((CCString*)point->valueForKey("x"))->intValue(),
+            y - ((CCString*)point->valueForKey("y"))->intValue()
+        );
+    }
 }
 
 void Terrain::prepareHillKeyPoint()
@@ -220,30 +209,24 @@ void Terrain::prepareHillKeyPoint()
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
 	//刚体关键点
-	CCString* pointStr = (CCString*)dict->objectForKey("polyline");
-	const char* beginPos;
-	const char* endPos;
-	const_string_parser lineParser(pointStr->getCString(),' ');
-	while (beginPos=lineParser.parse(&endPos))
-	{
-		const char* ppbegin;
-		const char* ppend;
-		const_string_parser pointParser(beginPos,',');
-		ppbegin = pointParser.parse(&ppend);
-
-		CCString* xString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-		ppbegin = pointParser.parse(&ppend);
-		CCString* yString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-
-		//CCLog("X=%d,Y=%d",xString->intValue(),yString->intValue());
-
-		_hillKeyPoints[_hillKeyPointIndex++] = ccp(offsetPosition.x +  x + xString->intValue(),offsetPosition.y +  y -yString->intValue() );
-		if (_hillKeyPointIndex >= kMaxPlatformKeyPoints)
-		{
-			_hillKeyPointIndex = 0;
-		}
-		_lastHillKeyPoint = ccp(x + xString->intValue(),y -yString->intValue());
-	}
+    CCArray* points = (CCArray*)dict->objectForKey("points");
+    CCObject* pObj = NULL;
+    CCDictionary* point = NULL;
+    CCARRAY_FOREACH(points, pObj) {
+        point = (CCDictionary*)pObj;
+        _hillKeyPoints[_hillKeyPointIndex++] = ccp(
+            offsetPosition.x +  x + ((CCString*)point->valueForKey("x"))->intValue(),
+            offsetPosition.y +  y - ((CCString*)point->valueForKey("y"))->intValue()
+        );
+        if (_hillKeyPointIndex >= kMaxPlatformKeyPoints)
+        {
+            _hillKeyPointIndex = 0;
+        }
+        _lastHillKeyPoint = ccp(
+            x + ((CCString*)point->valueForKey("x"))->intValue(),
+            y - ((CCString*)point->valueForKey("y"))->intValue()
+        );
+    }
 }
 
 void Terrain::resetHillVertices()
@@ -433,10 +416,7 @@ void Terrain::createElementBox2DBody()
 		}
 
 		//刚体关键关键点
-		CCString* pointStr = (CCString*)dict->objectForKey("polyline");
-		const char* beginPos;
-		const char* endPos;
-		const_string_parser lineParser(pointStr->getCString(),' ');
+        CCArray* points = (CCArray*)dict->objectForKey("points");
 
 		b2BodyDef bd;
 		bd.position.Set(0, 0);
@@ -446,27 +426,24 @@ void Terrain::createElementBox2DBody()
 		b2EdgeShape shape;
 		b2Vec2 p1, p2;
 		int flag = 0;
-		while (beginPos=lineParser.parse(&endPos))
-		{
-			const char* ppbegin;
-			const char* ppend;
-			const_string_parser pointParser(beginPos,',');
-			ppbegin = pointParser.parse(&ppend);
-
-			CCString* xString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-			ppbegin = pointParser.parse(&ppend);
-			CCString* yString = CCString::createWithData((const unsigned char*)ppbegin,ppend - ppbegin);
-
-			//CCLog("X=%d,Y=%d",xString->intValue(),yString->intValue());
-
+		CCObject* pObj = NULL;
+        CCDictionary* point = NULL;
+        CCARRAY_FOREACH(points, pObj) {
+            point = (CCDictionary*)pObj;
 			if (flag == 0)
 			{
 				flag++;
-				p1 = b2Vec2( (x+xString->intValue()+offsetPosition.x) / PTM_RATIO, (y-yString->intValue() + offsetPosition.y) / PTM_RATIO);
+				p1 = b2Vec2(
+                    (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+                    (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+                );
 			}
 			else
 			{
-				p2 = b2Vec2( (x+xString->intValue()+offsetPosition.x) / PTM_RATIO, (y-yString->intValue() + offsetPosition.y) / PTM_RATIO);
+				p2 = b2Vec2(
+                    (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+                    (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+                );
 				shape.Set(p1, p2);
 
 				b2FixtureDef fd;
