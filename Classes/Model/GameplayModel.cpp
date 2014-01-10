@@ -195,8 +195,8 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 	if (obj)
 	{
 		/*速度为0,石头碎、hero受到伤害**/
-		if ( myContact._linearVelocity.x == 0.0f &&
-			 myContact._linearVelocity.y == 0.0f)
+		if ( myContact._linearVelocity.x <= 0.0f &&
+			 myContact._linearVelocity.y <= 0.0f)
 		{
 			b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
 			CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
@@ -245,9 +245,6 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 		{
 
 		}
-
-		//
-		
 	}
 }
 
