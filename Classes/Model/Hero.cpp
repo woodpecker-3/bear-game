@@ -80,8 +80,7 @@ void Hero::update( float dt )
 		_nextVel = 0;
 	}
 
-	//Ðý×ª
-	
+	/*在地面or在空中没有主动调整过角度时，程序要自动调整角度**/
 	if (GameplayModel::sharedModel()->isHeroOnTheGround())
 	{
 		float angle = ccpToAngle(ccp(weightedVel.x, weightedVel.y));
@@ -92,11 +91,6 @@ void Hero::update( float dt )
 void Hero::createBox2dBody()
 {
 	float radius = 16.0f;
-// 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-// 	int screenH = size.height;
-
-	//CCPoint startPosition = ccp(size.width / 8, screenH / 2 + radius);
-	//CCPoint startPosition = getMainLayer()->getHeroStartPos();
 
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
@@ -152,16 +146,11 @@ void Hero::jump()
 {
 	if (_awake)
 	{
-		b2Vec2 vel;// = _body->GetLinearVelocity();
+		b2Vec2 vel;
 		vel.x = 1;
 		vel.y = 5;
 		_body->ApplyLinearImpulse(vel, _body->GetPosition());
 	}
-}
-
-void Hero::rotation(float angle)
-{
-	setRotation(-1 * CC_RADIANS_TO_DEGREES(angle));
 }
 
 void Hero::setState( int state )

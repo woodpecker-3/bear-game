@@ -6,13 +6,13 @@
 #include "GameObject.h"
 
 USING_NS_CC;
+static GameplayModel* s_GameplayMode=NULL;
 GameplayModel::GameplayModel()
 {
 	_world = NULL;
 	_contactListener = NULL;
 	_terrain = NULL;
 	_hero = NULL;
-	//_platform = NULL;
 	_tapDown = false;
 	_rotationAngle = 0;
 	_terrainScale = 1;
@@ -21,20 +21,21 @@ GameplayModel::GameplayModel()
 GameplayModel::~GameplayModel()
 {
 	CC_SAFE_DELETE(_world);
+
+	CC_SAFE_DELETE(s_GameplayMode);
 }
 
 GameplayModel* GameplayModel::sharedModel()
 {
-	static GameplayModel* sGameplayMode=NULL;
-	if(!sGameplayMode)
+	if(!s_GameplayMode)
 	{
 		GameplayModel* model = new GameplayModel;
 		if (model && model->init())
 		{
-			sGameplayMode = model;
+			s_GameplayMode = model;
 		}
 	}
-	return sGameplayMode;
+	return s_GameplayMode;
 }
 
 bool GameplayModel::init()
@@ -49,9 +50,6 @@ bool GameplayModel::init()
 
 		_terrain = Terrain::create(_world,_hero);
 		CC_BREAK_IF(!_terrain);
-
-// 		_platform = MyPlatform::create(_terrain);
-// 		CC_BREAK_IF(!_platform);
 
 		bRet = true;
 	} while (0);
@@ -118,13 +116,11 @@ void GameplayModel::update( float dt )
 
 	_terrain->update(dt);
 
-	//_platform->update(dt);
 	//contact
 	processContact();
 
 	//score
-	float score = GameplayModel::sharedModel()->getHero()->getPositionX();
-	score /= PTM_RATIO;
+	float score = _hero->getPositionX()/PTM_RATIO;
 	BearData::sharedData()->setScore((int)score);
 }
 
@@ -199,7 +195,8 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 	if (obj)
 	{
 		/*速度为0,石头碎、hero受到伤害**/
-		if ( !myContact._linearVelocity.IsValid() )
+		if ( myContact._linearVelocity.x == 0.0f &&
+			 myContact._linearVelocity.y == 0.0f)
 		{
 			b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
 			CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);

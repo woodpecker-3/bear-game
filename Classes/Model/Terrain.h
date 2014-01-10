@@ -62,8 +62,10 @@ protected:
 	Hero* _hero;
 
 	b2World *_world;
-	b2Body *_body;/*地表**/
-	vector<b2Body*> _bodyArr;/*可碰撞物件**/
+	/*地表**/
+	b2Body *_body;
+	/*可碰撞物件**/
+	vector<b2Body*> _bodyArr;
 
 
 	//cocos2d::CCTMXTiledMap* _leftMap;
@@ -81,7 +83,8 @@ protected:
 	
 	/*地面关键点**/
 	cocos2d::CCPoint _hillKeyPoints[kMaxPlatformKeyPoints];
-	int _hillKeyPointIndex;/*当前插入位置**/
+	/*当前插入位置**/
+	int _hillKeyPointIndex;
 	/*当前绘制区域**/
 	int _fromKeyPointIndex;
 	int _toKeyPointIndex;

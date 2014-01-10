@@ -7,7 +7,6 @@
 
 class Hero;
 class Terrain;
-//class MyPlatform;
 class GameplayModel
 {
 public:
@@ -26,7 +25,6 @@ public:
 public:
 	Hero* getHero(){return _hero;}
 	Terrain* getTerrain(){return _terrain;}
-	//MyPlatform* getPlatform(){return _platform;}
 	MyContactListener* getContactListener(){return _contactListener;}
 protected:
 	void setupWorld();
@@ -40,7 +38,6 @@ private:
 
 	Hero* _hero;
 	Terrain* _terrain;
-	//MyPlatform* _platform;
 
 	float _rotationAngle;
 };

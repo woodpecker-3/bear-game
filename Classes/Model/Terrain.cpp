@@ -98,9 +98,9 @@ void Terrain::createMap()
 	_rightMap->_map = CCTMXTiledMap::create(nextMapRes());
 	addChild(_rightMap->_map,-1);
 	_rightMap->_offsetXWhenCreated = getPosition().x;
-	//提取第一个点
+	/*提取第一个点**/
 	prepareFirstHillKeyPoint();
-	//下一张地图第一个点和上一张地图最后一个点重合
+	/*下一张地图第一个点和上一张地图最后一个点重合**/
 	CCPoint leftPoint;
 	float leftMapWidth = 0;
 	if (_leftMap->isValid())
@@ -109,7 +109,7 @@ void Terrain::createMap()
 		leftPoint = _leftMap->_map->getPosition();
 	}
 	else
-	{//第一个点会左移，补上一个点
+	{/*第一个点会左移，补上一个点**/
 		_hillKeyPoints[_hillKeyPointIndex++] = CCPointMake(-_sceenSize.width/4,_sceenSize.height*3/4);
 		leftPoint = CCPointZero;
 	}
@@ -117,10 +117,10 @@ void Terrain::createMap()
  	_rightMap->_map->setPosition(CCPointMake(leftPoint.x + leftMapWidth - _prepareFirstHillKeyPoint.x,
  		leftPoint.y + _lastHillKeyPoint.y - _prepareFirstHillKeyPoint.y ));
 
-	//提取地面关键点
+	/*提取地面关键点**/
 	prepareHillKeyPoint();
 
-	//创建障碍物刚体
+	/*创建障碍物刚体**/
 	createElementBox2DBody();
 
 	//
@@ -149,13 +149,13 @@ void Terrain::resetMap()
 		if (_leftMap->_offsetXWhenCreated == 0 )
 		{
 			if(( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width/8))
-			{//左边地图右半滑出屏幕8分之区域
+			{/*左边地图右半滑出屏幕8分之区域**/
 				swap(_leftMap,_rightMap);
 				_rightMap->_map->setVisible(false);
 				removeMap(_rightMap);
 			}
 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)- _sceenSize.width*9/8))
-			{//左边地图左半进入屏幕8分之区域
+			{/*左边地图左半进入屏幕8分之区域**/
 				if (!_rightMap->isValid())
 				{
 					createMap();
@@ -165,13 +165,13 @@ void Terrain::resetMap()
 		else
 		{
 			if(( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width*10/8))
-			{//左边地图右半滑出屏幕8分之区域
+			{/*左边地图右半滑出屏幕8分之区域**/
 				swap(_leftMap,_rightMap);
 				_rightMap->_map->setVisible(false);
 				removeMap(_rightMap);
 			}
 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)/*- _sceenSize.width*9/8*/))
-			{//左边地图左半进入屏幕8分之区域
+			{/*左边地图左半进入屏幕8分之区域**/
 				if (!_rightMap->isValid())
 				{
 					createMap();
@@ -185,10 +185,10 @@ void Terrain::prepareFirstHillKeyPoint()
 {
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d");
 	CCDictionary* dict = objGroup->objectNamed("platform");
-	//对象的位置
+	/*对象的位置**/
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
-	//刚体关键点
+	/*刚体关键点**/
     CCArray* points = (CCArray*)dict->objectForKey("points");
     if (points && points->count() > 0) {
         CCDictionary* point = (CCDictionary*)(points->objectAtIndex(0));
@@ -205,10 +205,10 @@ void Terrain::prepareHillKeyPoint()
 
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d");
 	CCDictionary* dict = objGroup->objectNamed("platform");
-	//对象位置
+	/*对象位置**/
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
 	int y = ((CCString*)dict->objectForKey("y"))->intValue();
-	//刚体关键点
+	/*刚体关键点**/
     CCArray* points = (CCArray*)dict->objectForKey("points");
     CCObject* pObj = NULL;
     CCDictionary* point = NULL;
@@ -274,7 +274,7 @@ void Terrain::resetHillVertices()
 		{
 			nextKeyPointIndex = 0;
 		}
-		//×îÐ¡µÄyÖµ
+		/*绘制的水平基准**/
 		float minY = p0.y;
 		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
 		{
@@ -387,7 +387,7 @@ void Terrain::resetTerrainBox2DBody()
 void Terrain::createElementBox2DBody()
 {
 	CCPoint offsetPosition = _rightMap->_map->getPosition();
-	//障碍物layer
+	/*障碍物layer**/
 	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("box2d2");
 	CCArray* objArr = objGroup->getObjects();
 	CCObject* obj=NULL;
@@ -398,10 +398,9 @@ void Terrain::createElementBox2DBody()
 	{
 		obj = objArr->objectAtIndex(i);
 		dict = (CCDictionary*)obj;
-		//对象位置
+		/*对象位置**/
 		int x = ((CCString*)dict->objectForKey("x"))->intValue();
 		int y = ((CCString*)dict->objectForKey("y"))->intValue();
-		//´´½¨¾«Áé
 		GameObject* obj = NULL;
 // 		if (strcmp(dict->valueForKey("name")->getCString(),"stone") == 0 ||
 // 			strcmp(dict->valueForKey("name")->getCString(),"gold"))

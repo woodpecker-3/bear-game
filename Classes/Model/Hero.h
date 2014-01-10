@@ -29,7 +29,6 @@ public:
 	void limitVelocity();
 	void wake();
 	void jump();
-	void rotation(float angle);
 
 	void damage();
 public:

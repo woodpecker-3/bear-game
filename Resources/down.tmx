@@ -52,5 +52,12 @@
    </properties>
    <polyline points="4,10 -14,-21 43,-21 40,8 5,10"/>
   </object>
+  <object name="stone" x="1605" y="455">
+   <properties>
+    <property name="canDestroy" value="True"/>
+    <property name="objType" value="2"/>
+   </properties>
+   <polyline points="-2,7 -9,-21 28,-23 29,6 -4,5"/>
+  </object>
  </objectgroup>
 </map>
