@@ -57,7 +57,7 @@ void MyContactListener::PostSolve( b2Contact* contact, const b2ContactImpulse* i
 		{
 			// linearVelocity
 			b2Vec2 vel = GameplayModel::sharedModel()->getHero()->getBody()->GetLinearVelocity();
-			CCLOG("GetLinearVelocity(%f,%f)",vel.x,vel.y);
+			//CCLOG("GetLinearVelocity(%f,%f)",vel.x,vel.y);
 
 			MyContact myContact;
 			myContact._impulse = maxImpulse;

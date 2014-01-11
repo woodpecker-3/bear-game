@@ -38,7 +38,5 @@ private:
 
 	Hero* _hero;
 	Terrain* _terrain;
-
-	float _rotationAngle;
 };
 #endif// _GAMEMODEL_H_

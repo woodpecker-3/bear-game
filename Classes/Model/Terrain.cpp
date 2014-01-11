@@ -274,22 +274,6 @@ void Terrain::resetHillVertices()
 		{
 			nextKeyPointIndex = 0;
 		}
-		/*绘制的水平基准**/
-		float minY = p0.y;
-		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
-		{
-			if (_hillKeyPoints[i].y < minY)
-			{
-				minY = _hillKeyPoints[i].y;
-			}
-			++i;
-			if (i >= kMaxPlatformKeyPoints)
-			{
-				i=0;
-			}
-		}
-		minY -= 320;
-
 		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
 		{
 			
@@ -309,9 +293,9 @@ void Terrain::resetHillVertices()
 				pt1.y = ymid + ampl * cosf(da * j);
 				_borderVertices[_borderVerticesCount++] = pt1;
 
- 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/minY);
+ 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y-320));
  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
- 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/minY);
+ 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y-320));
  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
  
  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);

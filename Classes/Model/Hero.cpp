@@ -81,11 +81,32 @@ void Hero::update( float dt )
 	}
 
 	/*在地面or在空中没有主动调整过角度时，程序要自动调整角度**/
-	if (GameplayModel::sharedModel()->isHeroOnTheGround())
+	float currAngleDegree = getRotation();
+	if (GameplayModel::sharedModel()->getTapDown())
+	{
+		while (currAngleDegree > 360) {
+			currAngleDegree -= 360;
+		}
+		while (currAngleDegree < -360) {
+			currAngleDegree += 360;
+		}
+		// 12 * 0.5 * 60 = 360
+		// 12 degree per frame, 0.5 sec to turn a loop, negative means ccw
+		currAngleDegree -= 3;
+	}
+	else
 	{
 		float angle = ccpToAngle(ccp(weightedVel.x, weightedVel.y));
-		setRotation(-1 * CC_RADIANS_TO_DEGREES(angle));
+		float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
+		float delta = (tarAngleDegree - currAngleDegree);
+		if (abs(delta) > 2 )
+		{
+			delta = delta/abs(delta)*2;
+		}
+		CCLOG("delta=%f,tarAngleDegree=%f,currAngleDegree=%f",delta,tarAngleDegree,currAngleDegree);
+		currAngleDegree += delta;		
 	}
+	setRotation(currAngleDegree);
 }
 
 void Hero::createBox2dBody()
@@ -120,7 +141,7 @@ void Hero::limitVelocity()
 		return;
 	}
 
-	const float minVelocityX = 5;
+	const float minVelocityX = 8;
 	const float minVelocityY = -40;
 	b2Vec2 vel = _body->GetLinearVelocity();
 	if (vel.x < minVelocityX)

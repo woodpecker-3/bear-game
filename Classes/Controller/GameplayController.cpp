@@ -117,19 +117,6 @@ void GameplayController::operateAllSchedulerAndActions( cocos2d::CCNode* node, O
 	}
 }
 
-// void GameplayController::didJump()
-// {
-// 	Hero* hero = GameplayModel::sharedModel()->getHero();
-// 	if (hero->isHeroOnTheGround())
-// 	{
-// 		hero->jump();
-// 	}
-// 	else
-// 	{
-// 		hero->rotation();
-// 	}
-// }
-
 void GameplayController::didTouchBegan()
 {
 	Hero* hero = GameplayModel::sharedModel()->getHero();

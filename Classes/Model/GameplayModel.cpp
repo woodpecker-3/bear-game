@@ -14,7 +14,6 @@ GameplayModel::GameplayModel()
 	_terrain = NULL;
 	_hero = NULL;
 	_tapDown = false;
-	_rotationAngle = 0;
 	_terrainScale = 1;
 }
 
@@ -91,28 +90,13 @@ void GameplayModel::update( float dt )
 		_world->ClearForces();
 	}
 	
+	/*在地面取消按下效果**/
+	if (isHeroOnTheGround())
+	{
+		setTapDown(false);
+	}
 	
 	_hero->update(dt);
-	if (_tapDown && !isHeroOnTheGround())
-	{
-		//_rotationAngle += 1;
-		//_hero->rotation(_rotationAngle);
-        float currAngleDegree = _hero->getRotation();
-        while (currAngleDegree > 360) {
-            currAngleDegree -= 360;
-        }
-        while (currAngleDegree < -360) {
-            currAngleDegree += 360;
-        }
-        // 12 * 0.5 * 60 = 360
-        // 12 degree per frame, 0.5 sec to turn a loop, negative means ccw
-        _hero->setRotation(currAngleDegree + (-12));
-	}
-	else
-	{
-		_rotationAngle = 0;
-	}
-
 
 	_terrain->update(dt);
 
@@ -182,7 +166,12 @@ bool GameplayModel::isHeroOnTheGround()
 void GameplayModel::processContact_Ground(const MyContact& myContact )
 {
 	/*速度为0**/
-	if(!myContact._linearVelocity.IsValid())
+	float currAngleDegree = _hero->getRotation();
+
+	b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
+	float angle = ccpToAngle(ccp(vel.x, vel.y));
+	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
+	if (currAngleDegree < tarAngleDegree)
 	{
 		_hero->damage();
 	}
@@ -199,7 +188,7 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 			 myContact._linearVelocity.y <= 0.0f)
 		{
 			b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-			CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+			//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
 
 			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
 			explosion->retain();
@@ -256,7 +245,7 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 	{
 		//
 		b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-		CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+		//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
 
 		CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
 		explosion->retain();
