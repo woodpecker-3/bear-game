@@ -8,9 +8,31 @@ LOCAL_MODULE_FILENAME := libcocos2dcpp
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp
+                   ../../Classes/Controller/GameStartController.cpp \
+                   ../../Classes/Controller/GameStartControllerDelegate.cpp \
+                   ../../Classes/Controller/GameplayController.cpp \
+                   ../../Classes/Controller/GameplayControllerDelegate.cpp \
+                   ../../Classes/Controller/MyContactListener.cpp \
+                   ../../Classes/Model/BearData.cpp \
+                   ../../Classes/Model/GameObject.cpp \
+                   ../../Classes/Model/GameStartModel.cpp \
+                   ../../Classes/Model/GameplayModel.cpp \
+                   ../../Classes/Model/Hero.cpp \
+                   ../../Classes/Model/MyPlatform.cpp \
+                   ../../Classes/Model/Terrain.cpp \
+                   ../../Classes/View/BackgroundLayer.cpp \
+                   ../../Classes/View/GameStartView.cpp \
+                   ../../Classes/View/GameplayView.cpp \
+                   ../../Classes/View/MenuLayer.cpp \
+                   ../../Classes/View/PanelLayer.cpp \
+                   ../../Classes/View/PlayerLayer.cpp \
+                   ../../Classes/View/TouchLayer.cpp \
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
+			$(LOCAL_PATH)/../../Classes/Controller \
+			$(LOCAL_PATH)/../../Classes/Model \
+			$(LOCAL_PATH)/../../Classes/View \
+			$(LOCAL_PATH)/../../Classes/Util
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static

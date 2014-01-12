@@ -255,12 +255,7 @@
 		CB9F45AE187F9B7D006F8CD6 /* PanelLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB9F4598187F9B7D006F8CD6 /* PanelLayer.cpp */; };
 		CB9F45AF187F9B7D006F8CD6 /* PlayerLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB9F459A187F9B7D006F8CD6 /* PlayerLayer.cpp */; };
 		CB9F45B0187F9B7D006F8CD6 /* TouchLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CB9F459C187F9B7D006F8CD6 /* TouchLayer.cpp */; };
-		CB9F45E6187F9BFD006F8CD6 /* 地图.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B1187F9BFD006F8CD6 /* 地图.png */; };
-		CB9F45E7187F9BFD006F8CD6 /* 房子.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B2187F9BFD006F8CD6 /* 房子.png */; };
 		CB9F45E8187F9BFD006F8CD6 /* jinbi.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B4187F9BFD006F8CD6 /* jinbi.png */; };
-		CB9F45E9187F9BFD006F8CD6 /* 金币.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B5187F9BFD006F8CD6 /* 金币.png */; };
-		CB9F45EA187F9BFD006F8CD6 /* 金币0.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B6187F9BFD006F8CD6 /* 金币0.png */; };
-		CB9F45EB187F9BFD006F8CD6 /* 金币2.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B7187F9BFD006F8CD6 /* 金币2.png */; };
 		CB9F45EC187F9BFD006F8CD6 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45B8187F9BFD006F8CD6 /* background.png */; };
 		CB9F45ED187F9BFD006F8CD6 /* bear_duck1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45BA187F9BFD006F8CD6 /* bear_duck1.png */; };
 		CB9F45EE187F9BFD006F8CD6 /* bear_duck2.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9F45BB187F9BFD006F8CD6 /* bear_duck2.png */; };
@@ -836,12 +831,7 @@
 		CB9F459B187F9B7D006F8CD6 /* PlayerLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerLayer.h; sourceTree = "<group>"; };
 		CB9F459C187F9B7D006F8CD6 /* TouchLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TouchLayer.cpp; sourceTree = "<group>"; };
 		CB9F459D187F9B7D006F8CD6 /* TouchLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchLayer.h; sourceTree = "<group>"; };
-		CB9F45B1187F9BFD006F8CD6 /* 地图.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "地图.png"; sourceTree = "<group>"; };
-		CB9F45B2187F9BFD006F8CD6 /* 房子.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "房子.png"; sourceTree = "<group>"; };
 		CB9F45B4187F9BFD006F8CD6 /* jinbi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jinbi.png; sourceTree = "<group>"; };
-		CB9F45B5187F9BFD006F8CD6 /* 金币.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "金币.png"; sourceTree = "<group>"; };
-		CB9F45B6187F9BFD006F8CD6 /* 金币0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "金币0.png"; sourceTree = "<group>"; };
-		CB9F45B7187F9BFD006F8CD6 /* 金币2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "金币2.png"; sourceTree = "<group>"; };
 		CB9F45B8187F9BFD006F8CD6 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		CB9F45BA187F9BFD006F8CD6 /* bear_duck1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bear_duck1.png; sourceTree = "<group>"; };
 		CB9F45BB187F9BFD006F8CD6 /* bear_duck2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bear_duck2.png; sourceTree = "<group>"; };
@@ -1866,8 +1856,6 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CB9F45B1187F9BFD006F8CD6 /* 地图.png */,
-				CB9F45B2187F9BFD006F8CD6 /* 房子.png */,
 				CB9F45B3187F9BFD006F8CD6 /* back */,
 				CB9F45B8187F9BFD006F8CD6 /* background.png */,
 				CB9F45B9187F9BFD006F8CD6 /* bear */,
@@ -1992,9 +1980,6 @@
 			isa = PBXGroup;
 			children = (
 				CB9F45B4187F9BFD006F8CD6 /* jinbi.png */,
-				CB9F45B5187F9BFD006F8CD6 /* 金币.png */,
-				CB9F45B6187F9BFD006F8CD6 /* 金币0.png */,
-				CB9F45B7187F9BFD006F8CD6 /* 金币2.png */,
 			);
 			path = back;
 			sourceTree = "<group>";
@@ -2114,7 +2099,6 @@
 				CB9F4605187F9BFD006F8CD6 /* Noise.png in Resources */,
 				CB9F4607187F9BFD006F8CD6 /* stars.png in Resources */,
 				D4EF949A15BD2D8B00D803EB /* Icon-57.png in Resources */,
-				CB9F45E9187F9BFD006F8CD6 /* 金币.png in Resources */,
 				CB9F4600187F9BFD006F8CD6 /* gold1.png in Resources */,
 				CB9F4609187F9BFD006F8CD6 /* stone.png in Resources */,
 				CB9F45FF187F9BFD006F8CD6 /* Marker Felt.ttf in Resources */,
@@ -2130,19 +2114,15 @@
 				D4EF94A015BD2D9800D803EB /* Icon-144.png in Resources */,
 				CB9F45F4187F9BFD006F8CD6 /* bear_resource.png in Resources */,
 				CB9F45F5187F9BFD006F8CD6 /* bear.mp3 in Resources */,
-				CB9F45EB187F9BFD006F8CD6 /* 金币2.png in Resources */,
 				D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */,
 				CB9F4611187F9BFD006F8CD6 /* bear.tps in Resources */,
 				CB9F4604187F9BFD006F8CD6 /* menu_start_selected.png in Resources */,
 				CB9F4602187F9BFD006F8CD6 /* gold3.png in Resources */,
 				CB9F45E8187F9BFD006F8CD6 /* jinbi.png in Resources */,
 				CB9F45EC187F9BFD006F8CD6 /* background.png in Resources */,
-				CB9F45EA187F9BFD006F8CD6 /* 金币0.png in Resources */,
 				CB9F45FB187F9BFD006F8CD6 /* bg3.png in Resources */,
-				CB9F45E7187F9BFD006F8CD6 /* 房子.png in Resources */,
 				CB9F4612187F9BFD006F8CD6 /* CloseNormal.png in Resources */,
 				D446FD6E16102124000ADA7B /* Default@2x.png in Resources */,
-				CB9F45E6187F9BFD006F8CD6 /* 地图.png in Resources */,
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,
 				CB9F45FD187F9BFD006F8CD6 /* fire.png in Resources */,
 				CB9F4616187F9BFD006F8CD6 /* tree.png in Resources */,

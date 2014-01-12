@@ -16,6 +16,8 @@ OPTIONS:
 EOF
 }
 
+#source ~/.bash_profile
+
 while getopts "sh" OPTION; do
 case "$OPTION" in
 s)
