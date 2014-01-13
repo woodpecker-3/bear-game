@@ -133,6 +133,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\Controller\GameStartController.cpp" />
     <ClCompile Include="..\Classes\Controller\GameStartControllerDelegate.cpp" />
     <ClCompile Include="..\Classes\Controller\MyContactListener.cpp" />
+    <ClCompile Include="..\Classes\Model\Background.cpp" />
     <ClCompile Include="..\Classes\Model\BearData.cpp" />
     <ClCompile Include="..\Classes\Model\GameObject.cpp" />
     <ClCompile Include="..\Classes\Model\GameplayModel.cpp" />
@@ -156,6 +157,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\Controller\GameStartControllerDelegate.h" />
     <ClInclude Include="..\Classes\Controller\MyContactListener.h" />
     <ClInclude Include="..\Classes\Defined.h" />
+    <ClInclude Include="..\Classes\Model\Background.h" />
     <ClInclude Include="..\Classes\Model\BearData.h" />
     <ClInclude Include="..\Classes\Model\GameObject.h" />
     <ClInclude Include="..\Classes\Model\GameplayModel.h" />

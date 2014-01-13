@@ -15,6 +15,7 @@ Hero::Hero()
 	_normalAnimate = NULL;
 	_bellyAnim = NULL;
 	_bellyAnimate = NULL;
+	_strike = NULL;
 }
 
 Hero::~Hero()
@@ -38,7 +39,11 @@ bool Hero::init(b2World* world)
 	bool bRet = false;
 	do 
 	{
-		CC_BREAK_IF(!CCSprite::initWithSpriteFrameName("bear_stand1.png"));
+		CC_BREAK_IF(!CCNode::init());
+
+		_sprite = CCSprite::createWithSpriteFrameName("bear_stand1.png");
+		CC_BREAK_IF(!_sprite);
+		addChild(_sprite);
 
 		_world = world;
 
@@ -64,6 +69,8 @@ bool Hero::init(b2World* world)
 
 void Hero::update( float dt )
 {
+	CCNode::update(dt);
+
 	if (!_awake) return;
 	setPosition(ccp(_body->GetPosition().x * PTM_RATIO, _body->GetPosition().y * PTM_RATIO));
 	b2Vec2 vel = _body->GetLinearVelocity();
@@ -82,6 +89,7 @@ void Hero::update( float dt )
 
 	/*在地面or在空中没有主动调整过角度时，程序要自动调整角度**/
 	float currAngleDegree = getRotation();
+	float oldAngleDegree = currAngleDegree;
 	if (GameplayModel::sharedModel()->getTapDown())
 	{
 		while (currAngleDegree > 360) {
@@ -106,7 +114,34 @@ void Hero::update( float dt )
 		CCLOG("delta=%f,tarAngleDegree=%f,currAngleDegree=%f",delta,tarAngleDegree,currAngleDegree);
 		currAngleDegree += delta;		
 	}
-	setRotation(currAngleDegree);
+	if (currAngleDegree != oldAngleDegree)
+	{
+		setRotation(currAngleDegree);
+	}
+
+	/*拖尾**/
+// 	if(!GameplayModel::sharedModel()->isHeroOnTheGround())
+// 	{
+// 		if(!_strike)
+// 		{
+// 			_strike = CCMotionStreak::create(1.0f,/*尾巴持续的时间 **/
+// 				16.0f,/*尾巴大小  **/
+// 				16.0f,/*图片的大小 **/ 
+// 				ccRED,/*颜色 **/
+// 				"fire.png"/*使用的图片 **/
+// 				);  
+// 			addChild(_strike,1);  
+// 			_strike->setPosition(ccp(240,160));  
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if(_strike)
+// 		{
+// 			removeChild(_strike,true);    
+// 			_strike = NULL;
+// 		}
+// 	}
 }
 
 void Hero::createBox2dBody()
@@ -185,13 +220,13 @@ void Hero::setState( int state )
 			{
 				if (_bellyAnimate)
 				{
-					stopAction(_bellyAnimate);
+					_sprite->stopAction(_bellyAnimate);
 					_bellyAnimate = NULL;
 				}
 				if(!_normalAnimate)
 				{
 					_normalAnimate = CCRepeatForever::create(CCAnimate::create(_normalAnim));
-					runAction(_normalAnimate);
+					_sprite->runAction(_normalAnimate);
 				}
 			}
 			break;
@@ -199,12 +234,12 @@ void Hero::setState( int state )
 			{
 				if (_normalAnimate)
 				{
-					stopAction(_normalAnimate);
+					_sprite->stopAction(_normalAnimate);
 				}
 				_normalAnimate = NULL;
 
 				_bellyAnimate = CCRepeatForever::create(CCAnimate::create(_bellyAnim));
-				runAction(_bellyAnimate);
+				_sprite->runAction(_bellyAnimate);
 			}
 			break;
 		default:

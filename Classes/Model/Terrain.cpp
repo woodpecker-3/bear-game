@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "GameplayModel.h"
 
+#define CONST_OFFSET_Y 0.5
+
 USING_NS_CC;
 static const char* s_MapArr[]={"down.tmx","down.tmx"};
 const char* nextMapRes()
@@ -67,7 +69,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_rightMap->clear();
 		
 		//初始点
-		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*0.5);
+		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*CONST_OFFSET_Y);
 		createMap();
 		resetHillVertices();
 
@@ -80,7 +82,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_hero = hero;
 		addChild(_hero,11);
  		_hero->setPosition(CCPointMake(_leftMap->_map->getPosition().x + _prepareFirstHillKeyPoint.x,
- 			_leftMap->_map->getPosition().y + _prepareFirstHillKeyPoint.y + _hero->getContentSize().height/4));
+ 			_leftMap->_map->getPosition().y + _prepareFirstHillKeyPoint.y + _hero->getContentSize().height/2+32));
 		_hero->createBox2dBody();
 		//_hero->update(0);
 
@@ -293,9 +295,9 @@ void Terrain::resetHillVertices()
 				pt1.y = ymid + ampl * cosf(da * j);
 				_borderVertices[_borderVerticesCount++] = pt1;
 
- 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y-320));
+ 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height));
  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
- 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y-320));
+ 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height));
  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
  
  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
@@ -455,7 +457,7 @@ void Terrain::update( float dt )
 	resetHillVertices();
 
 	//scale
-	float scale = abs((_sceenSize.height*0.5)/(getPositionY() + _hero->getPositionY()));
+	float scale = abs((_sceenSize.height*CONST_OFFSET_Y)/(getPositionY() + _hero->getPositionY()));
 	GameplayModel::sharedModel()->setTerrainScale(scale);
 }
 
@@ -477,7 +479,7 @@ void Terrain::draw()
 void Terrain::fellow()
 {
 	float offsetX = _sceenSize.width/4 - _hero->getPosition().x * getScale();
-	float offsetY = (_sceenSize.height*0.5 - (_hero->getPosition().y + getPosition().y));
+	float offsetY = (_sceenSize.height*CONST_OFFSET_Y - (_hero->getPosition().y + getPosition().y));
 	if (offsetY < 0)
 	{
 		offsetY = 0;

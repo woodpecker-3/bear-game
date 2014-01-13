@@ -16,10 +16,12 @@ public:
 
 	void setOffsetX(float offsetX);
 
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCSprite*,_backgroundSprite,BackgroundSprite);
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCSprite*,_backgroundSprite2,BackgroundSprite2);
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCSprite*,_mediumgroundSprite,MediumgroundSprite);
-	CC_SYNTHESIZE_RETAIN(cocos2d::CCSprite*,_mediumgroundSprite2,MediumgroundSprite2);
+private:
+	cocos2d::CCSprite* _backgroundSprite;
+	cocos2d::CCSprite* _backgroundSprite2;
+	cocos2d::CCSprite* _mediumgroundSprite;
+	cocos2d::CCSprite* _mediumgroundSprite2;
+	cocos2d::CCSprite* _light;
 protected:
 	float _offsetX;
 };

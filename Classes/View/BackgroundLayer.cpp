@@ -1,4 +1,6 @@
 #include "BackgroundLayer.h"
+#include "GameplayModel.h"
+#include "Background.h"
 
 USING_NS_CC;
 BackgroundLayer::BackgroundLayer()
@@ -7,15 +9,13 @@ BackgroundLayer::BackgroundLayer()
 	_backgroundSprite2 = NULL;
 	_mediumgroundSprite = NULL;
 	_mediumgroundSprite2 = NULL;
+	_backgroundSprite = NULL;
 	_offsetX= 0;
 }
 
 BackgroundLayer::~BackgroundLayer()
 {
-	CC_SAFE_RELEASE_NULL(_backgroundSprite);
-	CC_SAFE_RELEASE_NULL(_backgroundSprite2);
-	CC_SAFE_RELEASE_NULL(_mediumgroundSprite);
-	CC_SAFE_RELEASE_NULL(_mediumgroundSprite2);
+
 }
 
 bool BackgroundLayer::init()
@@ -25,48 +25,40 @@ bool BackgroundLayer::init()
 	{
 		CC_BREAK_IF(!CCLayer::init());
 
-		//bg1
-		CCSprite* sprite = CCSprite::create("bg.png");
-		sprite->setAnchorPoint(CCPointMake(0,0));
-		setBackgroundSprite(sprite);
-		addChild(sprite);
-		//bg2
-		sprite = CCSprite::create("bg.png");
-		sprite->setAnchorPoint(CCPointMake(0,0));
-		setBackgroundSprite2(sprite);
-		addChild(sprite);
-		sprite->setPosition(CCPointMake(sprite->getContentSize().width,0));
+		addChild(GameplayModel::sharedModel()->getBackground());
+// 
+// 		//bg1
+// 		_backgroundSprite = CCSprite::create("bg.png");
+// 		CC_BREAK_IF(!_backgroundSprite);
+// 		_backgroundSprite->setAnchorPoint(CCPointMake(0,0));
+// 		addChild(_backgroundSprite);
+// 		//bg2
+// 		_backgroundSprite2 = CCSprite::create("bg.png");
+// 		CC_BREAK_IF(!_backgroundSprite2);
+// 		_backgroundSprite2->setAnchorPoint(CCPointMake(0,0));
+// 		addChild(_backgroundSprite2);
+// 		_backgroundSprite2->setPosition(CCPointMake(_backgroundSprite2->getContentSize().width,0));
+// 
+// 		//mg1
+// 		_mediumgroundSprite = CCSprite::create("mg.png");
+// 		CC_BREAK_IF(!_mediumgroundSprite);
+// 		_mediumgroundSprite->setAnchorPoint(CCPointMake(0,0));
+// 		addChild(_mediumgroundSprite);
+// 
+// 		//mg2
+// 		_mediumgroundSprite2 = CCSprite::create("mg.png");
+// 		CC_BREAK_IF(!_mediumgroundSprite2);
+// 		_mediumgroundSprite2->setAnchorPoint(CCPointMake(0,0));
+// 		addChild(_mediumgroundSprite2);
+// 		_mediumgroundSprite2->setPosition(CCPointMake(_mediumgroundSprite2->getContentSize().width,0));
+// 
+// 		//light
+// 		_light = CCSprite::create("light.png");
+// 		_light->setAnchorPoint(CCPointMake(0,0));
+// 		addChild(_light);
 
-		//mg1
-		sprite = CCSprite::create("bg.png");
-		sprite->setAnchorPoint(CCPointMake(0,0));
-		setMediumgroundSprite(sprite);
-		addChild(sprite);
-		//mg2
-		sprite = CCSprite::create("bg.png");
-		sprite->setAnchorPoint(CCPointMake(0,0));
-		setMediumgroundSprite(sprite);
-		addChild(sprite);
-		sprite->setPosition(CCPointMake(sprite->getContentSize().width,0));
 		bRet =true;
 	} while (0);
 	return bRet;
 }
 
-void BackgroundLayer::setOffsetX( float offsetX )
-{
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	/*一直往左移**/
-	_backgroundSprite->setPositionX(_backgroundSprite->getPosition().x - (offsetX - _offsetX) * 0.25f);
-	/*移完一个宽度时，重新把位置设置为接近0的位置**/
-	if (_backgroundSprite->getPositionX() < -(_backgroundSprite->getContentSize().width - size.width)) {
-		_backgroundSprite->setPositionX(0);
-	}
-
-	_mediumgroundSprite->setPositionX(_mediumgroundSprite->getPosition().x - (offsetX - _offsetX) * 0.15f);
-
-	if (_mediumgroundSprite->getPositionX() < -(_mediumgroundSprite->getContentSize().width - size.width)) {
-		_mediumgroundSprite->setPositionX(0);
-	}
-	_offsetX = offsetX;
-}

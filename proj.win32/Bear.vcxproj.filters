@@ -90,6 +90,9 @@
     <ClCompile Include="..\Classes\Model\GameObject.cpp">
       <Filter>Classes\Model\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Model\Background.cpp">
+      <Filter>Classes\Model\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -156,6 +159,9 @@
       <Filter>Classes\View\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Model\GameObject.h">
+      <Filter>Classes\Model\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Model\Background.h">
       <Filter>Classes\Model\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>

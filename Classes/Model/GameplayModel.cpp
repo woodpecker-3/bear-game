@@ -4,6 +4,7 @@
 #include "Defined.h"
 #include "BearData.h"
 #include "GameObject.h"
+#include "Background.h"
 
 USING_NS_CC;
 static GameplayModel* s_GameplayMode=NULL;
@@ -12,15 +13,19 @@ GameplayModel::GameplayModel()
 	_world = NULL;
 	_contactListener = NULL;
 	_terrain = NULL;
+	_background = NULL;
 	_hero = NULL;
 	_tapDown = false;
 	_terrainScale = 1;
+	_strike = NULL;
 }
 
 GameplayModel::~GameplayModel()
 {
 	CC_SAFE_DELETE(_world);
-
+	CC_SAFE_RELEASE_NULL(_background);
+	CC_SAFE_RELEASE_NULL(_terrain);
+	CC_SAFE_RELEASE_NULL(_hero);
 	CC_SAFE_DELETE(s_GameplayMode);
 }
 
@@ -45,10 +50,17 @@ bool GameplayModel::init()
 		setupWorld();
 
 		_hero = Hero::create(_world);
+		_hero->retain();
+		_hero->setAnchorPoint(CCPointZero);
 		CC_BREAK_IF(!_hero);
 
 		_terrain = Terrain::create(_world,_hero);
+		_terrain->retain();
 		CC_BREAK_IF(!_terrain);
+
+		_background = Background::create();
+		_background->retain();
+		CC_BREAK_IF(!_background);
 
 		bRet = true;
 	} while (0);
@@ -100,12 +112,39 @@ void GameplayModel::update( float dt )
 
 	_terrain->update(dt);
 
+	_background->fellow(_hero->getPositionX());
 	//contact
 	processContact();
 
 	//score
 	float score = _hero->getPositionX()/PTM_RATIO;
 	BearData::sharedData()->setScore((int)score);
+
+	/*拖尾**/
+	if(!isHeroOnTheGround())
+	{
+		if(!_strike)
+		{
+			_strike = CCMotionStreak::create(1.0f,/*尾巴持续的时间 **/
+				16.0f,/*尾巴大小  **/
+				16.0f,/*图片的大小 **/ 
+				ccWHITE,/*颜色 **/
+				"fire.png"/*使用的图片 **/
+				);  
+			_strike->setAnchorPoint(CCPointZero);
+			_terrain->addChild(_strike,12);  
+			  
+		}
+		_strike->setPosition(ccp(_hero->getPositionX(),_hero->getPositionY()));
+	}
+	else
+	{
+		if(_strike)
+		{
+			_terrain->removeChild(_strike,true);    
+			_strike = NULL;
+		}
+	}
 }
 
 void GameplayModel::processContact()
@@ -166,15 +205,15 @@ bool GameplayModel::isHeroOnTheGround()
 void GameplayModel::processContact_Ground(const MyContact& myContact )
 {
 	/*速度为0**/
-	float currAngleDegree = _hero->getRotation();
-
-	b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-	float angle = ccpToAngle(ccp(vel.x, vel.y));
-	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
-	if (currAngleDegree < tarAngleDegree)
-	{
-		_hero->damage();
-	}
+// 	float currAngleDegree = _hero->getRotation();
+// 
+// 	b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
+// 	float angle = ccpToAngle(ccp(vel.x, vel.y));
+// 	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
+// 	if (currAngleDegree < tarAngleDegree)
+// 	{
+// 		_hero->damage();
+// 	}
 }
 
 void GameplayModel::processContact_Stone(const MyContact& myContact )
@@ -183,57 +222,43 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 	GameObject* obj = (GameObject*)body->GetUserData();
 	if (obj)
 	{
-		/*速度为0,石头碎、hero受到伤害**/
-		if ( myContact._linearVelocity.x <= 0.0f &&
-			 myContact._linearVelocity.y <= 0.0f)
+		do 
 		{
-			b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-			//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+			/*速度为0,石头碎、hero受到伤害**/
+			if ( myContact._linearVelocity.x <= 0.0f &&
+				myContact._linearVelocity.y <= 0.0f)
+			{
+				_hero->damage();
+			}
+			/*冲力大于7，石头碎、hero不受伤害**/
+			else if (myContact._impulse > 7.0f)
+			{
+				
+			}
+			else
+			{
+				break;
+			}
 
-			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
+			CCParticleExplosion *explosion = CCParticleExplosion::createWithTotalParticles(100);
 			explosion->retain();
 			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
 			//explosion->initWithTotalParticles(200);
 			explosion->setAutoRemoveOnFinish(true);
 			explosion->setStartSizeVar(10.0f);
-			explosion->setSpeed(70.0f);
+			explosion->setSpeed(200.0f);
 			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
 			explosion->setPosition(obj->getPosition());
-			explosion->setDuration(1.0f);
-
+			explosion->setDuration(0.005f);
+			//explosion->setEndRadius(128.0f);
 
 			_terrain->addChild(explosion, 11);
 			explosion->release();
+
 			_terrain->removeChild(obj);
 			_terrain->removeBody(body);
 
-			_hero->damage();
-		}
-		/*冲力大于7，石头碎、hero不受伤害**/
-		else if (myContact._impulse > 7.0f)
-		{
-			CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
-			explosion->retain();
-			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
-			//explosion->initWithTotalParticles(200);
-			explosion->setAutoRemoveOnFinish(true);
-			explosion->setStartSizeVar(10.0f);
-			explosion->setSpeed(70.0f);
-			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
-			explosion->setPosition(obj->getPosition());
-			explosion->setDuration(1.0f);
-
-
-			_terrain->addChild(explosion, 11);
-			explosion->release();
-			_terrain->removeChild(obj);
-			_terrain->removeBody(body);
-		}
-		/*hero滑行而过**/
-		else
-		{
-
-		}
+		} while (0);
 	}
 }
 
@@ -244,10 +269,10 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 	if (obj)
 	{
 		//
-		b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
+		//b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
 		//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
 
-		CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(200);
+		CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(100);
 		explosion->retain();
 		explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
 		//explosion->initWithTotalParticles(200);
@@ -256,11 +281,19 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 		explosion->setSpeed(70.0f);
 		explosion->setAnchorPoint(ccp(0.5f, 0.5f));
 		explosion->setPosition(obj->getPosition());
-		explosion->setDuration(1.0f);
+		explosion->setDuration(0.5f);
 
+// 		/*创建一个CCParticleSystemQuad系统：每个粒子用4个点(Quad,矩形)表示的粒子系统 **/ 
+// 		CCParticleSystemQuad *emitter = CCParticleSystemQuad::create("ExplodingRing.plist");
+// 		emitter->setBlendAdditive(false);/*是否混合 **/
+// 		emitter->setAutoRemoveOnFinish(true);
+// 		emitter->setEmissionRate(75.0f);
+// 		//emitter->stopSystem();
+// 		emitter->setPosition(obj->getPosition());
 
 		_terrain->addChild(explosion, 11);
 		explosion->release();
+
 		_terrain->removeChild(obj);
 		_terrain->removeBody(body);
 

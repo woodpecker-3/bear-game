@@ -46,7 +46,9 @@ bool GameplayView::init( GameplayControllerDelegate* theDelegate )
 		_delegate = theDelegate;
 		_background = BackgroundLayer::create();
 		CC_BREAK_IF(!_background);
+		_background->setAnchorPoint(CCPointZero);
 		addChild(_background);
+		_background->setScale(0.88f);
 
 		//_platformLayer
 		_playerLayer = PlayerLayer::create();
@@ -79,11 +81,6 @@ void GameplayView::pauseOrResume()
 {
 	_delegate->didPauseOrResume();
 }
-// 
-// void GameplayView::jump()
-// {
-// 	_delegate->didJump();
-// }
 
 void GameplayView::touchBegan()
 {

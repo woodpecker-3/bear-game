@@ -6,7 +6,7 @@
 
 #define NUM_PREV_VELS 5
 class Hero : 
-	public cocos2d::CCSprite
+	public cocos2d::CCNode
 {
 public:
 	enum
@@ -40,6 +40,7 @@ public:
 
 	b2Body* getBody(){return _body;}
 protected:
+	cocos2d::CCSprite* _sprite;
 	b2World* _world;
 	b2Body* _body;
 	b2Vec2 _prevVels[NUM_PREV_VELS];
@@ -51,5 +52,7 @@ protected:
 	cocos2d::CCAction *_normalAnimate;
 	cocos2d::CCAnimation *_bellyAnim;
 	cocos2d::CCAction *_bellyAnimate;
+
+	cocos2d::CCMotionStreak* _strike;
 };
 #endif// _HERO_H_

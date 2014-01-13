@@ -7,6 +7,7 @@
 
 class Hero;
 class Terrain;
+class Background;
 class GameplayModel
 {
 public:
@@ -23,6 +24,7 @@ public:
 	CC_SYNTHESIZE(bool, _tapDown, TapDown);
 	CC_SYNTHESIZE(float,_terrainScale,TerrainScale);
 public:
+	Background* getBackground(){return _background;}
 	Hero* getHero(){return _hero;}
 	Terrain* getTerrain(){return _terrain;}
 	MyContactListener* getContactListener(){return _contactListener;}
@@ -36,7 +38,11 @@ private:
 	b2World* _world;
 	MyContactListener* _contactListener;
 
+	Background* _background;
 	Hero* _hero;
 	Terrain* _terrain;
+
+	//
+	cocos2d::CCMotionStreak* _strike;
 };
 #endif// _GAMEMODEL_H_

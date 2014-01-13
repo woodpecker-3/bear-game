@@ -5,7 +5,7 @@
  </tileset>
  <layer name="ele" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKwDAMQ1HNPUSGLN1y/+OFQodiQsiSBqz/QJMXC1sCAKlMZvVNJkXjzjUks9h11vf+ZaO9nG67W4Z/wJrrk4fT7WN3J87d3bTTCwAAAAAAjul6WgNW
+   eJztzjEBAAAMAiATrX+8xfAQEpAAAACw5toBAAAAah6j1gAv
   </data>
  </layer>
  <layer name="template" width="60" height="30" visible="0">
