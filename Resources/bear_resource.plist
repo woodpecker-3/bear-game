@@ -7,7 +7,7 @@
             <key>CloseNormal.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,21},{40,40}}</string>
+                <string>{{1,1},{40,40}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,39 +20,65 @@
             <key>CloseSelected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{82,1},{38,38}}</string>
+                <string>{{42,1},{40,40}}</string>
                 <key>offset</key>
-                <string>{0,1}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,0},{38,38}}</string>
+                <string>{{0,0},{40,40}}</string>
                 <key>sourceSize</key>
                 <string>{40,40}</string>
+            </dict>
+            <key>dust1.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,42},{64,16}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{64,16}}</string>
+                <key>sourceSize</key>
+                <string>{64,16}</string>
+            </dict>
+            <key>dust2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,59},{64,16}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{64,16}}</string>
+                <key>sourceSize</key>
+                <string>{64,16}</string>
             </dict>
             <key>menu_start_normal.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,1},{80,19}}</string>
+                <string>{{1,76},{90,25}}</string>
                 <key>offset</key>
-                <string>{0,1}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{5,2},{80,19}}</string>
+                <string>{{0,0},{90,25}}</string>
                 <key>sourceSize</key>
                 <string>{90,25}</string>
             </dict>
             <key>menu_start_selected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{42,40},{84,23}}</string>
+                <string>{{1,102},{90,25}}</string>
                 <key>offset</key>
-                <string>{0,1}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{3,0},{84,23}}</string>
+                <string>{{0,0},{90,25}}</string>
                 <key>sourceSize</key>
                 <string>{90,25}</string>
             </dict>
@@ -64,9 +90,9 @@
             <key>realTextureFileName</key>
             <string>bear_resource.png</string>
             <key>size</key>
-            <string>{128,64}</string>
+            <string>{128,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:c12747f6166df112b0168c7f7f71792c:1ec4b5eeac9cd06dbde344011b4412df:7bf5d344da079367368f5bc6c1d5118f$</string>
+            <string>$TexturePacker:SmartUpdate:5c1213e2c49c61edba8e836e6312d913:deeedafe044fbdc1879bd3cc67a4ea80:7bf5d344da079367368f5bc6c1d5118f$</string>
             <key>textureFileName</key>
             <string>bear_resource.png</string>
         </dict>

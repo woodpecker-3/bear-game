@@ -53,6 +53,10 @@ protected:
 	cocos2d::CCAnimation *_bellyAnim;
 	cocos2d::CCAction *_bellyAnimate;
 
+	cocos2d::CCSprite* _dustSprite;
+	cocos2d::CCAnimation *_dustAnim;
+	cocos2d::CCAction *_dustAnimate;
+
 	cocos2d::CCMotionStreak* _strike;
 };
 #endif// _HERO_H_

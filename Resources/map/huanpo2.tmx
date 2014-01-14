@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="120" height="80" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="tiaoban" tilewidth="64" tileheight="64">
+  <image source="../tiaoban.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="2" name="coin" tilewidth="8" tileheight="8">
+  <image source="../gold.png" width="8" height="8"/>
+ </tileset>
+ <tileset firstgid="3" name="tree1" tilewidth="64" tileheight="64">
+  <image source="../tree1.png" width="64" height="64"/>
+ </tileset>
+ <layer name="thing" width="120" height="80">
+  <data encoding="base64" compression="zlib">
+   eJzt2dsNACEIBEAf/fdsC/chotxMBZusEhJaAwAAqhjZAdjma5c6v5+O6oju0lsBeIN5DQDcrGcHAAAAAChgZgfgKH0DAAAAAAAQxS0KavCXAQAAAACADG4UAAAQy84NAAAAAAAAAP+2AD2TACI=
+  </data>
+ </layer>
+ <objectgroup draworder="topdown" name="platform" width="30" height="20">
+  <object x="-1" y="129">
+   <polyline points="0,0 65,-1 130,3 402,96 719,335 898,415 928,419 961,419"/>
+  </object>
+ </objectgroup>
+ <objectgroup draworder="topdown" name="colls" width="120" height="80">
+  <object type="1" x="201" y="73" width="8" height="7">
+   <ellipse/>
+  </object>
+  <object type="1" x="241" y="65" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object type="1" x="281" y="57" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object type="1" x="320" y="49" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object type="1" x="361" y="58" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object type="1" x="395" y="74" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object type="1" x="425" y="98" width="7" height="6">
+   <ellipse/>
+  </object>
+  <object x="59" y="127">
+   <polyline points="0,0 69,-22 69,-16 67,-15 67,5"/>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="240" height="160" tilewidth="4" tileheight="4">
+ <tileset firstgid="1" name="stone" tilewidth="48" tileheight="48">
+  <image source="../stone.png" width="48" height="48"/>
+ </tileset>
+ <tileset firstgid="2" name="tree1" tilewidth="64" tileheight="64">
+  <image source="../tree1.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="3" name="xueren2" tilewidth="48" tileheight="48">
+  <image source="../snow_man1.png" width="48" height="48"/>
+ </tileset>
+ <tileset firstgid="4" name="coin" tilewidth="8" tileheight="8">
+  <image source="../gold.png" width="8" height="8"/>
+ </tileset>
+ <tileset firstgid="5" name="tiaoban" tilewidth="64" tileheight="64">
+  <image source="../tiaoban.png" width="64" height="64"/>
+ </tileset>
+ <layer name="thing" width="240" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2qEBACAMA7DB/v8Zj8GtguSB1tS1CgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDbThcAAAAAAGqlCwAAAAAA/nTwCVsHAACAnImvXA9kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG8HWckADA==
+  </data>
+ </layer>
+ <objectgroup draworder="topdown" name="platform" width="30" height="20">
+  <object x="0" y="275">
+   <polyline points="0,0 129,1 415,26 609,46 834,63 898,67 961,68"/>
+  </object>
+ </objectgroup>
+ <objectgroup draworder="topdown" name="colls" width="30" height="20">
+  <object x="319" y="292">
+   <polyline points="0,0 -3,-13 -1,-23 15,-33 32,-34 38,-27 42,-10 41,0 30,4"/>
+  </object>
+  <object x="747" y="330">
+   <polyline points="0,0 -3,-13 -1,-23 15,-33 32,-34 38,-27 42,-10 41,0 30,4"/>
+  </object>
+ </objectgroup>
+</map>

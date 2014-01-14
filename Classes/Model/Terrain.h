@@ -11,22 +11,24 @@
 
 
 class Hero;
+class GameObject;
 class Terrain :
 	public cocos2d::CCNode
 {
 public:
-	friend class MyPlatform;
 	friend class GameplayModel;
 	typedef struct  
 	{
 		cocos2d::CCTMXTiledMap* _map;
 		vector<b2Body*> _bodyArr;
+		vector<GameObject*> _objArr;
 		int _offsetXWhenCreated;
 
 		void clear()
 		{
 			_map = NULL;
 			_bodyArr.clear();
+			_objArr.clear();
 			_offsetXWhenCreated = 0;
 		}
 
@@ -43,6 +45,7 @@ public:
 
 	void draw();
 
+	void removeGameObject(GameObject* obj);
 	void removeBody(b2Body* body);
 protected:
 	void createMap();
@@ -67,17 +70,13 @@ protected:
 	/*可碰撞物件**/
 	vector<b2Body*> _bodyArr;
 
-
-	//cocos2d::CCTMXTiledMap* _leftMap;
-	//cocos2d::CCTMXTiledMap* _rightMap;
-	MyMap* _leftMap;
-	MyMap* _rightMap;
-	/*地图1的宽度**/
-	int _LeftMapWidth;
-	int _RightMapWidth;
+	/*repeat map**/
+	vector<MyMap*> _runningMapArr;
+	vector<MyMap*> _freeMapArr;
+ 	MyMap* _leftMap;
+ 	MyMap* _rightMap;
 	/*当前地图的最后一个关键点，是下一个地图的起始点**/
 	cocos2d::CCPoint _lastHillKeyPoint;
-	//cocos2d::CCPoint _prepareLastHillKeyPoint;
 	cocos2d::CCPoint _prepareFirstHillKeyPoint;
 
 	

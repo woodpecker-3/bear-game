@@ -15,7 +15,11 @@ Hero::Hero()
 	_normalAnimate = NULL;
 	_bellyAnim = NULL;
 	_bellyAnimate = NULL;
+	_dustAnim = NULL;
+	_dustAnimate = NULL;
 	_strike = NULL;
+
+	_dustSprite = NULL;
 }
 
 Hero::~Hero()
@@ -42,12 +46,18 @@ bool Hero::init(b2World* world)
 		CC_BREAK_IF(!CCNode::init());
 
 		_sprite = CCSprite::createWithSpriteFrameName("bear_stand1.png");
+		//_sprite->setAnchorPoint(ccp(0,0));
 		CC_BREAK_IF(!_sprite);
 		addChild(_sprite);
 
 		_world = world;
 
-		//´´½¨¶¯»­
+		_dustSprite = CCSprite::createWithSpriteFrameName("dust1.png");
+		_dustSprite->setAnchorPoint(ccp(1,1));
+		addChild(_dustSprite);
+		_dustSprite->setVisible(false);
+		_dustSprite->setPosition(ccp(2,-9));
+
 		_normalAnim = CCAnimation::create();
 		_normalAnim->retain();
 		_normalAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_stand1.png"));
@@ -61,6 +71,13 @@ bool Hero::init(b2World* world)
 		_bellyAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_duck2.png"));
 		_bellyAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("bear_duck3.png"));
 		_bellyAnim->setDelayPerUnit(0.1f);
+
+		_dustAnim = CCAnimation::create();
+		_dustAnim->retain();
+		//CCSpriteFrame* ppppp = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("dust1.png");
+		_dustAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("dust1.png"));
+		_dustAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("dust2.png"));
+		_dustAnim->setDelayPerUnit(0.1f);
 
 		bRet = true;
 	} while (0);
@@ -142,6 +159,24 @@ void Hero::update( float dt )
 // 			_strike = NULL;
 // 		}
 // 	}
+	if (GameplayModel::sharedModel()->isHeroOnTheGround())
+	{
+		if (!_dustAnimate)
+		{
+			_dustAnimate = CCRepeatForever::create(CCAnimate::create(_dustAnim));
+			_dustSprite->runAction(_dustAnimate);
+			_dustSprite->setVisible(true);
+		}
+	}
+	else
+	{
+		if (_dustAnimate)
+		{
+			_dustSprite->stopAction(_dustAnimate);
+			_dustAnimate = NULL;
+			_dustSprite->setVisible(false);
+		}
+	}
 }
 
 void Hero::createBox2dBody()

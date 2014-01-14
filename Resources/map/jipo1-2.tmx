@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="240" height="320" tilewidth="4" tileheight="4">
+ <tileset firstgid="1" name="stone" tilewidth="48" tileheight="48">
+  <image source="../stone.png" width="48" height="48"/>
+ </tileset>
+ <tileset firstgid="2" name="tree1" tilewidth="64" tileheight="64">
+  <image source="../tree1.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="3" name="tiaoban" tilewidth="64" tileheight="64">
+  <image source="../tiaoban.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="4" name="xueren2" tilewidth="48" tileheight="48">
+  <image source="../snow_man1.png" width="48" height="48"/>
+ </tileset>
+ <tileset firstgid="5" name="coin" tilewidth="8" tileheight="8">
+  <image source="../gold.png" width="8" height="8"/>
+ </tileset>
+ <layer name="thing" width="240" height="320">
+  <data encoding="base64" compression="zlib">
+   eJzt28EJACEQBEFZufxTvggWwYcjUhVB/4cZAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbNdAAAAAAAAAAAAAAAwOUqHQAAAAAAAAAAAAAAAAAAABzhWwwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADACyodAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwoC8dAAAAAAAAwLVsSQAAAAAAAHRsSQAAAAAAAHRsSQAAAAAAAHRsSQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACsVDoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOCAH3brACU=
+  </data>
+ </layer>
+ <objectgroup draworder="topdown" name="platform" width="30" height="40">
+  <object x="2" y="127">
+   <polyline points="0,0 30,1 125,8 317,129 455,354 607,703 703,949 862,1083 892,1089 957,1090"/>
+  </object>
+ </objectgroup>
+ <objectgroup draworder="topdown" name="colls" width="30" height="40">
+  <object x="70" y="130">
+   <polyline points="0,0 65,-20 63,10"/>
+  </object>
+  <object x="604" y="812" width="8" height="7">
+   <ellipse/>
+  </object>
+  <object x="616" y="841" width="8" height="7">
+   <ellipse/>
+  </object>
+  <object x="628" y="868" width="8" height="7">
+   <ellipse/>
+  </object>
+  <object x="640" y="897" width="8" height="7">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

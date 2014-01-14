@@ -35,7 +35,7 @@ bool GameObject::init( int objTpe )
 		}
 		else if (objTpe == kFixtrue_Gold)
 		{
-			_sprite = CCSprite::create("gold3.png");
+			_sprite = CCSprite::create("gold.png");
 		}
 		CC_BREAK_IF(!_sprite);
 		addChild(_sprite);

@@ -127,9 +127,9 @@ void GameplayModel::update( float dt )
 		{
 			_strike = CCMotionStreak::create(1.0f,/*尾巴持续的时间 **/
 				16.0f,/*尾巴大小  **/
-				16.0f,/*图片的大小 **/ 
+				8.0f,/*图片的大小 **/ 
 				ccWHITE,/*颜色 **/
-				"fire.png"/*使用的图片 **/
+				"strike.png"/*使用的图片 **/
 				);  
 			_strike->setAnchorPoint(CCPointZero);
 			_terrain->addChild(_strike,12);  
@@ -194,8 +194,8 @@ bool GameplayModel::isHeroOnTheGround()
 			break;
 		}
 	}
-	if ( abs(heroPos.y - _terrain->_borderVertices[i].y )< HERO_GROUND_FIXED_PIXEL ||
-		 abs(heroPos.y - _terrain->_borderVertices[i+1].y )< HERO_GROUND_FIXED_PIXEL )
+	if ( abs(heroPos.y - _terrain->_borderVertices[i].y )< FIXED_GROUND_PIXEL ||
+		 abs(heroPos.y - _terrain->_borderVertices[i+1].y )< FIXED_GROUND_PIXEL )
 	{
 		return true;
 	}
@@ -255,7 +255,7 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 			_terrain->addChild(explosion, 11);
 			explosion->release();
 
-			_terrain->removeChild(obj);
+			_terrain->removeGameObject(obj);
 			_terrain->removeBody(body);
 
 		} while (0);
@@ -294,7 +294,7 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 		_terrain->addChild(explosion, 11);
 		explosion->release();
 
-		_terrain->removeChild(obj);
+		_terrain->removeGameObject(obj);
 		_terrain->removeBody(body);
 
 		BearData::sharedData()->alterGold(10);
