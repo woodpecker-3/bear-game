@@ -415,10 +415,6 @@ void Terrain::resetTerrainBox2DBody()
 	int i = 0;
 	for (; i < _borderVerticesArr.size()/*_borderVerticesCount*/ /*- 1*/; ++i)
 	{
-		if (i == 1016)
-		{
-			CCLog("ddd");
-		}
 		p1 = b2Vec2( (/*_borderVertices*/_borderVerticesArr[i].x) / PTM_RATIO, (_borderVerticesArr/*_borderVertices*/[i].y ) / PTM_RATIO);
 		//p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
 		
@@ -471,40 +467,85 @@ void Terrain::createElementBox2DBody(MyMap* myMap)
 		bd.userData = obj;
 		b2Body* body = _world->CreateBody(&bd);
 
-		b2EdgeShape shape;
+		
 		b2Vec2 p1, p2;
 		int flag = 0;
 		CCObject* pObj = NULL;
         CCDictionary* point = NULL;
-        CCARRAY_FOREACH(points, pObj) {
-            point = (CCDictionary*)pObj;
-			if (flag == 0)
-			{
-				flag++;
-				p1 = b2Vec2(
-                    (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
-                    (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
-                );
-			}
-			else
-			{
-				p2 = b2Vec2(
-                    (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
-                    (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
-                );
-				shape.Set(p1, p2);
+		if (points->count() <= 2)
+		{
+			point = (CCDictionary*)points->objectAtIndex(0);
+			p1 = b2Vec2(
+				(x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+				(y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+				);
+			point = (CCDictionary*)points->objectAtIndex(1);
+			p2 = b2Vec2(
+				(x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+				(y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+				);
+			b2EdgeShape shape;
+			shape.Set(p1, p2);
 
-				b2FixtureDef fd;
-				fd.shape = &shape;
-				fd.density = 1.0f ;
-				fd.restitution = 0.0f;
-				fd.friction = 0.2f;
-				fd.userData = (void*)obj->getObjType();
-				body->CreateFixture(&fd);
-
-				p1 = p2;
-			}	
+			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f ;
+			fd.restitution = 0.0f;
+			fd.friction = 0.2f;
+			fd.userData = (void*)obj->getObjType();
+			body->CreateFixture(&fd);
 		}
+		else
+		{
+			b2ChainShape shape;
+			b2Vec2 pointes[32];
+			int pointCount = 0;
+			CCARRAY_FOREACH(points, pObj) {
+				point = (CCDictionary*)pObj;
+				pointes[pointCount++] = b2Vec2(
+					(x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+					(y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+					);
+			}
+			shape.CreateChain(pointes,pointCount);
+
+			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f ;
+			fd.restitution = 0.0f;
+			fd.friction = 0.2f;
+			fd.userData = (void*)obj->getObjType();
+			body->CreateFixture(&fd);
+		}
+//         CCARRAY_FOREACH(points, pObj) {
+//             point = (CCDictionary*)pObj;
+// 			if (flag == 0)
+// 			{
+// 				flag++;
+// 				p1 = b2Vec2(
+//                     (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+//                     (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+//                 );
+// 			}
+// 			else
+// 			{
+// 				p2 = b2Vec2(
+//                     (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
+//                     (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
+//                 );
+// 				shape.Set(p1, p2);
+// 
+// 				b2FixtureDef fd;
+// 				fd.shape = &shape;
+// 				fd.density = 1.0f ;
+// 				fd.restitution = 0.0f;
+// 				fd.friction = 0.2f;
+// 				fd.userData = (void*)obj->getObjType();
+// 				body->CreateFixture(&fd);
+// 
+// 				p1 = p2;
+// 			}	
+// 		}
 		myMap->_bodyArr.push_back(body);
 		if(obj)
 		{
