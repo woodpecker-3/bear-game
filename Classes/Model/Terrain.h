@@ -17,19 +17,19 @@ class Terrain :
 {
 public:
 	friend class GameplayModel;
-	typedef struct  
+	typedef struct  _MyMap
 	{
 		cocos2d::CCTMXTiledMap* _map;
 		vector<b2Body*> _bodyArr;
 		vector<GameObject*> _objArr;
-		int _offsetXWhenCreated;
+
+		_MyMap(){clear();}
 
 		void clear()
 		{
 			_map = NULL;
 			_bodyArr.clear();
 			_objArr.clear();
-			_offsetXWhenCreated = 0;
 		}
 
 		bool isValid(){return (_map!=NULL);}
@@ -51,11 +51,11 @@ protected:
 	void createMap();
 	void removeMap(MyMap* myMap);
 	void resetMap();
-	void prepareFirstHillKeyPoint();
-	void prepareHillKeyPoint();
+	void prepareFirstHillKeyPoint(MyMap* myMap);
+	void prepareHillKeyPoint(MyMap* myMap);
 	void resetHillVertices();
 	void resetTerrainBox2DBody();
-	void createElementBox2DBody();
+	void createElementBox2DBody(MyMap* myMap);
 	
 	void fellow();
 protected:
@@ -71,10 +71,10 @@ protected:
 	vector<b2Body*> _bodyArr;
 
 	/*repeat map**/
-	vector<MyMap*> _runningMapArr;
-	vector<MyMap*> _freeMapArr;
- 	MyMap* _leftMap;
- 	MyMap* _rightMap;
+	list<MyMap*> _runningMapList;
+	list<MyMap*> _freeMapList;
+//  	MyMap* _leftMap;
+//  	MyMap* _rightMap;
 	/*当前地图的最后一个关键点，是下一个地图的起始点**/
 	cocos2d::CCPoint _lastHillKeyPoint;
 	cocos2d::CCPoint _prepareFirstHillKeyPoint;

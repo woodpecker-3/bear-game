@@ -8,7 +8,7 @@
 #define CONST_OFFSET_Y 0.5
 
 USING_NS_CC;
-static const char* s_MapArr[]={"map/huanpo1-1.tmx","map/huanpo1-2.tmx"};
+static const char* s_MapArr[]={"huanpo1-1.tmx","huanpo1-2.tmx"};
 const char* nextMapRes()
 {
 	static int _nextMapIndex = -1;
@@ -25,8 +25,8 @@ Terrain::Terrain()
 	_hero = NULL;
 	_world = NULL;
 	_body = NULL;
-	_leftMap = NULL;
-	_rightMap = NULL;
+// 	_leftMap = NULL;
+// 	_rightMap = NULL;
 	_hillKeyPointIndex = 0;
 	_fromKeyPointIndex = 0;
 	_toKeyPointIndex = 0;
@@ -36,8 +36,8 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
-	CC_SAFE_DELETE(_leftMap);
-	CC_SAFE_DELETE(_rightMap);
+// 	CC_SAFE_DELETE(_leftMap);
+// 	CC_SAFE_DELETE(_rightMap);
 
 	/*回收内存**/
 // 	for (vector<MyMap*>::iterator it = _runningMapArr.begin();
@@ -81,17 +81,17 @@ bool Terrain::init(b2World* world,Hero* hero)
 		
 		_sceenSize = CCDirector::sharedDirector()->getWinSize();
 		
-		_leftMap = new MyMap;
-		_leftMap->clear();
-		_rightMap = new MyMap;
-		_rightMap->clear();
+// 		_leftMap = new MyMap;
+// 		_leftMap->clear();
+// 		_rightMap = new MyMap;
+// 		_rightMap->clear();
 		
 		//初始点
 		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*CONST_OFFSET_Y);
 		createMap();
 		resetHillVertices();
 
-		_stripes = CCSprite::create("bg3.png");
+		_stripes = CCSprite::create("stripe.png");
 		ccTexParams tp2 = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_CLAMP_TO_EDGE};
 		_stripes->getTexture()->setTexParameters(&tp2);
 		_stripes->retain();
@@ -99,8 +99,9 @@ bool Terrain::init(b2World* world,Hero* hero)
 		//hero
 		_hero = hero;
 		addChild(_hero,11);
- 		_hero->setPosition(CCPointMake(_leftMap->_map->getPosition().x + _prepareFirstHillKeyPoint.x,
- 			_leftMap->_map->getPosition().y + _prepareFirstHillKeyPoint.y + _hero->getContentSize().height/2+32));
+		MyMap* fisrtMap = _runningMapList.front();
+ 		_hero->setPosition(CCPointMake(fisrtMap->_map->getPosition().x + _prepareFirstHillKeyPoint.x,
+ 			fisrtMap->_map->getPosition().y + _prepareFirstHillKeyPoint.y + _hero->getContentSize().height/2+32));
 		_hero->createBox2dBody();
 		//_hero->update(0);
 
@@ -111,22 +112,29 @@ bool Terrain::init(b2World* world,Hero* hero)
 
 void Terrain::createMap()
 {
-	if (_rightMap->isValid())
+	MyMap* myMap=NULL;
+	if(_freeMapList.size() > 0)
 	{
-		removeMap(_rightMap);
+		myMap = _freeMapList.front();
+		_freeMapList.pop_front();
 	}
-	_rightMap->_map = CCTMXTiledMap::create(nextMapRes());
-	addChild(_rightMap->_map,-1);
-	_rightMap->_offsetXWhenCreated = getPosition().x;
+	else
+	{
+		myMap = new MyMap;
+	}
+
+	myMap->_map = CCTMXTiledMap::create(nextMapRes());
+	addChild(myMap->_map,-1);
 	/*提取第一个点**/
-	prepareFirstHillKeyPoint();
+	prepareFirstHillKeyPoint(myMap);
 	/*下一张地图第一个点和上一张地图最后一个点重合**/
 	CCPoint leftPoint;
 	float leftMapWidth = 0;
-	if (_leftMap->isValid())
+	if (_runningMapList.size() > 0)
 	{
-		leftMapWidth = TMX_WIDTH(_leftMap->_map);
-		leftPoint = _leftMap->_map->getPosition();
+		MyMap* lastMap = _runningMapList.back();
+		leftMapWidth = TMX_WIDTH(lastMap->_map);
+		leftPoint = lastMap->_map->getPosition();
 	}
 	else
 	{/*第一个点会左移，补上一个点**/
@@ -134,20 +142,21 @@ void Terrain::createMap()
 		leftPoint = CCPointZero;
 	}
 	
- 	_rightMap->_map->setPosition(CCPointMake(leftPoint.x + leftMapWidth - _prepareFirstHillKeyPoint.x,
+ 	myMap->_map->setPosition(CCPointMake(leftPoint.x + leftMapWidth - _prepareFirstHillKeyPoint.x,
  		leftPoint.y + _lastHillKeyPoint.y - _prepareFirstHillKeyPoint.y ));
 
 	/*提取地面关键点**/
-	prepareHillKeyPoint();
+	prepareHillKeyPoint(myMap);
 
 	/*创建障碍物刚体**/
-	createElementBox2DBody();
+	createElementBox2DBody(myMap);
 
 	//
-	if(!_leftMap->isValid())
-	{
-		swap(_leftMap,_rightMap);
-	}
+// 	if(!_leftMap->isValid())
+// 	{
+// 		swap(_leftMap,_rightMap);
+// 	}
+	_runningMapList.push_back(myMap);
 }
 
 void Terrain::removeMap( MyMap* myMap )
@@ -174,60 +183,44 @@ void Terrain::removeMap( MyMap* myMap )
 
 void Terrain::resetMap()
 {
-	int posX = getPosition().x;
-	if (_leftMap->isValid())
+// 	int posX = getPosition().x;
+// 	if (_leftMap->isValid())
+// 	{
+// 		if((_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX ) < ( - _sceenSize.width/4))
+// 		{/*左边地图右半滑出屏幕8分之区域**/
+// 			swap(_leftMap,_rightMap);
+// 			_rightMap->_map->setVisible(false);
+// 			removeMap(_rightMap);
+// 		}
+// 		else if ( (_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX) < ( _sceenSize.width*5/4))
+// 		{/*左边地图左半进入屏幕8分之区域**/
+// 			if (!_rightMap->isValid())
+// 			{
+// 				createMap();
+// 			}
+// 		}
+// 	}
+	if (_runningMapList.size() > 0)
 	{
-// 		if (_leftMap->_offsetXWhenCreated == 0 )
-// 		{
-// 			if(( -posX + _leftMap->_map->getPositionX() )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width/4))
-// 			{/*左边地图右半滑出屏幕8分之区域**/
-// 				swap(_leftMap,_rightMap);
-// 				_rightMap->_map->setVisible(false);
-// 				removeMap(_rightMap);
-// 			}
-// 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)- _sceenSize.width*5/4))
-// 			{/*左边地图左半进入屏幕8分之区域**/
-// 				if (!_rightMap->isValid())
-// 				{
-// 					createMap();
-// 				}
-// 			}
-// 		}
-// 		else
-// 		{
-// 			if(( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map) + _sceenSize.width*10/8))
-// 			{/*左边地图右半滑出屏幕8分之区域**/
-// 				swap(_leftMap,_rightMap);
-// 				_rightMap->_map->setVisible(false);
-// 				removeMap(_rightMap);
-// 			}
-// 			else if ( ( -posX + _leftMap->_offsetXWhenCreated )> (TMX_WIDTH(_leftMap->_map)/*- _sceenSize.width*9/8*/))
-// 			{/*左边地图左半进入屏幕8分之区域**/
-// 				if (!_rightMap->isValid())
-// 				{
-// 					createMap();
-// 				}
-// 			}
-// 		}
-		if((_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX ) < ( - _sceenSize.width/4))
+		MyMap* firstMap = _runningMapList.front();
+		if((firstMap->_map->getPositionX() + TMX_WIDTH(firstMap->_map) + getPositionX() ) < ( - _sceenSize.width/4))
 		{/*左边地图右半滑出屏幕8分之区域**/
-			swap(_leftMap,_rightMap);
-			_rightMap->_map->setVisible(false);
-			removeMap(_rightMap);
+			removeMap(firstMap);
+			_runningMapList.remove(firstMap);
+			_freeMapList.push_back(firstMap);
 		}
-		else if ( (_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX) < ( _sceenSize.width*5/4))
+		
+		MyMap* lastMap = _runningMapList.back();
+		if ( (lastMap->_map->getPositionX() + TMX_WIDTH(lastMap->_map) + getPositionX() ) < ( _sceenSize.width*5/4))
 		{/*左边地图左半进入屏幕8分之区域**/
-			if (!_rightMap->isValid())
-			{
-				createMap();
-			}
+			createMap();
 		}
 	}
 }
 
-void Terrain::prepareFirstHillKeyPoint()
+void Terrain::prepareFirstHillKeyPoint(MyMap* myMap)
 {
-	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("platform");
+	CCTMXObjectGroup* objGroup = myMap->_map->objectGroupNamed("platform");
 	CCDictionary* dict = objGroup->objectNamed("platform");
 	/*对象的位置**/
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
@@ -243,11 +236,11 @@ void Terrain::prepareFirstHillKeyPoint()
     }
 }
 
-void Terrain::prepareHillKeyPoint()
+void Terrain::prepareHillKeyPoint(MyMap* myMap)
 {
-	CCPoint offsetPosition = _rightMap->_map->getPosition();
+	CCPoint offsetPosition = myMap->_map->getPosition();
 
-	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("platform");
+	CCTMXObjectGroup* objGroup = myMap->_map->objectGroupNamed("platform");
 	CCDictionary* dict = objGroup->objectNamed("platform");
 	/*对象位置**/
 	int x = ((CCString*)dict->objectForKey("x"))->intValue();
@@ -412,11 +405,11 @@ void Terrain::resetTerrainBox2DBody()
 	_body->CreateFixture(&fd);
 }
 
-void Terrain::createElementBox2DBody()
+void Terrain::createElementBox2DBody(MyMap* myMap)
 {
-	CCPoint offsetPosition = _rightMap->_map->getPosition();
+	CCPoint offsetPosition = myMap->_map->getPosition();
 	/*障碍物layer**/
-	CCTMXObjectGroup* objGroup = _rightMap->_map->objectGroupNamed("colls");
+	CCTMXObjectGroup* objGroup = myMap->_map->objectGroupNamed("colls");
 	CCArray* objArr = objGroup->getObjects();
 	CCObject* obj=NULL;
 	CCDictionary* dict = NULL;
@@ -484,10 +477,10 @@ void Terrain::createElementBox2DBody()
 				p1 = p2;
 			}	
 		}
-		_rightMap->_bodyArr.push_back(body);
+		myMap->_bodyArr.push_back(body);
 		if(obj)
 		{
-			_rightMap->_objArr.push_back(obj);
+			myMap->_objArr.push_back(obj);
 		}
 	}
 }
@@ -539,24 +532,40 @@ void Terrain::removeBody( b2Body* body )
 {
 	do 
 	{
-		if (_leftMap->isValid())
+// 		if (_leftMap->isValid())
+// 		{
+// 			vector<b2Body*>::iterator it = find(_leftMap->_bodyArr.begin(),_leftMap->_bodyArr.end(),body);
+// 			if (it!= _leftMap->_bodyArr.end())
+// 			{
+// 				_leftMap->_bodyArr.erase(it);
+// 				break;
+// 			}
+// 		}
+// 
+// 		if (_rightMap->isValid())
+// 		{
+// 			vector<b2Body*>::iterator it = find(_rightMap->_bodyArr.begin(),_rightMap->_bodyArr.end(),body);
+// 			if (it!= _rightMap->_bodyArr.end())
+// 			{
+// 				_rightMap->_bodyArr.erase(it);
+// 			}
+// 		}
+		MyMap* myMap = NULL;
+		for (list<MyMap*>::iterator it = _runningMapList.begin();
+			 it!=_runningMapList.end();
+			 ++it)
 		{
-			vector<b2Body*>::iterator it = find(_leftMap->_bodyArr.begin(),_leftMap->_bodyArr.end(),body);
-			if (it!= _leftMap->_bodyArr.end())
+			myMap = (*it);
+			if ( myMap->isValid())
 			{
-				_leftMap->_bodyArr.erase(it);
-				break;
+				vector<b2Body*>::iterator it = find(myMap->_bodyArr.begin(),myMap->_bodyArr.end(),body);
+				if (it!= myMap->_bodyArr.end())
+				{
+					myMap->_bodyArr.erase(it);
+				}
 			}
 		}
-		
-		if (_rightMap->isValid())
-		{
-			vector<b2Body*>::iterator it = find(_rightMap->_bodyArr.begin(),_rightMap->_bodyArr.end(),body);
-			if (it!= _rightMap->_bodyArr.end())
-			{
-				_rightMap->_bodyArr.erase(it);
-			}
-		}
+
 	} while (0);
 	
 	_world->DestroyBody(body);
@@ -566,22 +575,37 @@ void Terrain::removeGameObject( GameObject* obj )
 {
 	do 
 	{
-		if (_leftMap->isValid())
+// 		if (_leftMap->isValid())
+// 		{
+// 			vector<GameObject*>::iterator it = find(_leftMap->_objArr.begin(),_leftMap->_objArr.end(),obj);
+// 			if (it!= _leftMap->_objArr.end())
+// 			{
+// 				_leftMap->_objArr.erase(it);
+// 				break;
+// 			}
+// 		}
+// 
+// 		if (_rightMap->isValid())
+// 		{
+// 			vector<GameObject*>::iterator it = find(_rightMap->_objArr.begin(),_rightMap->_objArr.end(),obj);
+// 			if (it!= _rightMap->_objArr.end())
+// 			{
+// 				_rightMap->_objArr.erase(it);
+// 			}
+// 		}
+		MyMap* myMap = NULL;
+		for (list<MyMap*>::iterator it = _runningMapList.begin();
+			it!=_runningMapList.end();
+			++it)
 		{
-			vector<GameObject*>::iterator it = find(_leftMap->_objArr.begin(),_leftMap->_objArr.end(),obj);
-			if (it!= _leftMap->_objArr.end())
+			myMap = (*it);
+			if ( myMap->isValid())
 			{
-				_leftMap->_objArr.erase(it);
-				break;
-			}
-		}
-
-		if (_rightMap->isValid())
-		{
-			vector<GameObject*>::iterator it = find(_rightMap->_objArr.begin(),_rightMap->_objArr.end(),obj);
-			if (it!= _rightMap->_objArr.end())
-			{
-				_rightMap->_objArr.erase(it);
+				vector<GameObject*>::iterator it = find(myMap->_objArr.begin(),myMap->_objArr.end(),obj);
+				if (it!= myMap->_objArr.end())
+				{
+					myMap->_objArr.erase(it);
+				}
 			}
 		}
 	} while (0);
