@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "GameStartController.h"
+#include "Defined.h"
 
 USING_NS_CC;
 
@@ -24,7 +25,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
 
-	//pEGLView->setDesignResolutionSize(960,640,kResolutionNoBorder);
+    // multiple resolution support
+    pEGLView->setDesignResolutionSize(
+        targetResourceSize.width,
+        targetResourceSize.height,
+        kResolutionFixedHeight
+    );
+    pDirector->setContentScaleFactor(
+        targetResourceSize.height / designResolutionSize.height
+    );
+    CCSize screen = pEGLView->getFrameSize();
+    CCLog("device screen size:(%f, %f)", screen.width, screen.height);
 
     // create a scene. it's an autorelease object
     CCScene *pScene = GameStartController::create();// HelloWorld::scene();

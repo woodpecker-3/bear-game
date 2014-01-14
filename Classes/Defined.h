@@ -1,6 +1,7 @@
 #ifndef _BEAR_DEFINE_H_
 #define _BEAR_DEFINE_H_
 
+#include "cocos2d.h"
 
 #define PTM_RATIO 32.0
 
@@ -15,6 +16,9 @@ typedef enum
 	kFixtrue_Stone,
 	kFixtrue_Gold,
 }kFixtrueType;
+
+static cocos2d::CCSize targetResourceSize = cocos2d::CCSizeMake(960, 640);
+static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(960, 640);
 
 /*³õÊ¼Æ«ÒÆ**/
 
