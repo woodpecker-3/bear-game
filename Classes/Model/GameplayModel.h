@@ -22,7 +22,6 @@ public:
 	bool isGameOver();
 	bool isHeroOnTheGround();
 	CC_SYNTHESIZE(bool, _tapDown, TapDown);
-	CC_SYNTHESIZE(float,_terrainScale,TerrainScale);
 public:
 	Background* getBackground(){return _background;}
 	Hero* getHero(){return _hero;}

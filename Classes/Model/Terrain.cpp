@@ -7,6 +7,8 @@
 
 #define CONST_OFFSET_Y 0.5
 
+#define NEXT_HILLKEYPOINT_INDEX(index) (((index) < (kMaxPlatformKeyPoints -1))?(index+1):(0))
+
 USING_NS_CC;
 static const char* s_MapArr[]={"huanpo1-1.tmx","huanpo1-2.tmx"};
 const char* nextMapRes()
@@ -32,6 +34,7 @@ Terrain::Terrain()
 	_toKeyPointIndex = 0;
 	_hillVerticesCount = 0;
 	_borderVerticesCount = 0;
+	_cacheScale = 1;
 }
 
 Terrain::~Terrain()
@@ -202,8 +205,9 @@ void Terrain::resetMap()
 // 	}
 	if (_runningMapList.size() > 0)
 	{
+		//float scale = 1;//GameplayModel::sharedModel()->getTerrainScale();
 		MyMap* firstMap = _runningMapList.front();
-		if((firstMap->_map->getPositionX() + TMX_WIDTH(firstMap->_map) + getPositionX() ) < ( - _sceenSize.width/4))
+		if((firstMap->_map->getPositionX() + TMX_WIDTH(firstMap->_map) + getPositionX() ) < ( - _sceenSize.width / 8 / _cacheScale ))
 		{/*左边地图右半滑出屏幕8分之区域**/
 			removeMap(firstMap);
 			_runningMapList.remove(firstMap);
@@ -211,7 +215,7 @@ void Terrain::resetMap()
 		}
 		
 		MyMap* lastMap = _runningMapList.back();
-		if ( (lastMap->_map->getPositionX() + TMX_WIDTH(lastMap->_map) + getPositionX() ) < ( _sceenSize.width*5/4))
+		if ( (lastMap->_map->getPositionX() + TMX_WIDTH(lastMap->_map) + getPositionX() ) < ( _sceenSize.width * 9 / 8 /_cacheScale ))
 		{/*左边地图左半进入屏幕8分之区域**/
 			createMap();
 		}
@@ -274,24 +278,25 @@ void Terrain::resetHillVertices()
 	static int prevToKeyPointI = -1;
 
 	CCPoint tmp = getPosition();
-	float scale = getScale();
+	//float scale = GameplayModel::sharedModel()->getTerrainScale();
 	// key points interval for drawing
-	while ( (_hillKeyPoints[_fromKeyPointIndex + 1].x + tmp.x ) < ( - _sceenSize.width / 4 /*/ getScale()*/))
+	while ( (_hillKeyPoints[NEXT_HILLKEYPOINT_INDEX(_fromKeyPointIndex)].x + tmp.x ) < ( - _sceenSize.width / 8 / _cacheScale ))
 	{
-		_fromKeyPointIndex++;
+		++_fromKeyPointIndex;
 		if (_fromKeyPointIndex >= kMaxPlatformKeyPoints)
 		{
 			_fromKeyPointIndex=0;
 		}
 	}
-	while ( (_hillKeyPoints[_toKeyPointIndex].x + tmp.x ) < ( _sceenSize.width * 5 / 4/* / getScale()*/) )
+	int lastToKeyPointIndex = (_hillKeyPointIndex == 0)?( kMaxPlatformKeyPoints - 1):( _hillKeyPointIndex - 1);
+	while ( (_hillKeyPoints[_toKeyPointIndex].x + tmp.x ) < ( _sceenSize.width * 9 / 8 / _cacheScale ) )
 	{
-		_toKeyPointIndex++;
+		++_toKeyPointIndex;
 		if (_toKeyPointIndex >= kMaxPlatformKeyPoints)
 		{
 			_toKeyPointIndex=0;
 		}
-		else if (_toKeyPointIndex == _hillKeyPointIndex)
+		else if (_toKeyPointIndex == lastToKeyPointIndex)
 		{
 			break;
 		}
@@ -303,15 +308,13 @@ void Terrain::resetHillVertices()
 		//CCLog("_fromKeyPointIndex(%d,%d)",_fromKeyPointIndex,_toKeyPointIndex);
 		// vertices for visible area
 		_hillVerticesCount = 0;
-		_borderVerticesCount = 0;
+		//_borderVerticesCount = 0;
+		_borderVerticesArr.clear();
 		CCPoint p0, p1, pt0, pt1;
 		p0 = _hillKeyPoints[_fromKeyPointIndex];
-		int nextKeyPointIndex = _toKeyPointIndex + 1;
-		if (nextKeyPointIndex >= kMaxPlatformKeyPoints)
-		{
-			nextKeyPointIndex = 0;
-		}
-		for (int i = _fromKeyPointIndex + 1; i != nextKeyPointIndex ; )
+		int nextKeyPointIndex = NEXT_HILLKEYPOINT_INDEX(_toKeyPointIndex);
+		for (int i = NEXT_HILLKEYPOINT_INDEX(_fromKeyPointIndex); 
+			i != nextKeyPointIndex ; )
 		{
 			
 			p1 = _hillKeyPoints[i];
@@ -323,22 +326,43 @@ void Terrain::resetHillVertices()
 			float ymid = (p0.y + p1.y) / 2;
 			float ampl = (p0.y - p1.y) / 2;
 			pt0 = p0;
-			_borderVertices[_borderVerticesCount++] = pt0;
+// 			_borderVertices[_borderVerticesCount++] = pt0;
+// 			if (_borderVerticesCount >= 990)
+// 			{
+// 				CCLog("_borderVerticesCount=%d",_borderVerticesCount);
+// 			}
+			_borderVerticesArr.push_back(pt0);
+			
 			for (int j = 1; j < hSegments + 1; ++j)
 			{
 				pt1.x = p0.x + j * dx;
 				pt1.y = ymid + ampl * cosf(da * j);
-				_borderVertices[_borderVerticesCount++] = pt1;
+// 				_borderVertices[_borderVerticesCount++] = pt1;
+// 				if (_borderVerticesCount >= 990)
+// 				{
+// 					CCLog("_borderVerticesCount=%d",_borderVerticesCount);
+// 				}
+				_borderVerticesArr.push_back(pt1);
 
- 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height));
- 				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
- 				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height));
- 				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
- 
- 				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
- 				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 0);
- 				_hillVertices[_hillVerticesCount] = ccp(pt1.x, pt1.y);
- 				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 0);
+//  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height));
+//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
+//  				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height));
+//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
+//  
+//  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
+//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 0);
+//  				_hillVertices[_hillVerticesCount] = ccp(pt1.x, pt1.y);
+//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 0);
+				_hillVerticesArr.push_back( ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height)));
+				_hillTexCoordsArr.push_back( ccp(pt0.x / 512, 1.0f));
+				_hillVerticesArr.push_back( ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height)));
+				_hillTexCoordsArr.push_back( ccp(pt1.x / 512, 1.0f));
+
+				_hillVerticesArr.push_back( ccp(pt0.x, pt0.y));
+				_hillTexCoordsArr.push_back( ccp(pt0.x / 512, 0));
+				_hillVerticesArr.push_back( ccp(pt1.x, pt1.y));
+				_hillTexCoordsArr.push_back( ccp(pt1.x / 512, 0));
+
 
 				pt0 = pt1;
 			}
@@ -389,9 +413,13 @@ void Terrain::resetTerrainBox2DBody()
 	b2Vec2 p1;//, p2;
 	b2Vec2 pointes[kMaxBorderVertices];
 	int i = 0;
-	for (; i < _borderVerticesCount /*- 1*/; ++i)
+	for (; i < _borderVerticesArr.size()/*_borderVerticesCount*/ /*- 1*/; ++i)
 	{
-		p1 = b2Vec2( (_borderVertices[i].x) / PTM_RATIO, (_borderVertices[i].y ) / PTM_RATIO);
+		if (i == 1016)
+		{
+			CCLog("ddd");
+		}
+		p1 = b2Vec2( (/*_borderVertices*/_borderVerticesArr[i].x) / PTM_RATIO, (_borderVerticesArr/*_borderVertices*/[i].y ) / PTM_RATIO);
 		//p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
 		
 		pointes[i] = p1;
@@ -491,13 +519,13 @@ void Terrain::update( float dt )
 
 	fellow();
 
-	resetMap();
-
-	resetHillVertices();
-
 	//scale
-	float scale = abs((_sceenSize.height*CONST_OFFSET_Y)/(getPositionY() + _hero->getPositionY()));
-	GameplayModel::sharedModel()->setTerrainScale(scale);
+	_cacheScale = abs((_sceenSize.height*CONST_OFFSET_Y)/(getPositionY() + _hero->getPositionY()));
+	//GameplayModel::sharedModel()->setTerrainScale(scale);
+	//setScale(scale);
+
+	resetMap();
+	resetHillVertices();
 }
 
 void Terrain::draw()
@@ -509,10 +537,10 @@ void Terrain::draw()
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
 
 	ccDrawColor4F(1.0f, 1.0f, 1.0f, 1.0f);
-	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, _hillVertices);
-	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, _hillTexCoords);
+	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, (void*)&_hillVerticesArr[0]);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, (void*)&_hillTexCoordsArr[0]);
 
-	glDrawArrays(GL_TRIANGLE_STRIP/*GL_LINES*/, 0, (GLsizei)_hillVerticesCount);
+	glDrawArrays(GL_TRIANGLE_STRIP/*GL_LINES*/, 0, (GLsizei)/*_hillVerticesCount*/_hillVerticesArr.size());
 }
 
 void Terrain::fellow()

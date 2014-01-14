@@ -7,7 +7,7 @@
 #define kMaxPlatformKeyPoints 100
 #define kPlatformSegmentWidth 5
 #define kMaxPlatformVertices 4000
-#define kMaxBorderVertices 800
+#define kMaxBorderVertices 1000
 
 
 class Hero;
@@ -47,6 +47,8 @@ public:
 
 	void removeGameObject(GameObject* obj);
 	void removeBody(b2Body* body);
+
+	CC_SYNTHESIZE(float,_cacheScale,CacheScale);
 protected:
 	void createMap();
 	void removeMap(MyMap* myMap);
@@ -88,10 +90,13 @@ protected:
 	int _fromKeyPointIndex;
 	int _toKeyPointIndex;
 	/*生成的cos曲线顶点**/
+	vector<cocos2d::CCPoint> _hillVerticesArr;
+	vector<cocos2d::CCPoint> _hillTexCoordsArr;
 	cocos2d::CCPoint _hillVertices[kMaxPlatformVertices];
 	cocos2d::CCPoint _hillTexCoords[kMaxPlatformVertices];
 	int _hillVerticesCount;
 	/*地面box2d线段**/
+	vector<cocos2d::CCPoint> _borderVerticesArr;
 	cocos2d::CCPoint _borderVertices[kMaxBorderVertices];
 	int _borderVerticesCount;
 

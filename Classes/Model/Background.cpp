@@ -66,8 +66,8 @@ bool Background::init()
 void Background::fellow(int offsetX)
 {
 	CCSize winsSize = CCDirector::sharedDirector()->getWinSize();
-	_background->setPositionX(_background->getPosition().x - (offsetX - _offsetX) * 0.25f);
-	_mediumground->setPositionX(_mediumground->getPosition().x - (offsetX - _offsetX) * 0.15f);
+	_background->setPositionX(_background->getPosition().x - (offsetX - _offsetX) * 0.15f);
+	_mediumground->setPositionX(_mediumground->getPosition().x - (offsetX - _offsetX) * 0.25f);
 
 	/*转换本地坐标在屏幕视口坐标**/
 	if ( (_backgroundSprite->getPositionX() + _background->getPositionX()) < (-1*(_backgroundSprite->getContentSize().width + winsSize.width/8)))

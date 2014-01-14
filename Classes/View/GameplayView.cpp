@@ -9,6 +9,7 @@
 #include "Hero.h"
 #include "BearData.h"
 #include "MenuLayer.h"
+#include "Terrain.h"
 
 USING_NS_CC;
 GameplayView::GameplayView(void)
@@ -104,7 +105,7 @@ void GameplayView::update( float delta )
 	_panelLayer->setScoreNumber(BearData::sharedData()->getScore());
 	_panelLayer->setGoldNumber(BearData::sharedData()->getGold());
 
-	_playerLayer->setScale(GameplayModel::sharedModel()->getTerrainScale());
+	_playerLayer->setScale(GameplayModel::sharedModel()->getTerrain()->getCacheScale());
 }
 
 void GameplayView::showResult()

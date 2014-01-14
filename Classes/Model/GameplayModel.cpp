@@ -16,7 +16,7 @@ GameplayModel::GameplayModel()
 	_background = NULL;
 	_hero = NULL;
 	_tapDown = false;
-	_terrainScale = 1;
+	//_terrainScale = 1;
 	_strike = NULL;
 }
 
@@ -187,15 +187,15 @@ bool GameplayModel::isHeroOnTheGround()
 {
 	int i = 0;
 	CCPoint heroPos = _hero->getPosition();
-	for (; i < _terrain->_borderVerticesCount - 1; ++i)
+	for (; i < _terrain->/*_borderVerticesCount*/_borderVerticesArr.size() - 1; ++i)
 	{
-		if ( heroPos.x >= _terrain->_borderVertices[i].x && heroPos.x < _terrain->_borderVertices[i+1].x)
+		if ( heroPos.x >= _terrain->/*_borderVertices*/_borderVerticesArr[i].x && heroPos.x < _terrain->/*_borderVertices*/_borderVerticesArr[i+1].x)
 		{
 			break;
 		}
 	}
-	if ( abs(heroPos.y - _terrain->_borderVertices[i].y )< FIXED_GROUND_PIXEL ||
-		 abs(heroPos.y - _terrain->_borderVertices[i+1].y )< FIXED_GROUND_PIXEL )
+	if ( abs(heroPos.y - _terrain->/*_borderVertices*/_borderVerticesArr[i].y )< FIXED_GROUND_PIXEL ||
+		 abs(heroPos.y - _terrain->/*_borderVertices*/_borderVerticesArr[i+1].y )< FIXED_GROUND_PIXEL )
 	{
 		return true;
 	}

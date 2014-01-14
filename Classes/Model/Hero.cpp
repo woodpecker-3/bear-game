@@ -128,7 +128,7 @@ void Hero::update( float dt )
 		{
 			delta = delta/abs(delta)*2;
 		}
-		CCLOG("delta=%f,tarAngleDegree=%f,currAngleDegree=%f",delta,tarAngleDegree,currAngleDegree);
+		//CCLOG("delta=%f,tarAngleDegree=%f,currAngleDegree=%f",delta,tarAngleDegree,currAngleDegree);
 		currAngleDegree += delta;		
 	}
 	if (currAngleDegree != oldAngleDegree)
