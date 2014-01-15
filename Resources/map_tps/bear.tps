@@ -36,7 +36,7 @@
         <key>dataFormat</key>
         <string>cocos2d</string>
         <key>textureFileName</key>
-        <filename>../bear_map_resource.png</filename>
+        <filename>../bear_resource.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -68,9 +68,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>1024</int>
+            <int>2048</int>
             <key>height</key>
-            <int>1024</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -127,7 +127,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../bear_map_resource.plist</filename>
+                <filename>../bear_resource.plist</filename>
             </struct>
         </map>
         <key>multiPack</key>

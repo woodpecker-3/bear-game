@@ -10,7 +10,7 @@
 #define NEXT_HILLKEYPOINT_INDEX(index) (((index) < (kMaxPlatformKeyPoints -1))?(index+1):(0))
 
 USING_NS_CC;
-static const char* s_MapArr[]={"huanpo1-1.tmx","huanpo1-2.tmx"};
+static const char* s_MapArr[]={"huanpo1-2.tmx","huanpo1-1.tmx"};
 const char* nextMapRes()
 {
 	static int _nextMapIndex = -1;
@@ -396,19 +396,6 @@ void Terrain::resetTerrainBox2DBody()
 	bd.userData = this;
 	_body = _world->CreateBody(&bd);
 
-// 	b2EdgeShape shape;
-// 	b2Vec2 p1, p2;
-// 	for (int i = 0; i < _borderVerticesCount - 1; ++i)
-// 	{
-// 		p1 = b2Vec2( (_borderVertices[i].x) / PTM_RATIO, (_borderVertices[i].y ) / PTM_RATIO);
-// 		p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
-// 		shape.Set(p1, p2);
-// 		//_body->CreateFixture(&shape, 0);
-// 		b2FixtureDef fd;
-// 		fd.shape = &shape;
-// 		fd.userData = (void*)kFixtrue_Ground;
-// 		_body->CreateFixture(&fd);
-// 	}
 	b2ChainShape shape;
 	b2Vec2 p1;//, p2;
 	b2Vec2 pointes[kMaxBorderVertices];
@@ -447,19 +434,17 @@ void Terrain::createElementBox2DBody(MyMap* myMap)
 		int x = ((CCString*)dict->objectForKey("x"))->intValue();
 		int y = ((CCString*)dict->objectForKey("y"))->intValue();
 		GameObject* obj = NULL;
-// 		if (strcmp(dict->valueForKey("name")->getCString(),"stone") == 0 ||
-// 			strcmp(dict->valueForKey("name")->getCString(),"gold"))
+		bool canDestroy = dict->valueForKey("canDestroy")->boolValue();
+		int objType = dict->valueForKey("objType")->intValue();
+		bool stickSprite = dict->valueForKey("stickSprite")->boolValue();
+		if (stickSprite)
 		{
-			string str = dict->valueForKey("canDestroy")->getCString();
-			int objType = dict->valueForKey("objType")->intValue();
-
 			obj = GameObject::create(objType);
-			//sprite->setTag(kTagStone);
 			addChild(obj);
 			obj->setPosition(CCPointMake(offsetPosition.x + x,offsetPosition.y + y));
 		}
 
-		//刚体关键关键点
+		/*刚体关键关键点**/
         CCArray* points = (CCArray*)dict->objectForKey("points");
 
 		b2BodyDef bd;
@@ -484,16 +469,23 @@ void Terrain::createElementBox2DBody(MyMap* myMap)
 				(x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
 				(y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
 				);
+
+#define CREATE_ELE_BODY_DEF() \
+	do \
+	{\
+		b2FixtureDef fd;\
+		fd.shape = &shape;\
+		fd.density = 1.0f ;\
+		fd.restitution = 0.0f;\
+		fd.friction = 0.0f;\
+		fd.userData = (void*)objType;\
+		body->CreateFixture(&fd);\
+	} while (0);
+			
 			b2EdgeShape shape;
 			shape.Set(p1, p2);
 
-			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f ;
-			fd.restitution = 0.0f;
-			fd.friction = 0.2f;
-			fd.userData = (void*)obj->getObjType();
-			body->CreateFixture(&fd);
+			CREATE_ELE_BODY_DEF();
 		}
 		else
 		{
@@ -509,43 +501,10 @@ void Terrain::createElementBox2DBody(MyMap* myMap)
 			}
 			shape.CreateChain(pointes,pointCount);
 
-			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f ;
-			fd.restitution = 0.0f;
-			fd.friction = 0.2f;
-			fd.userData = (void*)obj->getObjType();
-			body->CreateFixture(&fd);
+			CREATE_ELE_BODY_DEF();
 		}
-//         CCARRAY_FOREACH(points, pObj) {
-//             point = (CCDictionary*)pObj;
-// 			if (flag == 0)
-// 			{
-// 				flag++;
-// 				p1 = b2Vec2(
-//                     (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
-//                     (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
-//                 );
-// 			}
-// 			else
-// 			{
-// 				p2 = b2Vec2(
-//                     (x + ((CCString*)point->valueForKey("x"))->intValue() + offsetPosition.x) / PTM_RATIO,
-//                     (y - ((CCString*)point->valueForKey("y"))->intValue() + offsetPosition.y) / PTM_RATIO
-//                 );
-// 				shape.Set(p1, p2);
-// 
-// 				b2FixtureDef fd;
-// 				fd.shape = &shape;
-// 				fd.density = 1.0f ;
-// 				fd.restitution = 0.0f;
-// 				fd.friction = 0.2f;
-// 				fd.userData = (void*)obj->getObjType();
-// 				body->CreateFixture(&fd);
-// 
-// 				p1 = p2;
-// 			}	
-// 		}
+		
+
 		myMap->_bodyArr.push_back(body);
 		if(obj)
 		{

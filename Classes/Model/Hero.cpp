@@ -123,42 +123,31 @@ void Hero::update( float dt )
 	{
 		float angle = ccpToAngle(ccp(weightedVel.x, weightedVel.y));
 		float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
-		float delta = (tarAngleDegree - currAngleDegree);
-		if (abs(delta) > 2 )
+		float delta = ( tarAngleDegree - currAngleDegree);
+		if (GameplayModel::sharedModel()->isHeroOnTheGround() )
 		{
-			delta = delta/abs(delta)*2;
+			currAngleDegree = tarAngleDegree;
+		}
+		else
+		{
+			if ( abs(delta) > 2 )
+			{
+				if (delta >= 180)
+				{
+					delta *= -1;
+				}
+				delta = delta/abs(delta)*2;
+			}
+			currAngleDegree += delta;
 		}
 		//CCLOG("delta=%f,tarAngleDegree=%f,currAngleDegree=%f",delta,tarAngleDegree,currAngleDegree);
-		currAngleDegree += delta;		
+				
 	}
 	if (currAngleDegree != oldAngleDegree)
 	{
 		setRotation(currAngleDegree);
 	}
 
-	/*拖尾**/
-// 	if(!GameplayModel::sharedModel()->isHeroOnTheGround())
-// 	{
-// 		if(!_strike)
-// 		{
-// 			_strike = CCMotionStreak::create(1.0f,/*尾巴持续的时间 **/
-// 				16.0f,/*尾巴大小  **/
-// 				16.0f,/*图片的大小 **/ 
-// 				ccRED,/*颜色 **/
-// 				"fire.png"/*使用的图片 **/
-// 				);  
-// 			addChild(_strike,1);  
-// 			_strike->setPosition(ccp(240,160));  
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if(_strike)
-// 		{
-// 			removeChild(_strike,true);    
-// 			_strike = NULL;
-// 		}
-// 	}
 	if (GameplayModel::sharedModel()->isHeroOnTheGround())
 	{
 		if (!_dustAnimate)

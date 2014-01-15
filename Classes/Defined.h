@@ -11,10 +11,12 @@
 typedef enum
 {
 	kFixtrue_inalid = -1,
-	kFixtrue_Ground = 0,
+	kFixtrue_null = 0,
 	kFixtrue_Hero,
 	kFixtrue_Stone,
 	kFixtrue_Gold,
+	kFixtrue_Ground,
+	kFixtrue_Board,
 }kFixtrueType;
 
 static cocos2d::CCSize targetResourceSize = cocos2d::CCSizeMake(960, 640);

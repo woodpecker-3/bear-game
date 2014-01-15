@@ -1,72 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="240" height="160" tilewidth="4" tileheight="4">
- <tileset firstgid="1" name="stone" tilewidth="48" tileheight="48">
-  <image source="stone.png" width="48" height="48"/>
+<map version="1.0" orientation="orthogonal" width="40" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="bear_map_resource" tilewidth="32" tileheight="32">
+  <image source="bear_map_resource.png" width="256" height="512"/>
  </tileset>
- <tileset firstgid="2" name="tree1" tilewidth="64" tileheight="64">
-  <image source="tree1.png" width="64" height="64"/>
- </tileset>
- <tileset firstgid="3" name="tiaoban" tilewidth="64" tileheight="64">
-  <image source="tiaoban.png" width="64" height="64"/>
- </tileset>
- <tileset firstgid="4" name="xueren2" tilewidth="48" tileheight="48">
-  <image source="snow_man1.png" width="48" height="48"/>
- </tileset>
- <tileset firstgid="5" name="gold" tilewidth="32" tileheight="32">
-  <image source="gold.png" width="32" height="32"/>
- </tileset>
- <layer name="thing" width="240" height="160">
+ <layer name="thing" width="40" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzkERAAAMAiBv/UOvhX4gAQkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0HDrAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMPEfwgAD
+   eJxjYBg6QBOItQbaEXiAIRAbDbQj8ABLILYaaEeMIEBMeqVHmmYGYhYkPiMQMzEQl17R1fADsQBVXcfAwA3EPEh8TiDmYiAuvcLUiAKxGBCLA7EEld1HKZABYlkgloPyFQbOKaNgFAxJMFr3UwZG6/5RMBgBAK20Bck=
   </data>
  </layer>
- <objectgroup name="platform" width="30" height="20">
-  <object name="platform" x="2" y="127">
-   <polyline points="0,0 279,31 565,337 958,351"/>
+ <objectgroup name="platform" width="40" height="20">
+  <object name="platform" x="2" y="32">
+   <polyline points="0,36 406,219 924,226 1280,606"/>
   </object>
  </objectgroup>
- <objectgroup name="colls" width="30" height="20">
-  <object name="stone" x="243" y="135">
+ <objectgroup name="colls" width="40" height="20">
+  <object name="board" x="821" y="268">
    <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="2"/>
+    <property name="canDestroy" value="false"/>
+    <property name="objType" value="5"/>
+    <property name="stickSprite" value="false"/>
    </properties>
-   <polyline points="-4,18 6,-13 33,-14 45,5 35,23"/>
-  </object>
-  <object name="gold" x="618" y="451">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-   </properties>
-   <polyline points="-11,14 -10,-14 16,-14 15,15 -12,13"/>
-  </object>
-  <object name="gold" x="690" y="453">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-   </properties>
-   <polyline points="-11,14 -10,-14 16,-14 15,15 -12,13"/>
-  </object>
-  <object name="gold" x="833" y="460">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-   </properties>
-   <polyline points="-11,14 -10,-14 16,-14 15,15 -12,13"/>
-  </object>
-  <object name="gold" x="760" y="457">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-   </properties>
-   <polyline points="-11,14 -10,-14 16,-14 15,15 -12,13"/>
-  </object>
-  <object name="gold" x="896" y="460">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-   </properties>
-   <polyline points="-11,14 -10,-14 16,-14 15,15 -12,13"/>
+   <polyline points="-49,3 126,-57"/>
   </object>
  </objectgroup>
 </map>
