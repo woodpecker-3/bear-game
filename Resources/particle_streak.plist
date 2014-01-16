@@ -31,7 +31,7 @@
 	<key>finishColorVarianceRed</key>
 	<real>0.0</real>
 	<key>finishParticleSize</key>
-	<real>30.25</real>
+	<real>16</real>
 	<key>finishParticleSizeVariance</key>
 	<real>0.0</real>
 	<key>gravityx</key>
@@ -71,11 +71,11 @@
 	<key>sourcePositionVariancey</key>
 	<real>0.0</real>
 	<key>sourcePositionx</key>
-	<real>0.0</real>
+	<real>200</real>
 	<key>sourcePositiony</key>
 	<real>0.0</real>
 	<key>speed</key>
-	<real>98.680000305175781</real>
+	<real>99</real>
 	<key>speedVariance</key>
 	<real>0.0</real>
 	<key>startColorAlpha</key>
@@ -95,9 +95,9 @@
 	<key>startColorVarianceRed</key>
 	<real>0.0</real>
 	<key>startParticleSize</key>
-	<real>13.050000190734863</real>
+	<real>48</real>
 	<key>startParticleSizeVariance</key>
-	<real>33.259998321533203</real>
+	<real>16</real>
 	<key>tangentialAccelVariance</key>
 	<real>0.0</real>
 	<key>tangentialAcceleration</key>
