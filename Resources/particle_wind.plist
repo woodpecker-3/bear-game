@@ -31,7 +31,7 @@
 	<key>finishColorVarianceRed</key>
 	<real>0.0</real>
 	<key>finishParticleSize</key>
-	<real>128</real>
+	<real>8</real>
 	<key>finishParticleSizeVariance</key>
 	<real>0.0</real>
 	<key>gravityx</key>
@@ -69,7 +69,7 @@
 	<key>sourcePositionVariancex</key>
 	<real>16</real>
 	<key>sourcePositionVariancey</key>
-	<real>64</real>
+	<real>32</real>
 	<key>sourcePositionx</key>
 	<real>0.0</real>
 	<key>sourcePositiony</key>
