@@ -43,5 +43,8 @@ private:
 
 	//
 	cocos2d::CCMotionStreak* _strike;
+	cocos2d::CCParticleSystemQuad* _snow;
+	cocos2d::CCParticleSystemQuad* _velocity;
+	cocos2d::CCParticleSystemQuad* _wind;
 };
 #endif// _GAMEMODEL_H_

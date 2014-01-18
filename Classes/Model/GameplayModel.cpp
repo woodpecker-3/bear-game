@@ -18,6 +18,9 @@ GameplayModel::GameplayModel()
 	_tapDown = false;
 	//_terrainScale = 1;
 	_strike = NULL;
+	_snow = NULL;
+	_velocity = NULL;
+	_wind = NULL;
 }
 
 GameplayModel::~GameplayModel()
@@ -135,7 +138,13 @@ void GameplayModel::update( float dt )
 			_terrain->addChild(_strike,12);  
 			  
 		}
-		_strike->setPosition(ccp(_hero->getPositionX(),_hero->getPositionY()));
+		_strike->setPosition(_hero->getPosition());
+
+		if (_snow)
+		{
+			_hero->removeChild(_snow);
+			_snow = NULL;
+		}
 	}
 	else
 	{
@@ -143,6 +152,51 @@ void GameplayModel::update( float dt )
 		{
 			_terrain->removeChild(_strike,true);    
 			_strike = NULL;
+		}
+		if (!_snow)
+		{
+			_snow = CCParticleSystemQuad::create("partilce_snow.plist");
+			_snow->setAnchorPoint(CCPointZero);
+			_snow->setPositionType(kCCPositionTypeFree);
+			_hero->addChild(_snow);
+		}
+	}
+	{
+		b2Vec2 linearVelocity = _hero->getBody()->GetLinearVelocity();
+		if (linearVelocity.LengthSquared() >= 150)
+		{
+			if (!_velocity)
+			{
+				_velocity = CCParticleSystemQuad::create("particle_streak.plist");
+				_velocity->setAnchorPoint(CCPointZero);
+				_hero->addChild(_velocity);
+			}
+		}
+		else
+		{
+			if (_velocity)
+			{
+				_hero->removeChild(_velocity);
+				_velocity = NULL;
+			}
+		}
+
+		if (linearVelocity.LengthSquared() >= 120)
+		{
+			if (!_wind)
+			{
+				_wind = CCParticleSystemQuad::create("particle_wind.plist");
+				_wind->setAnchorPoint(CCPointZero);
+				_hero->addChild(_wind);
+			}
+		}
+		else
+		{
+			if (_wind)
+			{
+				_hero->removeChild(_wind);
+				_wind = NULL;
+			}
 		}
 	}
 }
@@ -240,20 +294,12 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 				break;
 			}
 
-			CCParticleExplosion *explosion = CCParticleExplosion::createWithTotalParticles(100);
-			explosion->retain();
-			explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
-			//explosion->initWithTotalParticles(200);
-			explosion->setAutoRemoveOnFinish(true);
-			explosion->setStartSizeVar(10.0f);
-			explosion->setSpeed(200.0f);
-			explosion->setAnchorPoint(ccp(0.5f, 0.5f));
-			explosion->setPosition(obj->getPosition());
-			explosion->setDuration(0.005f);
-			//explosion->setEndRadius(128.0f);
+			CCParticleSystemQuad* particle = CCParticleSystemQuad::create("exploding.plist");
+			particle->setAutoRemoveOnFinish(true);
+			particle->setPosition(obj->getPosition());
+			particle->setPositionType(kCCPositionTypeGrouped);
 
-			_terrain->addChild(explosion, 11);
-			explosion->release();
+			_terrain->addChild(particle, 11);
 
 			_terrain->removeGameObject(obj);
 			_terrain->removeBody(body);
@@ -271,28 +317,13 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 		//
 		//b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
 		//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
+		//exploding_ring.plist
+		CCParticleSystemQuad* particle = CCParticleSystemQuad::create("exploding_ring.plist");
+		particle->setAutoRemoveOnFinish(true);
+		particle->setPosition(obj->getPosition());
+		particle->setPositionType(kCCPositionTypeGrouped);
 
-		CCParticleSun *explosion = CCParticleSun::createWithTotalParticles(100);
-		explosion->retain();
-		explosion->setTexture(CCTextureCache::sharedTextureCache()->textureForKey("fire.png"));
-		//explosion->initWithTotalParticles(200);
-		explosion->setAutoRemoveOnFinish(true);
-		explosion->setStartSizeVar(10.0f);
-		explosion->setSpeed(70.0f);
-		explosion->setAnchorPoint(ccp(0.5f, 0.5f));
-		explosion->setPosition(obj->getPosition());
-		explosion->setDuration(0.5f);
-
-// 		/*创建一个CCParticleSystemQuad系统：每个粒子用4个点(Quad,矩形)表示的粒子系统 **/ 
-// 		CCParticleSystemQuad *emitter = CCParticleSystemQuad::create("ExplodingRing.plist");
-// 		emitter->setBlendAdditive(false);/*是否混合 **/
-// 		emitter->setAutoRemoveOnFinish(true);
-// 		emitter->setEmissionRate(75.0f);
-// 		//emitter->stopSystem();
-// 		emitter->setPosition(obj->getPosition());
-
-		_terrain->addChild(explosion, 11);
-		explosion->release();
+		_terrain->addChild(particle, 11);
 
 		_terrain->removeGameObject(obj);
 		_terrain->removeBody(body);

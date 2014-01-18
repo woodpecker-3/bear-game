@@ -90,19 +90,7 @@ void PanelLayer::setGoldNumber( int number )
 	if (number != _gold)
 	{
 		_gold = number;
-		CCParticleFlower* particle = /*CCParticleFire*/CCParticleFlower::createWithTotalParticles(50);//
-		particle->retain();
-		particle->setTexture( CCTextureCache::sharedTextureCache()->addImage("stars.png") );//.pvr");
-		particle->setAutoRemoveOnFinish(true);
-		particle->setStartSizeVar(10.0f);
-		particle->setSpeed(70.0f);
-		particle->setAnchorPoint(ccp(0.5f,0.5f));
-		particle->setPosition(getContentSize().width,getContentSize().height/2);
-		particle->setDuration(1.0f);
-
 		_goldLabel->setString(CCString::createWithFormat("gold: %d",number)->getCString());
-		_goldLabel->addChild(particle, 10);
-		particle->release();
 	}
 	
 }
