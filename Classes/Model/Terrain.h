@@ -4,9 +4,8 @@
 #include "cocos2d.h"
 #include "Box2D/Box2D.h"
 
-#define kMaxPlatformKeyPoints 100
+#define kMaxPlatformKeyPoints 50
 #define kPlatformSegmentWidth 5
-#define kMaxPlatformVertices 4000
 #define kMaxBorderVertices 1000
 
 
@@ -92,13 +91,11 @@ protected:
 	/*生成的cos曲线顶点**/
 	vector<cocos2d::CCPoint> _hillVerticesArr;
 	vector<cocos2d::CCPoint> _hillTexCoordsArr;
-	cocos2d::CCPoint _hillVertices[kMaxPlatformVertices];
-	cocos2d::CCPoint _hillTexCoords[kMaxPlatformVertices];
-	int _hillVerticesCount;
 	/*地面box2d线段**/
 	vector<cocos2d::CCPoint> _borderVerticesArr;
-	cocos2d::CCPoint _borderVertices[kMaxBorderVertices];
-	int _borderVerticesCount;
+
+	/*效果**/
+	cocos2d::CCParticleSystemQuad* _snow;
 
 };
 #endif// _TERRAIN_H_

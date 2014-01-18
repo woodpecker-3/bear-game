@@ -18,7 +18,7 @@ GameplayModel::GameplayModel()
 	_tapDown = false;
 	//_terrainScale = 1;
 	_strike = NULL;
-	_snow = NULL;
+	//_snow = NULL;
 	_velocity = NULL;
 	_wind = NULL;
 }
@@ -110,15 +110,16 @@ void GameplayModel::update( float dt )
 	{
 		setTapDown(false);
 	}
+
+	//contact
+	processContact();
 	
 	_hero->update(dt);
 
 	_terrain->update(dt);
 
 	_background->fellow(_hero->getPositionX());
-	//contact
-	processContact();
-
+	
 	//score
 	float score = _hero->getPositionX()/PTM_RATIO;
 	BearData::sharedData()->setScore((int)score);
@@ -140,11 +141,11 @@ void GameplayModel::update( float dt )
 		}
 		_strike->setPosition(_hero->getPosition());
 
-		if (_snow)
-		{
-			_hero->removeChild(_snow);
-			_snow = NULL;
-		}
+// 		if (_snow)
+// 		{
+// 			_hero->removeChild(_snow);
+// 			_snow = NULL;
+// 		}
 	}
 	else
 	{
@@ -153,51 +154,51 @@ void GameplayModel::update( float dt )
 			_terrain->removeChild(_strike,true);    
 			_strike = NULL;
 		}
-		if (!_snow)
-		{
-			_snow = CCParticleSystemQuad::create("partilce_snow.plist");
-			_snow->setAnchorPoint(CCPointZero);
-			_snow->setPositionType(kCCPositionTypeFree);
-			_hero->addChild(_snow);
-		}
+// 		if (!_snow)
+// 		{
+// 			_snow = CCParticleSystemQuad::create("partilce_snow.plist");
+// 			_snow->setAnchorPoint(CCPointZero);
+// 			_snow->setPositionType(kCCPositionTypeFree);
+// 			_hero->addChild(_snow);
+// 		}
 	}
 	{
 		b2Vec2 linearVelocity = _hero->getBody()->GetLinearVelocity();
-		if (linearVelocity.LengthSquared() >= 150)
-		{
-			if (!_velocity)
-			{
-				_velocity = CCParticleSystemQuad::create("particle_streak.plist");
-				_velocity->setAnchorPoint(CCPointZero);
-				_hero->addChild(_velocity);
-			}
-		}
-		else
-		{
-			if (_velocity)
-			{
-				_hero->removeChild(_velocity);
-				_velocity = NULL;
-			}
-		}
+// 		if (linearVelocity.LengthSquared() >= 150)
+// 		{
+// 			if (!_velocity)
+// 			{
+// 				_velocity = CCParticleSystemQuad::create("particle_streak.plist");
+// 				_velocity->setAnchorPoint(CCPointZero);
+// 				_hero->addChild(_velocity);
+// 			}
+// 		}
+// 		else
+// 		{
+// 			if (_velocity)
+// 			{
+// 				_hero->removeChild(_velocity);
+// 				_velocity = NULL;
+// 			}
+// 		}
 
-		if (linearVelocity.LengthSquared() >= 120)
-		{
-			if (!_wind)
-			{
-				_wind = CCParticleSystemQuad::create("particle_wind.plist");
-				_wind->setAnchorPoint(CCPointZero);
-				_hero->addChild(_wind);
-			}
-		}
-		else
-		{
-			if (_wind)
-			{
-				_hero->removeChild(_wind);
-				_wind = NULL;
-			}
-		}
+// 		if (linearVelocity.LengthSquared() >= 120)
+// 		{
+// 			if (!_wind)
+// 			{
+// 				_wind = CCParticleSystemQuad::create("particle_wind.plist");
+// 				_wind->setAnchorPoint(CCPointZero);
+// 				_hero->addChild(_wind);
+// 			}
+// 		}
+// 		else
+// 		{
+// 			if (_wind)
+// 			{
+// 				_hero->removeChild(_wind);
+// 				_wind = NULL;
+// 			}
+// 		}
 	}
 }
 
@@ -241,15 +242,15 @@ bool GameplayModel::isHeroOnTheGround()
 {
 	int i = 0;
 	CCPoint heroPos = _hero->getPosition();
-	for (; i < _terrain->/*_borderVerticesCount*/_borderVerticesArr.size() - 1; ++i)
+	for (; i < _terrain->_borderVerticesArr.size() - 1; ++i)
 	{
-		if ( heroPos.x >= _terrain->/*_borderVertices*/_borderVerticesArr[i].x && heroPos.x < _terrain->/*_borderVertices*/_borderVerticesArr[i+1].x)
+		if ( heroPos.x >= _terrain->_borderVerticesArr[i].x && heroPos.x < _terrain->_borderVerticesArr[i+1].x)
 		{
 			break;
 		}
 	}
-	if ( abs(heroPos.y - _terrain->/*_borderVertices*/_borderVerticesArr[i].y )< FIXED_GROUND_PIXEL ||
-		 abs(heroPos.y - _terrain->/*_borderVertices*/_borderVerticesArr[i+1].y )< FIXED_GROUND_PIXEL )
+	if ( abs(heroPos.y - _terrain->_borderVerticesArr[i].y )< FIXED_GROUND_PIXEL ||
+		 abs(heroPos.y - _terrain->_borderVerticesArr[i+1].y )< FIXED_GROUND_PIXEL )
 	{
 		return true;
 	}
@@ -259,15 +260,15 @@ bool GameplayModel::isHeroOnTheGround()
 void GameplayModel::processContact_Ground(const MyContact& myContact )
 {
 	/*速度为0**/
-// 	float currAngleDegree = _hero->getRotation();
-// 
-// 	b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-// 	float angle = ccpToAngle(ccp(vel.x, vel.y));
-// 	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
-// 	if (currAngleDegree < tarAngleDegree)
-// 	{
-// 		_hero->damage();
-// 	}
+	float currAngleDegree = _hero->getRotation();
+	float angle = ccpToAngle(ccp(myContact._linearVelocity.x, myContact._linearVelocity.y));
+	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
+
+	/*速度为0,石头碎、hero受到伤害**/
+	if( abs(currAngleDegree - tarAngleDegree) >= 90 )
+	{
+		_hero->damage();
+	}
 }
 
 void GameplayModel::processContact_Stone(const MyContact& myContact )
@@ -278,9 +279,14 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 	{
 		do 
 		{
+			float currAngleDegree = _hero->getRotation();
+			float angle = ccpToAngle(ccp(myContact._linearVelocity.x, myContact._linearVelocity.y));
+			float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
+
 			/*速度为0,石头碎、hero受到伤害**/
-			if ( myContact._linearVelocity.x <= 0.0f &&
-				myContact._linearVelocity.y <= 0.0f)
+			if( abs(tarAngleDegree - currAngleDegree) >= 90 )
+// 			if ( myContact._linearVelocity.x <= 0.0f &&
+// 				myContact._linearVelocity.y <= 0.0f)
 			{
 				_hero->damage();
 			}
@@ -314,10 +320,6 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 	GameObject* obj = (GameObject*)body->GetUserData();
 	if (obj)
 	{
-		//
-		//b2Vec2 vel = _hero->getBody()->GetLinearVelocity();
-		//CCLOG("!!!!GetLinearVelocity(%f,%f)",vel.x,vel.y);
-		//exploding_ring.plist
 		CCParticleSystemQuad* particle = CCParticleSystemQuad::create("exploding_ring.plist");
 		particle->setAutoRemoveOnFinish(true);
 		particle->setPosition(obj->getPosition());

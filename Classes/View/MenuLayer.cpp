@@ -60,7 +60,7 @@ bool MenuLayer::init(GameplayView* view)
 
 void MenuLayer::resume( cocos2d::CCObject* pSender )
 {
-	_parent->resume();
+	//_parent->resume();
 }
 
 void MenuLayer::showResult()

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<UIProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <filePath>E:\cocos2d-x-2.2.1\projects\Bear\Resources\UI\GameplayUI\GameplayUI\GameplayUI.xml.ui</filePath>
+  <Version>1.2.0.0</Version>
+  <Name>GameplayUI</Name>
+  <ProjectDir>E:\cocos2d-x-2.2.1\projects\Bear\Resources\UI\GameplayUI\GameplayUI</ProjectDir>
+  <JsonFileName>GameplayUI.json</JsonFileName>
+  <Resources>E:\cocos2d-x-2.2.1\projects\Bear\Resources\UI\GameplayUI\GameplayUI\Resources</Resources>
+  <JsonFolder>E:\cocos2d-x-2.2.1\projects\Bear\Resources\UI\GameplayUI\GameplayUI\Json</JsonFolder>
+  <JsonList>
+    <string>GameplayUI_1.json</string>
+  </JsonList>
+  <imageFileList />
+  <JsonSuffix>.json</JsonSuffix>
+  <CurrentUIJson>GameplayUI_1.json</CurrentUIJson>
+  <CanvasSize>
+    <Width>960</Width>
+    <Height>640</Height>
+  </CanvasSize>
+</UIProject>

@@ -27,20 +27,21 @@ public:
 
 	//delegate interface
 public:
-	virtual void didPauseOrResume();
+	virtual void didPause();
+	virtual void didResume();
 	virtual void didTouchBegan();
 	virtual void didTouchEnded();
 	virtual void didTouchCancelled();
 
 	virtual void didReset();
 protected:
-	void pause();
-	void resume();
+ 	void pause();
+ 	void resume();
 	void operateAllSchedulerAndActions(cocos2d::CCNode* node, OperateFlag flag);
 protected:
 	GameplayView* _view;
 	
-
+	bool _beginFlag;
 	bool _pauseFlag;
 };
 

@@ -1,15 +1,18 @@
 #include "PanelLayer.h"
 #include "GameplayView.h"
+#include "Defined.h"
 
 USING_NS_CC;
-
+USING_NS_CC_EXT;
 PanelLayer::PanelLayer()
 {
 	_parent = NULL;
+	_ul = NULL;
 	_scoreLabel = NULL;
-	_score = 0;
+	_score = -1;
 	_goldLabel = NULL;
-	_gold = 0;
+	_gold = -1;
+	_tarScoreLabel =NULL;
 }
 
 PanelLayer::~PanelLayer()
@@ -35,45 +38,41 @@ bool PanelLayer::init(GameplayView* view)
 	{
 		_parent = view;
 
-		//ÔÝÍŁ°´ĹĽ
-		CCMenuItemSprite* pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::pauseOrResume));
-		CCMenu* menu = CCMenu::create(pause, NULL);
+		_ul =UILayer::create();
+		CC_BREAK_IF(!_ul);
 
-		CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-		CCSize menuSize = pause->getContentSize();
+		_ul->addWidget(GUIReader::shareReader()->widgetFromJsonFile("GameplayUI_1.json"));
 
-		menu->setPosition(winSize.width - menuSize.width,winSize.height - menuSize.height);
-		addChild(menu);
+		//_ul->setAnchorPoint(ccp(0.5,0.5));
+		addChild(_ul);
+		//CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+		//_ul->setPosition(ccp(240,160 ));
 
-		//źĆˇÖ°ĺ
-		 _scoreLabel = CCLabelTTF::create("score: 0", "American Typewriter", 16);
-		 addChild(_scoreLabel);
-		 _scoreLabel->setColor(ccc3(126, 126, 126));
-		 _scoreLabel->setPosition(ccp(winSize.width - menuSize.width - 64,winSize.height - menuSize.height));
-		 setScoreNumber(0);
+		UIButton* btn = (UIButton*)_ul->getWidgetByName("Button_Pause");
+		btn->addReleaseEvent(this,coco_releaseselector(PanelLayer::clickPause));
 
-		 //˝đąŇ
-		 _goldLabel = CCLabelTTF::create("gold: 0", "American Typewriter", 16);
-		 addChild(_goldLabel);
-		 _goldLabel->setColor(ccc3(126, 126, 126));
-		 _goldLabel->setPosition(ccp(winSize.width - menuSize.width - 164,winSize.height - menuSize.height));
-		 setScoreNumber(0);
+		_scoreLabel = dynamic_cast<UILabel*>(_ul->getWidgetByName("Label_Score"));
+		_scoreLabel->setFontName(DEFAULT_FONTNAME);
 
-		//ĚřÔž°´ĹĽ
-// 		pause = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("CloseNormal.png"), CCSprite::createWithSpriteFrameName("CloseSelected.png"),this,menu_selector(PanelLayer::jump));
-// 		menu = CCMenu::create(pause, NULL);
-// 		menu->setPosition(winSize.width - menuSize.width,/*winSize.height -*/ menuSize.height);
-// 		addChild(menu);
+		_goldLabel = dynamic_cast<UILabel*>(_ul->getWidgetByName("Label_Gold"));
+		_goldLabel->setFontName(DEFAULT_FONTNAME);
+		_goldLabel->setColor(ccc3(126, 126, 126));
 
+		_tarScoreLabel  = dynamic_cast<UILabel*>(_ul->getWidgetByName("Label_TargetScore"));
+		_tarScoreLabel->setFontName(DEFAULT_FONTNAME);
+		_tarScoreLabel->setColor(ccc3(126, 126, 126));
+
+		setScoreNumber(0);
+		setGoldNumber(0);
 		bRet = true;
 	} while (0);
 	return  bRet;
 }
 
 
-void PanelLayer::pauseOrResume( cocos2d::CCObject* pSender )
+void PanelLayer::clickPause( cocos2d::CCObject* pSender )
 {
-	_parent->pauseOrResume();
+	_parent->clickPause();
 }
 
 void PanelLayer::setScoreNumber( int number )
@@ -81,7 +80,7 @@ void PanelLayer::setScoreNumber( int number )
 	if (number != _score)
 	{
 		_score = number;
-		_scoreLabel->setString(CCString::createWithFormat("score: %d",number)->getCString());
+		_scoreLabel->setText(CCString::createWithFormat("%d",number)->getCString());
 	}
 }
 
@@ -90,7 +89,7 @@ void PanelLayer::setGoldNumber( int number )
 	if (number != _gold)
 	{
 		_gold = number;
-		_goldLabel->setString(CCString::createWithFormat("gold: %d",number)->getCString());
+		_goldLabel->setText(CCString::createWithFormat("%d",number)->getCString());
 	}
 	
 }

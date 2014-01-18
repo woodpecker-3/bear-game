@@ -2,6 +2,7 @@
 #define _PANELLAYER_H_
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 
 class GameplayView;
 class PanelLayer : 
@@ -17,15 +18,17 @@ public:
 	 void setScoreNumber(int number);
 	 void setGoldNumber(int number);
 protected:
-	void pauseOrResume(cocos2d::CCObject* pSender);
+	void clickPause(cocos2d::CCObject* pSender);
 	//void jump(cocos2d::CCObject* pSender);
 
 protected:
 	GameplayView* _parent;
 
-	cocos2d::CCLabelTTF* _scoreLabel;
+	cocos2d::extension::UILayer* _ul;
+	cocos2d::extension::UILabel* _scoreLabel;
 	int _score;
-	cocos2d::CCLabelTTF* _goldLabel;
+	cocos2d::extension::UILabel* _goldLabel;
 	int _gold;
+	cocos2d::extension::UILabel* _tarScoreLabel;
 };
 #endif// _PANELLAYER_H_

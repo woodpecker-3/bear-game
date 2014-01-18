@@ -50,7 +50,8 @@ bool BearData::init()
 void BearData::reset()
 {
 // 	int gold = STATIC_DATA_INT("default_gold");
-// 	this->setGold(gold);
+	setGold(0);
+	setScore(0);
 // 	this->setIsBeginner(true);
 // 	this->setMusicVolume(1);
 // 	this->setSoundVolume(1);

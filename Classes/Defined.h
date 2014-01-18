@@ -8,6 +8,8 @@
 /*hero离地面判断时，即使已经离开地面了，但在离地面距离还是很小，仍然判断其还在地面**/
 #define FIXED_GROUND_PIXEL 10+16
 
+#define DEFAULT_FONTNAME "American Typewriter"
+
 typedef enum
 {
 	kFixtrue_inalid = -1,

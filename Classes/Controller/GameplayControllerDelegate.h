@@ -8,7 +8,8 @@ public:
 	virtual ~GameplayControllerDelegate();
 
 	//panel layer
-	virtual void didPauseOrResume()=0;
+	virtual void didPause()=0;
+	virtual void didResume()=0;
 
 	//touch layer
 	virtual void didTouchBegan()=0;

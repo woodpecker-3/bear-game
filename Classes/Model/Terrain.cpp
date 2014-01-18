@@ -27,21 +27,15 @@ Terrain::Terrain()
 	_hero = NULL;
 	_world = NULL;
 	_body = NULL;
-// 	_leftMap = NULL;
-// 	_rightMap = NULL;
 	_hillKeyPointIndex = 0;
 	_fromKeyPointIndex = 0;
 	_toKeyPointIndex = 0;
-	_hillVerticesCount = 0;
-	_borderVerticesCount = 0;
 	_cacheScale = 1;
+	_snow = NULL;
 }
 
 Terrain::~Terrain()
 {
-// 	CC_SAFE_DELETE(_leftMap);
-// 	CC_SAFE_DELETE(_rightMap);
-
 	/*回收内存**/
 // 	for (vector<MyMap*>::iterator it = _runningMapArr.begin();
 // 		it != _runningMapArr.end();
@@ -84,11 +78,6 @@ bool Terrain::init(b2World* world,Hero* hero)
 		
 		_sceenSize = CCDirector::sharedDirector()->getWinSize();
 		
-// 		_leftMap = new MyMap;
-// 		_leftMap->clear();
-// 		_rightMap = new MyMap;
-// 		_rightMap->clear();
-		
 		//初始点
 		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*CONST_OFFSET_Y);
 		createMap();
@@ -106,7 +95,6 @@ bool Terrain::init(b2World* world,Hero* hero)
  		_hero->setPosition(CCPointMake(fisrtMap->_map->getPosition().x + _prepareFirstHillKeyPoint.x,
  			fisrtMap->_map->getPosition().y + _prepareFirstHillKeyPoint.y + _hero->getContentSize().height/2+32));
 		_hero->createBox2dBody();
-		//_hero->update(0);
 
 		bRet = true;
 	} while (0);
@@ -154,11 +142,7 @@ void Terrain::createMap()
 	/*创建障碍物刚体**/
 	createElementBox2DBody(myMap);
 
-	//
-// 	if(!_leftMap->isValid())
-// 	{
-// 		swap(_leftMap,_rightMap);
-// 	}
+	/*push into running list**/
 	_runningMapList.push_back(myMap);
 }
 
@@ -186,23 +170,6 @@ void Terrain::removeMap( MyMap* myMap )
 
 void Terrain::resetMap()
 {
-// 	int posX = getPosition().x;
-// 	if (_leftMap->isValid())
-// 	{
-// 		if((_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX ) < ( - _sceenSize.width/4))
-// 		{/*左边地图右半滑出屏幕8分之区域**/
-// 			swap(_leftMap,_rightMap);
-// 			_rightMap->_map->setVisible(false);
-// 			removeMap(_rightMap);
-// 		}
-// 		else if ( (_leftMap->_map->getPositionX() + TMX_WIDTH(_leftMap->_map) + posX) < ( _sceenSize.width*5/4))
-// 		{/*左边地图左半进入屏幕8分之区域**/
-// 			if (!_rightMap->isValid())
-// 			{
-// 				createMap();
-// 			}
-// 		}
-// 	}
 	if (_runningMapList.size() > 0)
 	{
 		//float scale = 1;//GameplayModel::sharedModel()->getTerrainScale();
@@ -278,7 +245,6 @@ void Terrain::resetHillVertices()
 	static int prevToKeyPointI = -1;
 
 	CCPoint tmp = getPosition();
-	//float scale = GameplayModel::sharedModel()->getTerrainScale();
 	// key points interval for drawing
 	while ( (_hillKeyPoints[NEXT_HILLKEYPOINT_INDEX(_fromKeyPointIndex)].x + tmp.x ) < ( - _sceenSize.width / 8 / _cacheScale ))
 	{
@@ -305,18 +271,17 @@ void Terrain::resetHillVertices()
 
 	if (prevFromKeyPointI != _fromKeyPointIndex || prevToKeyPointI != _toKeyPointIndex)
 	{
-		//CCLog("_fromKeyPointIndex(%d,%d)",_fromKeyPointIndex,_toKeyPointIndex);
 		// vertices for visible area
-		_hillVerticesCount = 0;
-		//_borderVerticesCount = 0;
 		_borderVerticesArr.clear();
+		_hillVerticesArr.clear();
+		_hillTexCoordsArr.clear();
+
 		CCPoint p0, p1, pt0, pt1;
 		p0 = _hillKeyPoints[_fromKeyPointIndex];
 		int nextKeyPointIndex = NEXT_HILLKEYPOINT_INDEX(_toKeyPointIndex);
 		for (int i = NEXT_HILLKEYPOINT_INDEX(_fromKeyPointIndex); 
 			i != nextKeyPointIndex ; )
 		{
-			
 			p1 = _hillKeyPoints[i];
 
 			// triangle strip between p0 and p1
@@ -326,33 +291,14 @@ void Terrain::resetHillVertices()
 			float ymid = (p0.y + p1.y) / 2;
 			float ampl = (p0.y - p1.y) / 2;
 			pt0 = p0;
-// 			_borderVertices[_borderVerticesCount++] = pt0;
-// 			if (_borderVerticesCount >= 990)
-// 			{
-// 				CCLog("_borderVerticesCount=%d",_borderVerticesCount);
-// 			}
 			_borderVerticesArr.push_back(pt0);
 			
 			for (int j = 1; j < hSegments + 1; ++j)
 			{
 				pt1.x = p0.x + j * dx;
 				pt1.y = ymid + ampl * cosf(da * j);
-// 				_borderVertices[_borderVerticesCount++] = pt1;
-// 				if (_borderVerticesCount >= 990)
-// 				{
-// 					CCLog("_borderVerticesCount=%d",_borderVerticesCount);
-// 				}
 				_borderVerticesArr.push_back(pt1);
 
-//  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height));
-//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 1.0f);
-//  				_hillVertices[_hillVerticesCount] = ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height));
-//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 1.0f);
-//  
-//  				_hillVertices[_hillVerticesCount] = ccp(pt0.x, pt0.y);
-//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt0.x / 512, 0);
-//  				_hillVertices[_hillVerticesCount] = ccp(pt1.x, pt1.y);
-//  				_hillTexCoords[_hillVerticesCount++] = ccp(pt1.x / 512, 0);
 				_hillVerticesArr.push_back( ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height)));
 				_hillTexCoordsArr.push_back( ccp(pt0.x / 512, 1.0f));
 				_hillVerticesArr.push_back( ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height)));
@@ -374,8 +320,6 @@ void Terrain::resetHillVertices()
 			{
 				i=0;
 			}
-			//CCLog("_fromKeyPointIndex_i(%d)",i);
-
 		}
 
 		prevFromKeyPointI = _fromKeyPointIndex;
@@ -398,22 +342,22 @@ void Terrain::resetTerrainBox2DBody()
 
 	b2ChainShape shape;
 	b2Vec2 p1;//, p2;
-	b2Vec2 pointes[kMaxBorderVertices];
+	b2Vec2* pointesArr = new b2Vec2[_borderVerticesArr.size()];
 	int i = 0;
-	for (; i < _borderVerticesArr.size()/*_borderVerticesCount*/ /*- 1*/; ++i)
+	for (; i < _borderVerticesArr.size(); ++i)
 	{
-		p1 = b2Vec2( (/*_borderVertices*/_borderVerticesArr[i].x) / PTM_RATIO, (_borderVerticesArr/*_borderVertices*/[i].y ) / PTM_RATIO);
-		//p2 = b2Vec2( (_borderVertices[i + 1].x) / PTM_RATIO, (_borderVertices[i + 1].y ) / PTM_RATIO);
+		p1 = b2Vec2( (_borderVerticesArr[i].x) / PTM_RATIO, (_borderVerticesArr[i].y ) / PTM_RATIO);
 		
-		pointes[i] = p1;
-		//_body->CreateFixture(&shape, 0);
-		
+		pointesArr[i] = p1;
 	}
-	shape.CreateChain(pointes,i);
+	shape.CreateChain(pointesArr,i);
 	b2FixtureDef fd;
 	fd.shape = &shape;
 	fd.userData = (void*)kFixtrue_Ground;
 	_body->CreateFixture(&fd);
+
+	//release
+	delete[] pointesArr;
 }
 
 void Terrain::createElementBox2DBody(MyMap* myMap)
@@ -521,11 +465,29 @@ void Terrain::update( float dt )
 
 	//scale
 	_cacheScale = abs((_sceenSize.height*CONST_OFFSET_Y)/(getPositionY() + _hero->getPositionY()));
-	//GameplayModel::sharedModel()->setTerrainScale(scale);
-	//setScale(scale);
 
 	resetMap();
 	resetHillVertices();
+
+	if (GameplayModel::sharedModel()->isHeroOnTheGround())
+	{
+		if (!_snow)
+		{
+			_snow = CCParticleSystemQuad::create("partilce_snow.plist");
+			_snow->setAnchorPoint(CCPointZero);
+			_snow->setPositionType(kCCPositionTypeRelative);
+			addChild(_snow);
+		}
+		_snow->setPosition(GameplayModel::sharedModel()->getHero()->getPosition());
+	}
+	else
+	{
+		if (_snow)
+		{
+		 	_hero->removeChild(_snow);
+		 	_snow = NULL;
+		}
+	}
 }
 
 void Terrain::draw()
@@ -540,7 +502,7 @@ void Terrain::draw()
 	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, (void*)&_hillVerticesArr[0]);
 	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, (void*)&_hillTexCoordsArr[0]);
 
-	glDrawArrays(GL_TRIANGLE_STRIP/*GL_LINES*/, 0, (GLsizei)/*_hillVerticesCount*/_hillVerticesArr.size());
+	glDrawArrays(GL_TRIANGLE_STRIP/*GL_LINES*/, 0, (GLsizei)_hillVerticesArr.size());
 }
 
 void Terrain::fellow()
@@ -560,24 +522,7 @@ void Terrain::removeBody( b2Body* body )
 {
 	do 
 	{
-// 		if (_leftMap->isValid())
-// 		{
-// 			vector<b2Body*>::iterator it = find(_leftMap->_bodyArr.begin(),_leftMap->_bodyArr.end(),body);
-// 			if (it!= _leftMap->_bodyArr.end())
-// 			{
-// 				_leftMap->_bodyArr.erase(it);
-// 				break;
-// 			}
-// 		}
-// 
-// 		if (_rightMap->isValid())
-// 		{
-// 			vector<b2Body*>::iterator it = find(_rightMap->_bodyArr.begin(),_rightMap->_bodyArr.end(),body);
-// 			if (it!= _rightMap->_bodyArr.end())
-// 			{
-// 				_rightMap->_bodyArr.erase(it);
-// 			}
-// 		}
+
 		MyMap* myMap = NULL;
 		for (list<MyMap*>::iterator it = _runningMapList.begin();
 			 it!=_runningMapList.end();
@@ -603,24 +548,6 @@ void Terrain::removeGameObject( GameObject* obj )
 {
 	do 
 	{
-// 		if (_leftMap->isValid())
-// 		{
-// 			vector<GameObject*>::iterator it = find(_leftMap->_objArr.begin(),_leftMap->_objArr.end(),obj);
-// 			if (it!= _leftMap->_objArr.end())
-// 			{
-// 				_leftMap->_objArr.erase(it);
-// 				break;
-// 			}
-// 		}
-// 
-// 		if (_rightMap->isValid())
-// 		{
-// 			vector<GameObject*>::iterator it = find(_rightMap->_objArr.begin(),_rightMap->_objArr.end(),obj);
-// 			if (it!= _rightMap->_objArr.end())
-// 			{
-// 				_rightMap->_objArr.erase(it);
-// 			}
-// 		}
 		MyMap* myMap = NULL;
 		for (list<MyMap*>::iterator it = _runningMapList.begin();
 			it!=_runningMapList.end();

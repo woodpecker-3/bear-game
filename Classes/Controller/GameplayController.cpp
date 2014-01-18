@@ -4,13 +4,15 @@
 #include "GameplayModel.h"
 #include "Hero.h"
 #include "Defined.h"
+#include "BearData.h"
 
 USING_NS_CC;
 GameplayController::GameplayController(void)
 {
 	_view = NULL;
 
-	_pauseFlag = true;
+	_beginFlag = false;
+	_pauseFlag = false;
 }
 
 
@@ -38,11 +40,18 @@ bool GameplayController::init()
 
 void GameplayController::update( float dt )
 {
+	if (!_beginFlag)
+	{
+		_beginFlag = true;
+		GameplayModel::sharedModel()->getHero()->setAwake(true);
+		_view->showGameView();
+	}
+
 	if(_pauseFlag) return;
 	if (GameplayModel::sharedModel()->isGameOver())
 	{
+		pause();
 		_view->showResult();
-		didPauseOrResume();
 	}
 	else
 	{
@@ -52,46 +61,33 @@ void GameplayController::update( float dt )
 	}
 }
 
-void GameplayController::didPauseOrResume()
+void GameplayController::didPause()
 {
-	if (_pauseFlag)
-	{
-		_pauseFlag = false;
-		if (GameplayModel::sharedModel()->getHero()->getAwake())
-		{
-			resume();
-		}
-		else
-		{
-			GameplayModel::sharedModel()->getHero()->wake();
-		}
-	}
-	else
-	{
-		_pauseFlag = true;
-		pause();
-	}
+	pause();
+	_view->showPauseUI();
+}
+
+void GameplayController::didResume()
+{
+	resume();
+	_view->showGameView();
 }
 
 void GameplayController::pause()
 {
+	_pauseFlag = true;
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("sound_button.mp3");
 	operateAllSchedulerAndActions(_view, k_Operate_Pause);
-	
-	_view->setTouchEnabled(false);
-// 	_touchLayer->setTouchEnabled(false);
-// 	addChild(_menuLayer);
 }
 
 void GameplayController::resume()
 {
+	_pauseFlag = false;
 	operateAllSchedulerAndActions(_view, k_Operate_Resume);
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
-// 	removeChild(_menuLayer, false);
-// 	_touchLayer->setTouchEnabled(true);
-	_view->setTouchEnabled(true);
 }
+
 
 void GameplayController::operateAllSchedulerAndActions( cocos2d::CCNode* node, OperateFlag flag )
 {
@@ -144,5 +140,6 @@ void GameplayController::didTouchCancelled()
 void GameplayController::didReset()
 {
 	GameplayModel::sharedModel()->getHero()->setState(Hero::kHeroState_normal);
-	didPauseOrResume();
+	BearData::sharedData()->reset();
+	didResume();
 }

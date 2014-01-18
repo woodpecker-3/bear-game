@@ -9,6 +9,8 @@ class PlayerLayer;
 class PanelLayer;
 class TouchLayer;
 class MenuLayer;
+class PauseUI;
+class ResultUI;
 class GameplayView :
 	public cocos2d::CCNode
 {
@@ -16,6 +18,8 @@ public:
 	friend class PanelLayer;
 	friend class TouchLayer;
 	friend class MenuLayer;
+	friend class PauseUI;
+	friend class ResultUI;
 	GameplayView(void);
 	~GameplayView(void);
 
@@ -24,17 +28,19 @@ public:
 
 	void update(float delta);
 
-	void setTouchEnabled(bool flag);
-
+	void showGameView();
 	void showResult();
+	void showPauseUI();
 protected:
-	void pauseOrResume();
+	/*panle layer**/
+	void clickPause();
+	/*touck layer**/
 	void touchBegan();
 	void touchEnded();
 	void touchCancelled();
-
-
-	void resume();
+	/*pause UI**/
+	void clickResume();
+	void clickRestart();/*result UI too**/
 private:
 	BackgroundLayer* _background;
 	PlayerLayer* _playerLayer;
@@ -42,6 +48,8 @@ private:
 	TouchLayer *_touchLayer;
 	MenuLayer* _menuLayer;
 
+	PauseUI* _pauseUI;
+	ResultUI* _resultUI;
 
 	GameplayControllerDelegate* _delegate;
 };

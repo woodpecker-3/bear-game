@@ -28,6 +28,9 @@
     <Filter Include="Classes\Util">
       <UniqueIdentifier>{55d5001d-fcdf-4ff5-8641-6cce415ad251}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\View\UI">
+      <UniqueIdentifier>{bbc52a0e-61a8-4936-8d40-158faa5b26dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Model\Background.cpp">
       <Filter>Classes\Model\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\View\UI\PauseUI.cpp">
+      <Filter>Classes\View\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\View\UI\ResultUI.cpp">
+      <Filter>Classes\View\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Model\Background.h">
       <Filter>Classes\Model\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\View\UI\PauseUI.h">
+      <Filter>Classes\View\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\View\UI\ResultUI.h">
+      <Filter>Classes\View\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

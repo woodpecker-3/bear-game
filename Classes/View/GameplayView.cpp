@@ -10,8 +10,12 @@
 #include "BearData.h"
 #include "MenuLayer.h"
 #include "Terrain.h"
+#include "cocos-ext.h"
+#include "PauseUI.h"
+#include "ResultUI.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 GameplayView::GameplayView(void)
 {
 	_background = NULL;
@@ -20,12 +24,17 @@ GameplayView::GameplayView(void)
 	_touchLayer = NULL;
 	_menuLayer = NULL;
 	_delegate = NULL;
+	_pauseUI = NULL;
+	_resultUI = NULL;
 }
 
 
 GameplayView::~GameplayView(void)
 {
 	CC_SAFE_RELEASE(_menuLayer);
+
+	CC_SAFE_RELEASE(_pauseUI);
+	CC_SAFE_RELEASE(_resultUI);
 }
 
 GameplayView* GameplayView::create( GameplayControllerDelegate* theDelegate )
@@ -51,7 +60,6 @@ bool GameplayView::init( GameplayControllerDelegate* theDelegate )
 		addChild(_background);
 		_background->setScale(0.88f);
 
-		//_platformLayer
 		_playerLayer = PlayerLayer::create();
 		CC_BREAK_IF(!_playerLayer);
 		addChild(_playerLayer);
@@ -63,24 +71,29 @@ bool GameplayView::init( GameplayControllerDelegate* theDelegate )
 		_touchLayer = TouchLayer::create(this);
 		CC_BREAK_IF(!_touchLayer);
 		addChild(_touchLayer);
+		_touchLayer->setTouchEnabled(true);
 
 		_menuLayer = MenuLayer::create(this);
 		CC_BREAK_IF(!_touchLayer);
 		_menuLayer->retain();
+
+		_pauseUI = PauseUI::create(this);
+		CC_BREAK_IF(!_pauseUI);
+		_pauseUI->retain();
+
+
+		_resultUI = ResultUI::create(this);
+		CC_BREAK_IF(!_resultUI);
+		_resultUI->retain();
 
 		bRet = true;
 	} while (0);
 	return bRet;
 }
 
-void GameplayView::setTouchEnabled( bool flag )
+void GameplayView::clickPause()
 {
-	_touchLayer->setTouchEnabled(flag);
-}
-
-void GameplayView::pauseOrResume()
-{
-	_delegate->didPauseOrResume();
+	_delegate->didPause();
 }
 
 void GameplayView::touchBegan()
@@ -110,17 +123,35 @@ void GameplayView::update( float delta )
 
 void GameplayView::showResult()
 {
-	_panelLayer->setVisible(false);
-	_touchLayer->setVisible(false);
-	_menuLayer->showResult();
-	addChild(_menuLayer);
+	_resultUI->showResult();
+	addChild(_resultUI);
 }
 
-void GameplayView::resume()
+void GameplayView::showGameView()
 {
-	_panelLayer->setVisible(true);
-	_touchLayer->setVisible(true);
-	removeChild(_menuLayer);
+	if (_pauseUI->getParent() == this)
+	{
+		removeChild(_pauseUI);
+	}
+	if (_resultUI->getParent() == this)
+	{
+		removeChild(_resultUI);
+	}
+}
 
+void GameplayView::showPauseUI()
+{
+	addChild(_pauseUI);
+}
+
+
+void GameplayView::clickResume()
+{
+	_delegate->didResume();
+}
+
+
+void GameplayView::clickRestart()
+{
 	_delegate->didReset();
 }
