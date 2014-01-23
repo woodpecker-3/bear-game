@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "PauseUI.h"
 #include "ResultUI.h"
+#include "OrnamentalLayer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -58,7 +59,10 @@ bool GameplayView::init( GameplayControllerDelegate* theDelegate )
 		CC_BREAK_IF(!_background);
 		_background->setAnchorPoint(CCPointZero);
 		addChild(_background);
-		_background->setScale(0.88f);
+
+		_ornamental = OrnamentalLayer::create();
+		CC_BREAK_IF(!_ornamental);
+		addChild(_ornamental);
 
 		_playerLayer = PlayerLayer::create();
 		CC_BREAK_IF(!_playerLayer);
@@ -118,7 +122,12 @@ void GameplayView::update( float delta )
 	_panelLayer->setScoreNumber(BearData::sharedData()->getScore());
 	_panelLayer->setGoldNumber(BearData::sharedData()->getGold());
 
-	_playerLayer->setScale(GameplayModel::sharedModel()->getTerrain()->getCacheScale());
+	/*Ëõ·Å**/
+	float cacheScale = GameplayModel::sharedModel()->getCacheScale();
+	_background->setScale(SCALE_BACKGROUND(cacheScale) );
+	_ornamental->setScale(SCALE_DECORATIVE(cacheScale));
+	_playerLayer->setScale(cacheScale);
+	
 }
 
 void GameplayView::showResult()

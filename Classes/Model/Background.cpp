@@ -1,5 +1,7 @@
 #include "Background.h"
 #include <algorithm>
+#include "GameplayModel.h"
+#include "Hero.h"
 
 USING_NS_CC;
 Background::Background()
@@ -63,8 +65,16 @@ bool Background::init()
 	return bRet;
 }
 
-void Background::fellow(int offsetX)
+void Background::update( float delta )
 {
+	CCNode::update(delta);
+
+	fellow();
+}
+
+void Background::fellow()
+{
+	float offsetX = GameplayModel::sharedModel()->getHero()->getPositionX();
 	CCSize winsSize = CCDirector::sharedDirector()->getWinSize();
 	_background->setPositionX(_background->getPosition().x - (offsetX - _offsetX) * 0.15f);
 	_mediumground->setPositionX(_mediumground->getPosition().x - (offsetX - _offsetX) * 0.25f);

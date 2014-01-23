@@ -11,11 +11,13 @@
 
 class Hero;
 class GameObject;
+class Ornamental;
 class Terrain :
 	public cocos2d::CCNode
 {
 public:
 	friend class GameplayModel;
+	friend class Hero;
 	typedef struct  _MyMap
 	{
 		cocos2d::CCTMXTiledMap* _map;
@@ -39,6 +41,7 @@ public:
 
 	static Terrain* create(b2World* world,Hero* hero);
 	bool init(b2World* world,Hero* hero);
+	bool initTerrain();
 
 	void update(float dt);
 
@@ -47,7 +50,6 @@ public:
 	void removeGameObject(GameObject* obj);
 	void removeBody(b2Body* body);
 
-	CC_SYNTHESIZE(float,_cacheScale,CacheScale);
 protected:
 	void createMap();
 	void removeMap(MyMap* myMap);
@@ -57,11 +59,14 @@ protected:
 	void resetHillVertices();
 	void resetTerrainBox2DBody();
 	void createElementBox2DBody(MyMap* myMap);
+	void createOrnamental(MyMap* myMap);
 	
 	void fellow();
 protected:
 	cocos2d::CCSprite* _stripes;
 	cocos2d::CCSize _sceenSize;
+
+	Ornamental* _ornamental;
 
 	Hero* _hero;
 

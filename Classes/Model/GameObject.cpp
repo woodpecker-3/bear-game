@@ -37,8 +37,17 @@ bool GameObject::init( int objTpe )
 		{
 			_sprite = CCSprite::create("gold.png");
 		}
+		else if (objTpe == kFixtrue_Tree)
+		{
+			_sprite = CCSprite::createWithSpriteFrameName("tree1.png");
+		}
+		else if (objTpe == kFixtrue_Board)
+		{
+			_sprite = CCSprite::createWithSpriteFrameName("board.png");
+		}
 		CC_BREAK_IF(!_sprite);
 		addChild(_sprite);
+		_sprite->setAnchorPoint(ccp(0.0f,0.0f));
 
 		_objType = objTpe;
 

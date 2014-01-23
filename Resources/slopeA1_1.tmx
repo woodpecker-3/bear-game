@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="240" height="120" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="stone" tilewidth="48" tileheight="48">
+  <image source="stone.png" width="48" height="48"/>
+ </tileset>
+ <tileset firstgid="2" name="gold" tilewidth="24" tileheight="24">
+  <image source="gold.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="3" name="board" tilewidth="128" tileheight="128">
+  <image source="tps/board.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="4" name="house" tilewidth="64" tileheight="64">
+  <image source="tps/house.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="5" name="tree1" tilewidth="64" tileheight="128">
+  <image source="tps/tree1.png" width="64" height="128"/>
+ </tileset>
+ <tileset firstgid="6" name="snow_man1" tilewidth="48" tileheight="48">
+  <image source="tps/snow_man1.png" width="48" height="48"/>
+ </tileset>
+ <layer name="thing" width="240" height="120">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAIA7Ab+lemwS2CLcESAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvpjrAAAAAAAAAAAAAAAAAAAAQLHzggAG
+  </data>
+ </layer>
+ <objectgroup name="ornamental" width="240" height="120">
+  <object x="491" y="219" width="11" height="11">
+   <properties>
+    <property name="objType" value="6"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object x="580" y="259" width="11" height="11">
+   <properties>
+    <property name="objType" value="6"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object x="883" y="474" width="11" height="11">
+   <properties>
+    <property name="objType" value="6"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object x="1348" y="810" width="11" height="11">
+   <properties>
+    <property name="objType" value="6"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="platform" width="240" height="120">
+  <properties>
+   <property name="isDecorative" value="false"/>
+   <property name="objType" value="4"/>
+   <property name="stickSprite" value="false"/>
+  </properties>
+  <object name="platform" x="0" y="138">
+   <polyline points="0,0 538,90 1387,687 1920,755"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="colls" width="240" height="120">
+  <object x="962" y="376">
+   <properties>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 -1,23 36,24 35,-3 1,-5"/>
+  </object>
+  <object x="1030" y="406">
+   <properties>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 -1,23 36,24 35,-3 1,-5"/>
+  </object>
+  <object x="1099" y="441">
+   <properties>
+    <property name="objType" value="3"/>
+   </properties>
+   <polyline points="0,0 -1,23 36,24 35,-3 1,-5"/>
+  </object>
+  <object x="943" y="513">
+   <properties>
+    <property name="objType" value="2"/>
+   </properties>
+   <polyline points="-1,-9 -1,23 36,24 35,-8 -1,-9"/>
+  </object>
+  <object x="1689" y="868">
+   <properties>
+    <property name="objType" value="2"/>
+   </properties>
+   <polyline points="0,-5 -1,23 38,23 38,-6 0,-7"/>
+  </object>
+ </objectgroup>
+</map>

@@ -22,9 +22,9 @@ public:
 	static Hero* create(b2World* world);
 	bool init(b2World* world);
 
-	void update(float dt);
+	bool initHero();
 
-	void createBox2dBody();
+	void update(float dt);
 
 	void limitVelocity();
 	void wake();
@@ -39,6 +39,8 @@ public:
 	void setAwake(bool awake);
 
 	b2Body* getBody(){return _body;}
+protected:
+	void createBox2dBody();
 protected:
 	cocos2d::CCSprite* _sprite;
 	b2World* _world;

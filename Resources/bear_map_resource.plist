@@ -4,10 +4,23 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>board.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,1},{128,128}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{128,128}}</string>
+                <key>sourceSize</key>
+                <string>{128,128}</string>
+            </dict>
             <key>house.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1,1},{64,64}}</string>
+                <string>{{130,1},{64,64}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,7 +33,7 @@
             <key>snow_man1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{66,1},{48,48}}</string>
+                <string>{{195,1},{48,48}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -29,19 +42,6 @@
                 <string>{{0,0},{48,48}}</string>
                 <key>sourceSize</key>
                 <string>{48,48}</string>
-            </dict>
-            <key>tiaoban.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{115,1},{128,128}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{128,128}}</string>
-                <key>sourceSize</key>
-                <string>{128,128}</string>
             </dict>
             <key>tree1.png</key>
             <dict>
@@ -66,7 +66,7 @@
             <key>size</key>
             <string>{256,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:84b470b68a283da5855295182605afae:67cb0c3da71946ac6594015d30afd264:3885dfb13eb1b2dfc49c665d9e370b62$</string>
+            <string>$TexturePacker:SmartUpdate:842f1b1d67b6a270624e7e620e43fa82:0881a39192ca940e94e24594f9f45a7d:3885dfb13eb1b2dfc49c665d9e370b62$</string>
             <key>textureFileName</key>
             <string>bear_map_resource.png</string>
         </dict>

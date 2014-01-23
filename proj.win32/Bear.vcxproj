@@ -135,12 +135,14 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\Controller\MyContactListener.cpp" />
     <ClCompile Include="..\Classes\Model\Background.cpp" />
     <ClCompile Include="..\Classes\Model\BearData.cpp" />
+    <ClCompile Include="..\Classes\Model\Ornamental.cpp" />
     <ClCompile Include="..\Classes\Model\GameObject.cpp" />
     <ClCompile Include="..\Classes\Model\GameplayModel.cpp" />
     <ClCompile Include="..\Classes\Model\GameStartModel.cpp" />
     <ClCompile Include="..\Classes\Model\Hero.cpp" />
     <ClCompile Include="..\Classes\Model\Terrain.cpp" />
     <ClCompile Include="..\Classes\View\BackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\View\OrnamentalLayer.cpp" />
     <ClCompile Include="..\Classes\View\GameplayView.cpp" />
     <ClCompile Include="..\Classes\View\GameStartView.cpp" />
     <ClCompile Include="..\Classes\View\MenuLayer.cpp" />
@@ -161,6 +163,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\Defined.h" />
     <ClInclude Include="..\Classes\Model\Background.h" />
     <ClInclude Include="..\Classes\Model\BearData.h" />
+    <ClInclude Include="..\Classes\Model\Ornamental.h" />
     <ClInclude Include="..\Classes\Model\GameObject.h" />
     <ClInclude Include="..\Classes\Model\GameplayModel.h" />
     <ClInclude Include="..\Classes\Model\GameStartModel.h" />
@@ -168,6 +171,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\Model\Terrain.h" />
     <ClInclude Include="..\Classes\Util\MyUtil.h" />
     <ClInclude Include="..\Classes\View\BackgroundLayer.h" />
+    <ClInclude Include="..\Classes\View\OrnamentalLayer.h" />
     <ClInclude Include="..\Classes\View\GameplayView.h" />
     <ClInclude Include="..\Classes\View\GameStartView.h" />
     <ClInclude Include="..\Classes\View\MenuLayer.h" />

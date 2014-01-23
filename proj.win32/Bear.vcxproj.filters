@@ -31,6 +31,15 @@
     <Filter Include="Classes\View\UI">
       <UniqueIdentifier>{bbc52a0e-61a8-4936-8d40-158faa5b26dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\View\UI\GameStart">
+      <UniqueIdentifier>{e51edddd-0ba7-40b7-899f-ef039f5220c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\View\UI\Gameplay">
+      <UniqueIdentifier>{5b9edb4a-c80e-4b6e-96b7-8c6f0129341e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\View\GameStart">
+      <UniqueIdentifier>{dfb73a2a-6794-4444-b62e-9c502ae18687}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -97,10 +106,16 @@
       <Filter>Classes\Model\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\View\UI\PauseUI.cpp">
-      <Filter>Classes\View\UI</Filter>
+      <Filter>Classes\View\UI\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\View\UI\ResultUI.cpp">
-      <Filter>Classes\View\UI</Filter>
+      <Filter>Classes\View\UI\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Model\Ornamental.cpp">
+      <Filter>Classes\Model\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\View\OrnamentalLayer.cpp">
+      <Filter>Classes\View\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +188,17 @@
     <ClInclude Include="..\Classes\Model\Background.h">
       <Filter>Classes\Model\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\View\UI\PauseUI.h">
-      <Filter>Classes\View\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\View\UI\ResultUI.h">
-      <Filter>Classes\View\UI</Filter>
+      <Filter>Classes\View\UI\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\View\UI\PauseUI.h">
+      <Filter>Classes\View\UI\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Model\Ornamental.h">
+      <Filter>Classes\Model\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\View\OrnamentalLayer.h">
+      <Filter>Classes\View\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

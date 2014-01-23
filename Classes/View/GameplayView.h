@@ -5,6 +5,7 @@
 
 class GameplayControllerDelegate;
 class BackgroundLayer;
+class OrnamentalLayer;
 class PlayerLayer;
 class PanelLayer;
 class TouchLayer;
@@ -43,6 +44,7 @@ protected:
 	void clickRestart();/*result UI too**/
 private:
 	BackgroundLayer* _background;
+	OrnamentalLayer* _ornamental;
 	PlayerLayer* _playerLayer;
 	PanelLayer* _panelLayer;
 	TouchLayer *_touchLayer;

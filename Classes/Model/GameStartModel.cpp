@@ -63,7 +63,9 @@ void GameStartModel::cacheInit()
 {
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("bear_resource.plist");
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("bear.plist");
+	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("bear_map_resource.plist");
 	CCTextureCache::sharedTextureCache()->addImage("fire.png");
+	CCTextureCache::sharedTextureCache()->addImage("particleTexture_wind.png");
 }
 
 void GameStartModel::audioAndUserDataInit()

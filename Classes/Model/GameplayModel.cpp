@@ -5,9 +5,12 @@
 #include "BearData.h"
 #include "GameObject.h"
 #include "Background.h"
+#include "Ornamental.h"
 
 USING_NS_CC;
 static GameplayModel* s_GameplayMode=NULL;
+
+
 GameplayModel::GameplayModel()
 {
 	_world = NULL;
@@ -15,12 +18,15 @@ GameplayModel::GameplayModel()
 	_terrain = NULL;
 	_background = NULL;
 	_hero = NULL;
+	_ornamental = NULL;
 	_tapDown = false;
+	_cacheScale = 1;
 	//_terrainScale = 1;
 	_strike = NULL;
 	//_snow = NULL;
 	_velocity = NULL;
 	_wind = NULL;
+
 }
 
 GameplayModel::~GameplayModel()
@@ -40,6 +46,12 @@ GameplayModel* GameplayModel::sharedModel()
 		if (model && model->init())
 		{
 			s_GameplayMode = model;
+
+			if (!s_GameplayMode->initModel())
+			{
+				CC_SAFE_DELETE(s_GameplayMode);
+				s_GameplayMode =NULL;
+			}
 		}
 	}
 	return s_GameplayMode;
@@ -57,9 +69,15 @@ bool GameplayModel::init()
 		_hero->setAnchorPoint(CCPointZero);
 		CC_BREAK_IF(!_hero);
 
+		_ornamental = Ornamental::create();
+		_ornamental->retain();
+		CC_BREAK_IF(!_ornamental);
+
 		_terrain = Terrain::create(_world,_hero);
 		_terrain->retain();
 		CC_BREAK_IF(!_terrain);
+
+		
 
 		_background = Background::create();
 		_background->retain();
@@ -70,9 +88,23 @@ bool GameplayModel::init()
 	return bRet;
 }
 
+bool GameplayModel::initModel()
+{
+	bool bRet = false;
+	do 
+	{
+		CC_BREAK_IF(!_terrain->initTerrain());
+
+		CC_BREAK_IF(!_hero->initHero());
+
+		bRet = true;
+	} while (0);
+	return bRet;
+}
+
 void GameplayModel::setupWorld()
 {
-	b2Vec2 gravity = b2Vec2(0.0f, -10.0f);
+	b2Vec2 gravity = b2Vec2(0.0f, -7.0f);
 	bool doSleep = true;
 	_world = new b2World(gravity);
 	_world->SetAllowSleeping(doSleep);
@@ -114,11 +146,21 @@ void GameplayModel::update( float dt )
 	//contact
 	processContact();
 	
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	//scale
+	//CCPoint heroWorldPos = _terrain->convertToWorldSpace(_hero->getPosition());
+	//_cacheScale = (winSize.height*CONST_OFFSET_Y)/heroWorldPos.y;
+	//float YYYY = _terrain->getPositionY() + _hero->getPositionY();
+	_cacheScale = (winSize.height*CONST_OFFSET_Y)/(_terrain->getPositionY() + _hero->getPositionY());
+	
+
 	_hero->update(dt);
 
 	_terrain->update(dt);
 
-	_background->fellow(_hero->getPositionX());
+	_ornamental->update(dt);
+
+	_background->update(dt);
 	
 	//score
 	float score = _hero->getPositionX()/PTM_RATIO;
@@ -164,41 +206,42 @@ void GameplayModel::update( float dt )
 	}
 	{
 		b2Vec2 linearVelocity = _hero->getBody()->GetLinearVelocity();
-// 		if (linearVelocity.LengthSquared() >= 150)
-// 		{
-// 			if (!_velocity)
-// 			{
-// 				_velocity = CCParticleSystemQuad::create("particle_streak.plist");
-// 				_velocity->setAnchorPoint(CCPointZero);
-// 				_hero->addChild(_velocity);
-// 			}
-// 		}
-// 		else
-// 		{
-// 			if (_velocity)
-// 			{
-// 				_hero->removeChild(_velocity);
-// 				_velocity = NULL;
-// 			}
-// 		}
+		if (linearVelocity.LengthSquared() >= 150)
+		{
+			if (!_velocity)
+			{
+				_velocity = CCParticleSystemQuad::create("particle_streak.plist");
+				_velocity->setAnchorPoint(CCPointZero);
+				_velocity->setPositionType(kCCPositionTypeFree);
+				_hero->addChild(_velocity);
+			}
+		}
+		else
+		{
+			if (_velocity)
+			{
+				_hero->removeChild(_velocity);
+				_velocity = NULL;
+			}
+		}
 
-// 		if (linearVelocity.LengthSquared() >= 120)
-// 		{
-// 			if (!_wind)
-// 			{
-// 				_wind = CCParticleSystemQuad::create("particle_wind.plist");
-// 				_wind->setAnchorPoint(CCPointZero);
-// 				_hero->addChild(_wind);
-// 			}
-// 		}
-// 		else
-// 		{
-// 			if (_wind)
-// 			{
-// 				_hero->removeChild(_wind);
-// 				_wind = NULL;
-// 			}
-// 		}
+		if (linearVelocity.LengthSquared() >= 120)
+		{
+			if (!_wind)
+			{
+				_wind = CCParticleSystemQuad::create("particle_wind.plist");
+				_wind->setAnchorPoint(CCPointZero);
+				_hero->addChild(_wind);
+			}
+		}
+		else
+		{
+			if (_wind)
+			{
+				_hero->removeChild(_wind);
+				_wind = NULL;
+			}
+		}
 	}
 }
 
@@ -226,6 +269,11 @@ void GameplayModel::processContact()
 				processContact_Gold(myContact);
 			}
 			break;
+		case kFixtrue_Board:
+			{
+				processContact_Board(myContact);
+			}
+			break;
 		default:
 			break;
 		}
@@ -250,7 +298,7 @@ bool GameplayModel::isHeroOnTheGround()
 		}
 	}
 	if ( abs(heroPos.y - _terrain->_borderVerticesArr[i].y )< FIXED_GROUND_PIXEL ||
-		 abs(heroPos.y - _terrain->_borderVerticesArr[i+1].y )< FIXED_GROUND_PIXEL )
+		abs(heroPos.y - _terrain->_borderVerticesArr[i+1].y )< FIXED_GROUND_PIXEL )
 	{
 		return true;
 	}
@@ -265,8 +313,15 @@ void GameplayModel::processContact_Ground(const MyContact& myContact )
 	float tarAngleDegree = -1 * CC_RADIANS_TO_DEGREES(angle);
 
 	/*速度为0,石头碎、hero受到伤害**/
-	if( abs(currAngleDegree - tarAngleDegree) >= 90 )
+	if( abs(currAngleDegree - tarAngleDegree) >= 60)
 	{
+		CCParticleSystemQuad* particle = CCParticleSystemQuad::create("particle_snow2.plist");
+		particle->setAutoRemoveOnFinish(true);
+		particle->setPosition(_hero->getPosition());
+		particle->setPositionType(kCCPositionTypeFree);
+
+		_terrain->addChild(particle, 11);
+
 		_hero->damage();
 	}
 }
@@ -285,8 +340,6 @@ void GameplayModel::processContact_Stone(const MyContact& myContact )
 
 			/*速度为0,石头碎、hero受到伤害**/
 			if( abs(tarAngleDegree - currAngleDegree) >= 90 )
-// 			if ( myContact._linearVelocity.x <= 0.0f &&
-// 				myContact._linearVelocity.y <= 0.0f)
 			{
 				_hero->damage();
 			}
@@ -332,4 +385,21 @@ void GameplayModel::processContact_Gold(const MyContact& myContact )
 
 		BearData::sharedData()->alterGold(10);
 	}
+}
+
+void GameplayModel::processContact_Board( const MyContact& myContact )
+{
+// 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+// 	GameObject* obj = (GameObject*)myContact._fixture->GetBody()->GetUserData();
+// 	CCPoint nowPos = obj->getPosition();
+// 	CCPoint worldPpos = _terrain->convertToWorldSpace(nowPos );
+// 	if (worldPpos.y <  (winSize.height * 3 / 4 ))
+// 	{
+// 		//worldPpos.y /*+= (size.height * 3 / 4 - worldPpos.y + 3)/3*/ = size.height * 3 / 4;
+// 
+// 		//CCPoint newPos = _terrain->convertToNodeSpace(worldPpos);
+// 		float offsetY =(winSize.height * 3 / 4 ) - worldPpos.y;
+// 
+// 		_terrain->setPosition(ccp(_terrain->getPositionX(),(_terrain->getPositionY() + offsetY)));
+// 	}
 }

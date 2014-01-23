@@ -5,22 +5,54 @@
  </tileset>
  <layer name="thing" width="40" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBg6QBOItQbaEXiAIRAbDbQj8ABLILYaaEeMIEBMeqVHmmYGYhYkPiMQMzEQl17R1fADsQBVXcfAwA3EPEh8TiDmYiAuvcLUiAKxGBCLA7EEld1HKZABYlkgloPyFQbOKaNgFAxJMFr3UwZG6/5RMBgBAK20Bck=
+   eJztziEOACAMBMFSMBT+/15OVmBJE7KTrDh3ZgB+1tVIuykv+nKz1E57qij6AgAA3juwLwA1
   </data>
  </layer>
  <objectgroup name="platform" width="40" height="20">
   <object name="platform" x="2" y="32">
-   <polyline points="0,36 406,219 924,226 1280,606"/>
+   <polyline points="0,36 406,219 866,160 1280,606"/>
   </object>
  </objectgroup>
  <objectgroup name="colls" width="40" height="20">
-  <object name="board" x="821" y="268">
+  <object name="board" x="789" y="215">
    <properties>
     <property name="canDestroy" value="false"/>
     <property name="objType" value="5"/>
-    <property name="stickSprite" value="false"/>
+    <property name="stickSprite" value="true"/>
    </properties>
-   <polyline points="-49,3 126,-57"/>
+   <polyline points="-21,1 126,-57"/>
+  </object>
+  <object name="tree" x="125" y="153">
+   <properties>
+    <property name="isDecorative" value="true"/>
+    <property name="objType" value="6"/>
+    <property name="stickSprite" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="tree" x="482" y="249">
+   <properties>
+    <property name="isDecorative" value="true"/>
+    <property name="objType" value="6"/>
+    <property name="stickSprite" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="tree" x="709" y="241">
+   <properties>
+    <property name="isDecorative" value="true"/>
+    <property name="objType" value="6"/>
+    <property name="stickSprite" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object name="tree" x="1110" y="530">
+   <properties>
+    <property name="isDecorative" value="true"/>
+    <property name="objType" value="6"/>
+    <property name="stickSprite" value="true"/>
+   </properties>
+   <ellipse/>
   </object>
  </objectgroup>
 </map>

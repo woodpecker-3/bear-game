@@ -13,8 +13,9 @@ public:
 	CREATE_FUNC(Background);
 	bool init();
 
-	void setOffsetX(int offset){_offsetX = offset;}
-	void fellow(int offsetX);
+	void update(float delta);
+protected:
+	void fellow();
 private:
 	cocos2d::CCNode* _background;
 	cocos2d::CCSprite* _backgroundSprite;

@@ -16,7 +16,7 @@
  <objectgroup name="colls" width="40" height="20">
   <object name="gold" x="554" y="176">
    <properties>
-    <property name="canDestroy" value="true"/>
+    <property name="isDecorative" value="false"/>
     <property name="objType" value="3"/>
     <property name="stickSprite" value="true"/>
    </properties>
@@ -24,7 +24,7 @@
   </object>
   <object name="gold" x="625" y="189">
    <properties>
-    <property name="canDestroy" value="true"/>
+    <property name="isDecorative" value="false"/>
     <property name="objType" value="3"/>
     <property name="stickSprite" value="true"/>
    </properties>
@@ -32,7 +32,7 @@
   </object>
   <object name="gold" x="684" y="203">
    <properties>
-    <property name="canDestroy" value="true"/>
+    <property name="isDecorative" value="false"/>
     <property name="objType" value="3"/>
     <property name="stickSprite" value="true"/>
    </properties>
@@ -40,31 +40,7 @@
   </object>
   <object name="gold" x="748" y="211">
    <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-    <property name="stickSprite" value="true"/>
-   </properties>
-   <polyline points="-8,8 -7,-20 17,-19 15,6 -7,8"/>
-  </object>
-  <object name="gold" x="997" y="285">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-    <property name="stickSprite" value="true"/>
-   </properties>
-   <polyline points="-8,8 -7,-20 17,-19 15,6 -7,8"/>
-  </object>
-  <object name="gold" x="1059" y="336">
-   <properties>
-    <property name="canDestroy" value="true"/>
-    <property name="objType" value="3"/>
-    <property name="stickSprite" value="true"/>
-   </properties>
-   <polyline points="-8,8 -7,-20 17,-19 15,6 -7,8"/>
-  </object>
-  <object name="gold" x="1118" y="388">
-   <properties>
-    <property name="canDestroy" value="true"/>
+    <property name="isDecorative" value="false"/>
     <property name="objType" value="3"/>
     <property name="stickSprite" value="true"/>
    </properties>
@@ -72,7 +48,7 @@
   </object>
   <object name="stone" x="833" y="220">
    <properties>
-    <property name="canDestroy" value="true"/>
+    <property name="isDecorative" value="false"/>
     <property name="objType" value="2"/>
     <property name="stickSprite" value="true"/>
    </properties>

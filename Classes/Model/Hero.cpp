@@ -2,6 +2,7 @@
 #include "Defined.h"
 #include "MyContactListener.h"
 #include "GameplayModel.h"
+#include "Terrain.h"
 
 USING_NS_CC;
 Hero::Hero()
@@ -78,6 +79,26 @@ bool Hero::init(b2World* world)
 		_dustAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("dust1.png"));
 		_dustAnim->addSpriteFrame(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("dust2.png"));
 		_dustAnim->setDelayPerUnit(0.1f);
+
+		bRet = true;
+	} while (0);
+	return bRet;
+}
+
+bool Hero::initHero()
+{
+	bool bRet = false;
+	do 
+	{
+		CC_BREAK_IF(!CCNode::init());
+
+		Terrain* terrain = GameplayModel::sharedModel()->getTerrain();
+		Terrain::MyMap* firstMap = terrain->_runningMapList.front();
+		CCPoint& firstPoint = terrain->_prepareFirstHillKeyPoint;
+		setPosition(ccp(firstMap->_map->getPosition().x + firstPoint.x,
+			firstMap->_map->getPosition().y + firstPoint.y + getContentSize().height/2+32));
+		
+		createBox2dBody();
 
 		bRet = true;
 	} while (0);
@@ -200,16 +221,14 @@ void Hero::limitVelocity()
 		return;
 	}
 
-	const float minVelocityX = 8;
-	const float minVelocityY = -40;
 	b2Vec2 vel = _body->GetLinearVelocity();
-	if (vel.x < minVelocityX)
+	if (vel.x < CONST_MIN_VELOCITY_X)
 	{
-		vel.x = minVelocityX;
+		vel.x = CONST_MIN_VELOCITY_X;
 	}
-	if (vel.y < minVelocityY)
+	if (vel.y < CONST_MIN_VELOCITY_Y)
 	{
-		vel.y = minVelocityY;
+		vel.y = CONST_MIN_VELOCITY_Y;
 	}
 	_body->SetLinearVelocity(vel);
 }
@@ -227,7 +246,7 @@ void Hero::jump()
 	if (_awake)
 	{
 		b2Vec2 vel;
-		vel.x = 1;
+		vel.x = 0;
 		vel.y = 5;
 		_body->ApplyLinearImpulse(vel, _body->GetPosition());
 	}

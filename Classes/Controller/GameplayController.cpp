@@ -45,6 +45,7 @@ void GameplayController::update( float dt )
 		_beginFlag = true;
 		GameplayModel::sharedModel()->getHero()->setAwake(true);
 		_view->showGameView();
+		//pause();
 	}
 
 	if(_pauseFlag) return;
