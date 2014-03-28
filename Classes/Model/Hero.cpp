@@ -126,7 +126,7 @@ void Hero::update( float dt )
 	}
 
 	/*在地面or在空中没有主动调整过角度时，程序要自动调整角度**/
-	float currAngleDegree = getRotation();
+	float currAngleDegree = /*_sprite->*/getRotation();
 	float oldAngleDegree = currAngleDegree;
 	if (GameplayModel::sharedModel()->getTapDown())
 	{
@@ -166,7 +166,7 @@ void Hero::update( float dt )
 	}
 	if (currAngleDegree != oldAngleDegree)
 	{
-		setRotation(currAngleDegree);
+		/*_sprite->*/setRotation(currAngleDegree);
 	}
 
 	if (GameplayModel::sharedModel()->isHeroOnTheGround())

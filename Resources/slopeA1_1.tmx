@@ -69,11 +69,11 @@
    </properties>
    <polyline points="-1,-9 -1,23 36,24 35,-8 -1,-9"/>
   </object>
-  <object x="1689" y="868">
+  <object x="1693" y="860">
    <properties>
     <property name="objType" value="2"/>
    </properties>
-   <polyline points="0,-5 -1,23 38,23 38,-6 0,-7"/>
+   <polyline points="-11,-16 -1,23 38,23 38,-6 -9,-14"/>
   </object>
  </objectgroup>
 </map>

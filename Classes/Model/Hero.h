@@ -39,6 +39,8 @@ public:
 	void setAwake(bool awake);
 
 	b2Body* getBody(){return _body;}
+
+	cocos2d::CCSprite* getSprite(){return _sprite;}
 protected:
 	void createBox2dBody();
 protected:

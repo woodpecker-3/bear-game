@@ -26,7 +26,6 @@ bool BackgroundLayer::init()
 		CC_BREAK_IF(!CCLayer::init());
 
 		addChild(GameplayModel::sharedModel()->getBackground());
-
 		bRet =true;
 	} while (0);
 	return bRet;

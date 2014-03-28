@@ -8,6 +8,8 @@
 
 #define NEXT_HILLKEYPOINT_INDEX(index) (((index) < (kMaxPlatformKeyPoints -1))?(index+1):(0))
 
+#define CONST_STRIPE_TEXTURE_SIZE 512
+
 USING_NS_CC;
 static const char* s_MapArr[]={"slopeA1_1.tmx","slopeA1_1.tmx"};
 const char* nextMapRes()
@@ -81,6 +83,7 @@ bool Terrain::init(b2World* world,Hero* hero)
 		_lastHillKeyPoint = CCPointMake(0,_sceenSize.height*CONST_OFFSET_Y);
 
 		_stripes = CCSprite::create("stripe.png");
+		//_stripes = createStripe();
 		ccTexParams tp2 = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_CLAMP_TO_EDGE};
 		_stripes->getTexture()->setTexParameters(&tp2);
 		_stripes->retain();
@@ -319,7 +322,7 @@ void Terrain::resetHillVertices()
 
 	if (prevFromKeyPointI != _fromKeyPointIndex || prevToKeyPointI != _toKeyPointIndex)
 	{
-		// vertices for visible area
+		// pointArr for visible area
 		_borderVerticesArr.clear();
 		_hillVerticesArr.clear();
 		_hillTexCoordsArr.clear();
@@ -348,14 +351,14 @@ void Terrain::resetHillVertices()
 				_borderVerticesArr.push_back(pt1);
 
 				_hillVerticesArr.push_back( ccp(pt0.x, /*0*/(pt1.y - _sceenSize.height)));
-				_hillTexCoordsArr.push_back( ccp(pt0.x / 512, 1.0f));
+				_hillTexCoordsArr.push_back( ccp(pt0.x / CONST_STRIPE_TEXTURE_SIZE, 1.0f));
 				_hillVerticesArr.push_back( ccp(pt1.x,/* 0*/(pt1.y - _sceenSize.height)));
-				_hillTexCoordsArr.push_back( ccp(pt1.x / 512, 1.0f));
+				_hillTexCoordsArr.push_back( ccp(pt1.x / CONST_STRIPE_TEXTURE_SIZE, 1.0f));
 
 				_hillVerticesArr.push_back( ccp(pt0.x, pt0.y));
-				_hillTexCoordsArr.push_back( ccp(pt0.x / 512, 0));
+				_hillTexCoordsArr.push_back( ccp(pt0.x / CONST_STRIPE_TEXTURE_SIZE, 0));
 				_hillVerticesArr.push_back( ccp(pt1.x, pt1.y));
-				_hillTexCoordsArr.push_back( ccp(pt1.x / 512, 0));
+				_hillTexCoordsArr.push_back( ccp(pt1.x / CONST_STRIPE_TEXTURE_SIZE, 0));
 
 
 				pt0 = pt1;
@@ -664,5 +667,108 @@ void Terrain::removeGameObject( GameObject* obj )
 		}
 	} while (0);
 	removeChild(obj);
+}
+
+cocos2d::CCSprite* Terrain::createStripe()
+{
+	// 1: Create new CCRenderTexture
+	CCRenderTexture *rt = CCRenderTexture::create(CONST_STRIPE_TEXTURE_SIZE, CONST_STRIPE_TEXTURE_SIZE);
+
+	// 2: Call CCRenderTexture:begin
+	rt->beginWithClear(35,45,78,255);
+
+	// 3: Draw into the texture
+ 	//this->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionColor));
+// 	CC_NODE_DRAW_SETUP();
+
+	CCPoint pointArr[6];
+	ccColor4F colorArr[6];
+	int iIndex = 0;
+
+	// Layer 1: Stripes
+// 	ccColor4F c2 = ccc4f(100,100,100,100);
+// 	float x1 = -CONST_STRIPE_TEXTURE_SIZE;
+// 	float x2;
+// 	float y1 = CONST_STRIPE_TEXTURE_SIZE;
+// 	float y2 = 0;
+// 	float dx = CONST_STRIPE_TEXTURE_SIZE /2;
+// 	float stripeWidth = dx / 2;
+// 	for (int i = 0; i < 1; ++i)
+// 	{
+// 		x2  = x1 + CONST_STRIPE_TEXTURE_SIZE;
+// 
+// 		pointArr[iIndex] = ccp(x1, y1);
+// 		colorArr[iIndex++] = c2;
+// 
+// 		pointArr[iIndex] = ccp(x1 + stripeWidth, y1);
+// 		colorArr[iIndex++] = c2;
+// 
+// 		pointArr[iIndex] = ccp(x2, y2);
+// 		colorArr[iIndex++] =c2;
+// 
+// 		pointArr[iIndex] = pointArr[iIndex - 2];
+// 		colorArr[iIndex++] = c2;
+// 
+// 		pointArr[iIndex] = pointArr[iIndex - 2];
+// 		colorArr[iIndex++] = c2;
+// 
+// 		pointArr[iIndex] = ccp(x2 + stripeWidth, y2);
+// 		colorArr[iIndex++] = c2;
+// 		x1 += dx;
+// 	}
+// 
+// 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color);
+// 	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, pointArr);
+// 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, 0, colorArr);
+// 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)iIndex);
+// 
+	// Layer 1: gradient
+	float gradientAlpha = 0.7f;
+	iIndex = 0;
+
+	pointArr[iIndex] = ccp(0, 0);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, 0);
+
+	pointArr[iIndex] = ccp(CONST_STRIPE_TEXTURE_SIZE, 0);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, 0);
+
+	pointArr[iIndex] = ccp(0, CONST_STRIPE_TEXTURE_SIZE);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, gradientAlpha);
+
+	pointArr[iIndex] = ccp(CONST_STRIPE_TEXTURE_SIZE, CONST_STRIPE_TEXTURE_SIZE);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, gradientAlpha);
+
+	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, pointArr);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, 0, colorArr);
+	glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei)iIndex);
+
+	// Layer 2: top highlight
+	float borderHeight = CONST_STRIPE_TEXTURE_SIZE / 16;
+	float borderAlpha = 0.3f;
+	iIndex = 0;
+
+	pointArr[iIndex] = ccp(0, 0);
+	colorArr[iIndex++] = ccc4f(1, 1, 1, borderAlpha);
+
+	pointArr[iIndex] = ccp(CONST_STRIPE_TEXTURE_SIZE, 0);
+	colorArr[iIndex++] = ccc4f(1, 1, 1, borderAlpha);
+
+	pointArr[iIndex] = ccp(0, borderHeight);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, 0);
+
+	pointArr[iIndex] = ccp(CONST_STRIPE_TEXTURE_SIZE, borderHeight);
+	colorArr[iIndex++] = ccc4f(0, 0, 0, 0);
+
+	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, pointArr);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, 0, colorArr);
+	glBlendFunc(CC_BLEND_SRC, CC_BLEND_DST);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei)iIndex);
+
+	// 4: Call CCRenderTexture:end
+	rt->end();
+
+	// 5: Create a new Sprite from the texture
+	return CCSprite::createWithTexture(rt->getSprite()->getTexture());
 }
 

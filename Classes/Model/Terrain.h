@@ -51,6 +51,7 @@ public:
 	void removeBody(b2Body* body);
 
 protected:
+	cocos2d::CCSprite* createStripe();
 	void createMap();
 	void removeMap(MyMap* myMap);
 	void resetMap();

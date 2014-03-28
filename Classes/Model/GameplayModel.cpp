@@ -167,7 +167,7 @@ void GameplayModel::update( float dt )
 	BearData::sharedData()->setScore((int)score);
 
 	/*мон╡**/
-	if(!isHeroOnTheGround())
+	if(!isHeroOnTheGround() && !_velocity)
 	{
 		if(!_strike)
 		{
@@ -179,15 +179,8 @@ void GameplayModel::update( float dt )
 				);  
 			_strike->setAnchorPoint(CCPointZero);
 			_terrain->addChild(_strike,12);  
-			  
 		}
 		_strike->setPosition(_hero->getPosition());
-
-// 		if (_snow)
-// 		{
-// 			_hero->removeChild(_snow);
-// 			_snow = NULL;
-// 		}
 	}
 	else
 	{
@@ -196,17 +189,11 @@ void GameplayModel::update( float dt )
 			_terrain->removeChild(_strike,true);    
 			_strike = NULL;
 		}
-// 		if (!_snow)
-// 		{
-// 			_snow = CCParticleSystemQuad::create("partilce_snow.plist");
-// 			_snow->setAnchorPoint(CCPointZero);
-// 			_snow->setPositionType(kCCPositionTypeFree);
-// 			_hero->addChild(_snow);
-// 		}
 	}
 	{
+		float angle = _hero->getRotation();
 		b2Vec2 linearVelocity = _hero->getBody()->GetLinearVelocity();
-		if (linearVelocity.LengthSquared() >= 150)
+		if ( (angle > 0 && angle < 90)  && !_tapDown && linearVelocity.LengthSquared() >= 150)
 		{
 			if (!_velocity)
 			{
@@ -225,13 +212,14 @@ void GameplayModel::update( float dt )
 			}
 		}
 
-		if (linearVelocity.LengthSquared() >= 120)
+		if ( (angle > 0 && angle < 90) && !_tapDown && linearVelocity.LengthSquared() >= 120)
 		{
 			if (!_wind)
 			{
 				_wind = CCParticleSystemQuad::create("particle_wind.plist");
 				_wind->setAnchorPoint(CCPointZero);
 				_hero->addChild(_wind);
+				//_wind->setRotation(_hero->getSprite()->getRotation());
 			}
 		}
 		else
